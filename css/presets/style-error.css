@@ -1,0 +1,8 @@
+body{font: normal 13px Arial, Helvetica, sans-serif;}
+a{color: #0069b9;text-decoration: none;}
+a:hover{text-decoration: underline;}
+#top-handler{margin: 0px auto;position: relative;background: #670000 url(../../images/top-bg.png) repeat-x 0 0;}
+#top{height: 128px;width: 960px;margin: 0px auto;position: relative;}
+#top h1{font: 800 36px 'Open Sans', Arial, Helvetica, sans-serif;color: #ffffff;position: absolute;top: 30px;left: 25px;letter-spacing: -2px;}
+#top h2{font: 500 15px 'Open Sans', Arial, Helvetica, sans-serif;color: #ffffff;position: absolute;top: 70px;left: 25px;}
+#errorboxbody{border: 1px solid #c5c5c5;-webkit-box-shadow: rgba(0, 0, 0, 0.25) 1px 1px 7px;box-shadow: rgba(0, 0, 0, 0.25) 1px 1px 7px;-moz-box-shadow: 1px 1px 7px rgba(0, 0, 0, 0.25);padding: 35px;width: 570px;margin: 50px auto;background: #ffffff url(../../images/errorboxbg.jpg) no-repeat top right; border-bottom-left-radius: 5px 5px;border-bottom-right-radius: 5px 5px;border-top-left-radius: 5px 5px;border-top-right-radius: 5px 5px;-moz-border-radius:5px 5px 5px 5px;}

@@ -1,0 +1,46 @@
+/*
+	Fluid 960 Grid System - IE Fixes (IE7 and greater)
+	Learn more ~ http://www.designinfluences.com/
+
+	Licensed under GPL and MIT.
+*/
+
+/* =Grid >> Global
+--------------------------------------------------------------------------------*/
+
+#currency input.button {
+	padding: 0 30px;
+}
+
+.button, button, .addtocart_button_module {
+	overflow: visible;
+	height: 28px;
+	line-height: 20px;
+	border: 0;
+}
+
+#tpl-handler .moduletable_products {
+	margin: 0px 0px 0px 0px;
+}
+
+.moduletable_products table {
+	border-spacing: 20px !important;
+	border-collapse: collapse;
+	width: 100%;
+	margin-left: 0%;
+	display: table;
+}
+
+.moduletable_products table td {
+	height: 100%;
+	width: 20%;
+	text-align: center;
+}
+
+#main-content-handler #mc-hbg {
+	width: 100%;
+}
+
+#log-panel {
+	width: 120px;
+}
