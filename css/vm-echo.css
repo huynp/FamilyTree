@@ -384,7 +384,6 @@ span.bold{font-weight:700;}
 .product-field-display select {
 	line-height: 26px;
 	font-size:11px;
-	width:200px !important;
 }
 
 .vmproduct li { background-image: none; }
@@ -1132,11 +1131,7 @@ div.spaceStyle{padding: 0px; margin: 5px; spacing: 0px;}
 	padding-left:3px !important;	
 }
 
-#mainimage {
-	position: relative;
-	left: 38px;
-    top: 50px;	
-}
+
 /*Hide custom plug-in fields*/
 /*
 .user_input_text {

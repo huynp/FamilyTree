@@ -176,7 +176,7 @@ if (empty($this->product)) {
      
     <div class="row-fluid">
     <?php $catName = $this->product->category_name ?>
-	<div class="span6 floatleft" style="<?php echo (strpos($catName,'Additional') !== false ? 'width:30%;': 'width:58%;') ?> margin-left:auto; margin-right:auto;">  
+	<div class="span6 floatleft">  
 		<?php echo $this->loadTemplate('images'); ?>
 		
 		<?php
@@ -203,7 +203,7 @@ if (empty($this->product)) {
 		
 	</div>
 
-	<div class="span6 floatright" style="<?php echo (strpos($catName,'Additional') !== false ? 'width:67.4358%;': 'width:39.4358%;') ?> margin-left:10px;"> 
+	<div class="span6 floatright"> 
 	    <div class="spacer-buy-area"> 
 		
 		<?php
@@ -352,6 +352,8 @@ echo $this->loadTemplate('reviews');
 	jQuery(document).ready(function(){
 		var $=jQuery;
 		$("#nav-line, .moduletable, #tab-modules, #top-nav-handler").addClass("hidden-phone");
-		
+		$("#nav-line, .moduletable, #tab-modules, #top-nav-handler").addClass("hidden-tablet");
+		$(".moduletable").parent().addClass("hidden-tablet");
+		$(".productdetails-view").parents(".span9").addClass("full-width-tablet");
 	});
 </script>

@@ -50,15 +50,10 @@
 .visible-desktop {
   display: inherit !important;
 }
-/*
-Custom css for mobile friendly
-Author: Huy Nguyen Phan
-*/
-.productdetails-view .main-image{
-  position:relative; 
-  height:616px;
+.make-space-image{
+  float: left;
+  border: 1px solid;
 }
-/*End custom css*/
 /*tablet*/
 @media (min-width: 768px) and (max-width: 979px) {
   .hidden-desktop {
@@ -73,12 +68,11 @@ Author: Huy Nguyen Phan
   .hidden-tablet {
     display: none !important;
   }
-  .productdetails-view .main-image{
-    height:400px;
+  .full-width-tablet{
+    width: 100% !important;
   }
-  .productdetails-view #mainimage img{
-    max-height: 380px;
-    min-height: 350px;
+  #menu ul.menu-nav > li > a{
+    padding: 15px 5px !important;
   }
 }
 
@@ -118,13 +112,6 @@ Author: Huy Nguyen Phan
     font-size: 13px !important;
   }
 
-  .productdetails-view .main-image{
-    height:350px;
-  }
-  .productdetails-view #mainimage img{
-    max-height: 330px;
-    min-height: 310px;
-  }
   /*End custom css*/
 }
 @media (min-width: 1200px) {

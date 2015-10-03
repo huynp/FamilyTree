@@ -322,68 +322,61 @@ ul.vmmanufacturer li {
 	border:none !important;
 }
 
-#main-image {
+.main-image {
 	position:relative;
 }
 
 #PDP_Image {
-	position:absolute;
-	z-index: 5;
-	left:0px;
-	top:0px;
 	border: 1px solid #CCC;
 }
 
 #img_Background {
 	position:absolute;
+	top: 0;
+	left: 0;
 	z-index: 4;
-	margin-top:50px;
-	margin-left:38px; 
-	padding-left:1px;
-	padding-top:1px;
+}
+
+#mainimage{
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 5;
 }
 
 #img_Leaves {
 	position:absolute;
+	top: 0;
+	left: 0;
 	z-index: 5;
-	margin-top:50px;
-	margin-left:38px; 
-	padding-left:1px;
-	padding-top:1px;
 }
 
 #img_BottomLeft {
 	position:absolute;
+	top: 0;
+	left: 0;
 	z-index: 6;
-	margin-top:50px;
-	margin-left:38px;;
-	padding-left:1px;
-	padding-top:1px;
 }
 
 #img_BottomRight {
 	position:absolute;
+	top: 0;
+	left: 0;
 	z-index: 7;
-	margin-top:50px;
-	margin-left:38px;
-	padding-left:1px; 
-	padding-top:1px;
 }
 
 #img_Bottom {
 	position:absolute;
+	top: 0;
+	left: 0;
 	z-index: 8;
-	margin-top:50px;
-	margin-left:38px;
-	padding-left:1px;
-	padding-top:1px;
 }
 
 #img_Frame {
 	position:absolute;
+	top: 0;
+	left: 0;
 	z-index: 9;
-	padding-left:1px;
-	padding-top:1px;
 }
 
 .imageHover {
