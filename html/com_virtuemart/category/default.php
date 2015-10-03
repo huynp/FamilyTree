@@ -255,12 +255,12 @@ if (!empty($this->products)) {
         <!---Clint added style to this div--->
 		<div class="product floatleft <?php echo $Browsecellwidth . $show_vertical_separator ?>" style="width:18%; min-width:115px; padding-left:9px; padding-right:8px;">
             <!---Clint added style of min-height to this div--->
-			<div class="spacer" style="min-height:235px;">
+			<div class="spacer" style="min-height:235px; min-width:100px; padding:10px">
 				<div class="spacer-handler pr-img-handler">
 				
 					<a href="<?php echo $product->link;?>">
 					<?php 
-						echo $product->images[0]->displayMediaThumb ('class="browseProductImage" border="0" title="' . $product->product_name . '" ', FALSE, 'class="modal"');
+						echo $product->images[0]->displayMediaThumb ('class="browseProductImage" border="0" style="width:100%" title="' . $product->product_name . '" ', FALSE, 'class="modal"');
 					?>
 					</a>
 					
@@ -386,7 +386,16 @@ if (!empty($this->products)) {
 	echo JText::_ ('COM_VIRTUEMART_NO_RESULT') . ($this->keyword ? ' : (' . $this->keyword . ')' : '');
 }
 ?>
-</div><!-- end browse-view -->
+</div>
+
+<script  type="text/javascript">
+	jQuery(document).ready(function(){
+		var $=jQuery;
+		$("#nav-line, .moduletable, #tab-modules, #top-nav-handler").addClass("hidden-phone");
+		
+	});
+</script>
+<!-- end browse-view -->
 
 <!---Clint put at bottom of page to show category description after products are shown--->
 <div class="category_description">

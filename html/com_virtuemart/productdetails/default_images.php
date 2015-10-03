@@ -56,7 +56,7 @@ if ($templateparams->get('zoom_alwaysOn')) : $zoom_var_alwaysOn = "true"; else :
 	if (!empty($this->product->images)) {
 		$image = $this->product->images[0];
 		?>
-	<div class="main-image" style="position:relative; height:616px;">
+	<div class="main-image">
 		<div id="img_Background" style="position:absolute; left:38px; top:53px;"></div>
 		<div id="mainimage" style="position:relative; left:38px; top:43px;"> 
 			<?php 
@@ -124,7 +124,7 @@ if ($templateparams->get('zoom_alwaysOn')) : $zoom_var_alwaysOn = "true"; else :
 	if (!empty($this->product->images)) {
 		$image = $this->product->images[0];
 		?>
-	<div class="main-image" style="position:relative; height:616px;">
+	<div class="main-image" >
 		<div id="img_Background"></div>
 		<div id="mainimage"> 
 			<?php 

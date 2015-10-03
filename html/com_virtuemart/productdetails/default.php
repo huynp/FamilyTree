@@ -136,12 +136,12 @@ if (empty($this->product)) {
 						<a href="<?php echo $catURL ?>" class="" title="<?php echo $categoryName ?>">< <?php echo JText::sprintf('COM_VIRTUEMART_CATEGORY_BACK_TO',$categoryName) ?></a> 
 					</div>
 				</div>
-				<div class="span6">
+				<div class="span6 hidden-phone">
 					<?php
 					// PDF - Print - Email Icon
 					if (VmConfig::get('show_emailfriend') || VmConfig::get('show_printicon') || VmConfig::get('pdf_button_enable')) {
 					?>
-						<div class="icons hidden-phone">
+						<div class="icons">
                         
                         <!---Pinterest Link by Clint Sorensen--->
                         <a href="//www.pinterest.com/pin/create/button/" data-pin-do="buttonBookmark"  data-pin-color="red">
@@ -167,7 +167,6 @@ if (empty($this->product)) {
 					?>
 				</div>
 			</div>
-    <br />
     Please complete the form below to place your order.
 	<?php
     if(strpos($this->product->category_name,"Ancestor") !== false || strpos($this->product->category_name,"Descendant") !== false) {
@@ -349,3 +348,10 @@ echo $this->product->event->afterDisplayContent; ?>
 echo $this->loadTemplate('reviews');
 ?>
 </div>
+<script  type="text/javascript">
+	jQuery(document).ready(function(){
+		var $=jQuery;
+		$("#nav-line, .moduletable, #tab-modules, #top-nav-handler").addClass("hidden-phone");
+		
+	});
+</script>

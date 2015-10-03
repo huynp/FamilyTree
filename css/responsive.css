@@ -50,6 +50,16 @@
 .visible-desktop {
   display: inherit !important;
 }
+/*
+Custom css for mobile friendly
+Author: Huy Nguyen Phan
+*/
+.productdetails-view .main-image{
+  position:relative; 
+  height:616px;
+}
+/*End custom css*/
+/*tablet*/
 @media (min-width: 768px) and (max-width: 979px) {
   .hidden-desktop {
     display: inherit !important;
@@ -63,7 +73,16 @@
   .hidden-tablet {
     display: none !important;
   }
+  .productdetails-view .main-image{
+    height:400px;
+  }
+  .productdetails-view #mainimage img{
+    max-height: 380px;
+    min-height: 350px;
+  }
 }
+
+/*phone*/
 @media (max-width: 767px) {
   .hidden-desktop {
     display: inherit !important;
@@ -77,6 +96,36 @@
   .hidden-phone {
     display: none !important;
   }
+
+  /*
+  Custom css for mobile friendly
+  Author: Huy Nguyen Phan
+  */
+  .productdetails-view h1{
+    font-size: 19px !important;
+    font-weight: bold !important;
+  }
+  .productdetails-view .product-short-description{
+    margin: 0 !important;
+  }
+  .productdetails-view .back-to-category{
+    line-height: 0;
+  }
+  .productdetails-view .product-neighbours{
+    padding-bottom: 0;
+  }
+  .body{
+    font-size: 13px !important;
+  }
+
+  .productdetails-view .main-image{
+    height:350px;
+  }
+  .productdetails-view #mainimage img{
+    max-height: 330px;
+    min-height: 310px;
+  }
+  /*End custom css*/
 }
 @media (min-width: 1200px) {
   .row {
