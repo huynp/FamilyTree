@@ -76,6 +76,9 @@ if (!empty($this->product->images)) {
 		<div id="img_BottomRight"></div>
 		<div id="img_Bottom"></div> 
         <div id="img_Frame"></div>
+        <div id="img_boder">
+       		<img src="/images/border-image.png">
+       	</div>
 		<div class="clear"></div>
 	</div>
 	<?php

@@ -528,6 +528,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 	
 	document.getElementById('PDP_Image').src = createTreeImage(selectedTreeType());
 	document.getElementById(id_BranchStyle).style.backgroundColor = "#ffffff";
+	jQuery("#img_boder").show();
 	initForm();
 	closeWindow(); 
 	//SqueezeBox.close();  

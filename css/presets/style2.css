@@ -331,10 +331,6 @@ ul.vmmanufacturer li {
   	float: left;
 }
 
-#PDP_Image {
-	border: 1px solid #CCC;
-}
-
 #img_Background {
 	position:absolute;
 	top: 0;
@@ -377,13 +373,20 @@ ul.vmmanufacturer li {
 	z-index: 8;
 }
 
-#img_Frame {
+#img_boder{
 	position:absolute;
 	top: 0;
 	left: 0;
 	z-index: 9;
+	display: none;
 }
 
+#img_Frame {
+	position:absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
+}
 .imageHover {
 	border:1px solid #CCC;
 }
