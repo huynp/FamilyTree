@@ -176,7 +176,7 @@ if (empty($this->product)) {
      
     <div class="row-fluid">
     <?php $catName = $this->product->category_name ?>
-	<div class="span6 floatleft">  
+	<div class="span7 floatleft">  
 		<?php echo $this->loadTemplate('images'); ?>
 		
 		<?php
@@ -203,7 +203,7 @@ if (empty($this->product)) {
 		
 	</div>
 
-	<div class="span6 floatright"> 
+	<div class="span5 floatright"> 
 	    <div class="spacer-buy-area"> 
 		
 		<?php
