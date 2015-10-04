@@ -223,12 +223,12 @@ if (empty($this->product)) {
 
 		if (is_array($this->productDisplayShipments)) {
 		    foreach ($this->productDisplayShipments as $productDisplayShipment) {
-			echo $productDisplayShipment . '<br />';
+			echo $productDisplayShipment ;
 		    }
 		}
 		if (is_array($this->productDisplayPayments)) {
 		    foreach ($this->productDisplayPayments as $productDisplayPayment) {
-			echo $productDisplayPayment . '<br />';
+			echo $productDisplayPayment ;
 		    }
 		}
 		// Product Price

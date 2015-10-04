@@ -89,6 +89,10 @@
 		padding-bottom: 6px !important;
 		
 	}
+
+  input.vmcustom-textinput{
+    width: 135px !important;
+  }
 	
 }
  

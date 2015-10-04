@@ -52,6 +52,29 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
   var id_Plexiglass = "";
   var selectedForm = ""; 
   
+  function showPopup(contentElem){
+	var $ = jQuery;
+	var padding=60;
+	var popupWidth = $(window).width()-padding;
+	var popupHeight = $(window).height()-padding;
+	//Update popup width/height
+	popupWidth = popupWidth>750? 750:popupWidth;
+	popupHeight = popupHeight>550? 550:popupHeight;
+	SqueezeBox.options.size={x:popupWidth,y:popupHeight}
+	SqueezeBox.setContent('adopt',contentElem);
+	//Reset overlay width/height
+	$("#sbox-overlay").css({"width":$(document).width(),"height":$(document).height()})
+  }
+
+  String.format = function() {
+      var s = arguments[0];
+      for (var i = 0; i < arguments.length - 1; i++) {       
+          var reg = new RegExp("\\{" + i + "\\}", "gm");             
+          s = s.replace(reg, arguments[i + 1]);
+      }
+      return s;
+  }
+
   function initForm() {
     // Last characters of first index in selection box define mandatory status.
     var mandatory = "...";
@@ -364,7 +387,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		  
 		  newElem.appendChild(spn);
 			
-		  SqueezeBox.setContent('adopt',newElem);
+		  showPopup(newElem);
 	  }
   }
  
@@ -399,7 +422,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 							    "<a href='/index.php/contact-us'><u>Click here to go to that form.</u></a></td>" +
 		                    "</tr></tbody></table></center>"; 
 		
-	    SqueezeBox.setContent('adopt',newElem);
+	    showPopup(newElem);
 		
 		thisForm = document.getElementById(id).form;
 		thisForm.reset();
@@ -446,7 +469,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 																		  "<br /><a href=# onClick='SqueezeBox.close();'><u>Continue...</u></a></td>" +
 		                    "</tr></tbody></table></center>";
 		
-	    SqueezeBox.setContent('adopt',newElem);
+	    showPopup(newElem);
 		*/
 				
 		document.getElementById('PDP_Image').src = originalBackground;
@@ -513,7 +536,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		  
 		  newElem.appendChild(spn);
 			
-		  SqueezeBox.setContent('adopt',newElem);
+		  showPopup(newElem);
 		  return false;
 		  }
   }
@@ -573,7 +596,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		  
 		  newElem.appendChild(spn);
 			
-		  SqueezeBox.setContent('adopt',newElem);
+		  showPopup(newElem);
 		  return false;
 	}
   }
@@ -630,7 +653,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		  
 		  newElem.appendChild(spn);
 			
-		  SqueezeBox.setContent('adopt',newElem);
+		  showPopup(newElem);
 		  }
 	  return false;
 	  
@@ -714,7 +737,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 							"</tr></tbody></table></center>";
 			newElem.appendChild(spn);
 			
-			SqueezeBox.setContent('adopt',newElem);
+			showPopup(newElem);
 	  }
 	  return false;
   }
@@ -785,7 +808,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 							"</tr></tbody></table></center>"; 
 			newElem.appendChild(spn);
 			
-			SqueezeBox.setContent('adopt',newElem);
+			showPopup(newElem);
 	  }
 	  return false;
   }
@@ -885,7 +908,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 			}
 			newElem.appendChild(spn);
 			
-			SqueezeBox.setContent('adopt',newElem);
+			showPopup(newElem);
 	  }
 	  return false; 
   }
@@ -1040,7 +1063,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		
 	    newElem.appendChild(spn);
 		
-	    SqueezeBox.setContent('adopt',newElem);
+	    showPopup(newElem);
 	 }
 	 return false;
   }
@@ -1146,20 +1169,59 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 				frameCost = "$0.00";	
 			}
 			
-				spn.innerHTML = "<center><table class=\"background_table\"><tbody>" +
-								"<td><b>Frame Option 1:</b><br />Black Scoop<br /><b><span style='font-size:12px'>+ " + frameCost + "</span></b><br /><img id='Frame_Option1' class='imageHover' onclick='setFrame(\"Black Scoop\");' width='149' src='/images/products/Frame_Black_Scoop.png' alt='FrameOption1' /></td>" +
-								"<td><b>Frame Option 2:</b><br />Bronze Scoop<br /><b><span style='font-size:12px'>+ " + frameCost + "</span></b><br /><img id='Frame_Option2' class='imageHover' onclick='setFrame(\"Bronze Scoop\");' width='149' src='/images/products/Frame_Bronze_Scoop.png' alt='FrameOption2' /></td>" +
-								"<td><b>Frame Option 3:</b><br />Gold Classical<br /><b><span style='font-size:12px'>+ " + frameCost + "</span></b><br /><img id='Frame_Option3' class='imageHover' onclick='setFrame(\"Gold Classical\");' width='149' src='/images/products/Frame_Gold_Classical.png' alt='FrameOption3' /></td>" +
-								"<td><b>Frame Option 4:</b><br />Gold Scoop<br /><b><span style='font-size:12px'>+ " + frameCost + "</span></b><br /><img id='Frame_Option4' class='imageHover' onclick='setFrame(\"Gold Scoop\");' width='149' src='/images/products/Frame_Gold_Scoop.png' alt='FrameOption4' /></td>" + 
-								"</tr><tr>" +
-								"<td><b>Frame Option 5:</b><br />Pewter Scoop<br /><b><span style='font-size:12px'>+ " + frameCost + "</span></b><br /><img id='Frame_Option5' class='imageHover' onclick='setFrame(\"Pewter Scoop\");' width='149' src='/images/products/Frame_Pewter_Scoop.png' alt='FrameOption5' /></td>" + 
-								"<td><b>Frame Option 6:</b><br />Silver Classical<br /><b><span style='font-size:12px'>+ " + frameCost + "</span></b><br /><img id='Frame_Option6' class='imageHover' onclick='setFrame(\"Silver Classical\");' width='149' src='/images/products/Frame_Silver_Classical.png' alt='FrameOption6' /></td>" +
-								"<td><b>Frame Option 7:</b><br />Whitewashed Barnwood<br /><b><span style='font-size:12px'>+ " + frameCost + "</span></b><br /><img id='Frame_Option7' class='imageHover' onclick='setFrame(\"Whitewashed Barnwood\");' width='149' src='/images/products/Frame_Whitewashed_Barnwood.png' alt='FrameOption7' /></td>" + 
-								"<td><b>Frame Option 8:</b><br />No Frame<br /><b><span style='font-size:12px'>+ $0.00</span></b><br /><img id='Frame_Option8' class='imageHover' onclick='setFrame(\"None\");' width='149' src='/images/products/Frame_None.png' alt='FrameOption8' /></td>" +
-								"</tr></tbody></table></center>";
+
+			spn.innerHTML =String.format("<div class='frame-table'>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 1:</b>\
+							        <br />Black Scoop\
+							        <br /><b><span style='font-size:12px'>{0}</span></b>\
+							        <br /><img id='Frame_Option1' class='imageHover' onclick='setFrame(\"Black Scoop\");' width='149' src='/images/products/Frame_Black_Scoop.png' alt='FrameOption1' />\
+							    </div>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 2:</b>\
+							        <br />Bronze Scoop\
+							        <br /><b><span style='font-size:12px'>{0}</span></b>\
+							        <br /><img id='Frame_Option2' class='imageHover' onclick='setFrame(\"Bronze Scoop\");' width='149' src='/images/products/Frame_Bronze_Scoop.png' alt='FrameOption2' />\
+							    </div>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 3:</b>\
+							        <br />Gold Classical\
+							        <br /><b><span style='font-size:12px'>{0}</span></b>\
+							        <br /><img id='Frame_Option3' class='imageHover' onclick='setFrame(\"Gold Classical\");' width='149' src='/images/products/Frame_Gold_Classical.png' alt='FrameOption3' />\
+							    </div>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 4:</b>\
+							        <br />Gold Scoop\
+							        <br /><b><span style='font-size:12px'>{0}</span></b>\
+							        <br /><img id='Frame_Option4' class='imageHover' onclick='setFrame(\"Gold Scoop\");' width='149' src='/images/products/Frame_Gold_Scoop.png' alt='FrameOption4' />\
+							    </div>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 5:</b>\
+							        <br />Pewter Scoop\
+							        <br /><b><span style='font-size:12px'>{0}</span></b>\
+							        <br /><img id='Frame_Option5' class='imageHover' onclick='setFrame(\"Pewter Scoop\");' width='149' src='/images/products/Frame_Pewter_Scoop.png' alt='FrameOption5' />\
+							    </div>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 6:</b>\
+							        <br />Silver Classical\
+							        <br /><b><span style='font-size:12px'>{0}</span></b>\
+							        <br /><img id='Frame_Option6' class='imageHover' onclick='setFrame(\"Silver Classical\");' width='149' src='/images/products/Frame_Silver_Classical.png' alt='FrameOption6' />\
+							    </div>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 7:</b>\
+							        <br />Whitewashed Barnwood\
+							        <br /><b><span style='font-size:12px'>{0}</span></b>\
+							        <br /><img id='Frame_Option7' class='imageHover' onclick='setFrame(\"Whitewashed Barnwood\");' width='149' src='/images/products/Frame_Whitewashed_Barnwood.png' alt='FrameOption7' />\
+							    </div>\
+							    <div class='frame-item'>\
+							        <b>Frame Option 8:</b>\
+							        <br />No Frame\
+							        <br /><b><span style='font-size:12px'>+ $0.00</span></b>\
+							        <br /><img id='Frame_Option8' class='imageHover' onclick='setFrame(\"None\");' width='149' src='/images/products/Frame_None.png' alt='FrameOption8' />\
+							    </div>\
+							</div>",frameCost);
 			newElem.appendChild(spn);
-			
-			SqueezeBox.setContent('adopt',newElem);
+			showPopup(newElem);
 	  }
 	  return false; 
   }
@@ -1344,7 +1406,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		  
 		  newElem.appendChild(spn);
 			
-		  SqueezeBox.setContent('adopt',newElem);
+		  showPopup(newElem);
   }
   
   function show_plexiglass(id) {
@@ -1405,7 +1467,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 								"</tr></tbody></table></center>";
 			newElem.appendChild(spn);
 			
-			SqueezeBox.setContent('adopt',newElem);
+			showPopup(newElem);
 	  }
 	  return false; 
   }

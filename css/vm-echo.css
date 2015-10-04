@@ -119,7 +119,7 @@ span.title{display:block;margin:0 0 6px;}
 
 .spacer-buy-area .product-price .PricesalesPrice {
 	font: 700 100%/120% "Ubuntu", Arial, Helvetica, sans-serif;
-	padding: 10px 0px;
+	padding: 0;
 }
 
 .spacer-buy-area .product-price .PricesalesPrice span {
@@ -549,7 +549,7 @@ span.addtocart-button input.addtocart-button{height:35px;}
 
 .product-price {
 	font-size: 85%;
-	margin: 0px 0px 20px 0px;
+	margin: 0;
 }
 
 span.PricesalesPrice {

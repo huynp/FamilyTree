@@ -695,7 +695,7 @@ img {
 input.vmcustom-textinput {
     font-size: 12px !important;
     padding-left: 10px;
-    width: 173px !important;
+    width: 173px ;
 }
 
 .nomoreprints {
