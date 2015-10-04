@@ -40,7 +40,7 @@ echo '<script src="'.$this->baseurl.'/templates/'.$this->template.'/js/jquery-1.
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/print.css" media="print" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/vm-echo.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/sm/sm-core-css.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/sm/sm-simple.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/sm/sm-simple.css" media="screen" />
 	<script type="text/javascript" src="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template ?>/js/bootstrap.min.js"> </script>
 <script type="text/javascript">
   WebFontConfig = {
@@ -138,7 +138,7 @@ echo '<script src="'.$this->baseurl.'/templates/'.$this->template.'/js/jquery-1.
 				}, 300);
 			});
 		});
-		var newHtml = '';
+		            var newHtml = '';
             jQuery('#selectnav1 li').each(function () {
 
                 if (jQuery(this).index() == 1 || jQuery(this).index() == 7 || jQuery(this).index() == 24) {
@@ -160,6 +160,12 @@ echo '<script src="'.$this->baseurl.'/templates/'.$this->template.'/js/jquery-1.
             jQuery('#selectnav1').addClass("sm sm-vertical sm-simple").smartmenus();
 	});
 	</script>
+	<style>
+		body div.panel1 .menupanel
+		{
+			padding: 0;
+		}
+	</style>
 	<?php endif; ?>
 	<?php echo $this->params->get("headcode"); ?>
 	<?php if( $this->countModules('currency')) : ?>
