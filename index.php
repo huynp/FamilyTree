@@ -39,6 +39,8 @@ echo '<script src="'.$this->baseurl.'/templates/'.$this->template.'/js/jquery-1.
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/responsive-template.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/print.css" media="print" />
 	<link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/vm-echo.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/sm/sm-core-css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/sm/sm-simple.css" media="screen" />
 	<script type="text/javascript" src="<?php echo $this->baseurl; ?>/templates/<?php echo $this->template ?>/js/bootstrap.min.js"> </script>
 <script type="text/javascript">
   WebFontConfig = {
@@ -95,6 +97,7 @@ echo '<script src="'.$this->baseurl.'/templates/'.$this->template.'/js/jquery-1.
 
 <script
 	<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/js/selectnav.min.js"></script>
+	<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/js/jquery.smartmenus.min.js"></script>
 <!--[if IE 6]> <link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/ie6.css" media="screen" /> <![endif]-->
 <!--[if IE 7]> <link rel="stylesheet" type="text/css" href="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/css/ie.css" media="screen" /> <![endif]-->
     <?php if($this->params->get('usetheme')==true) : ?>
@@ -135,6 +138,26 @@ echo '<script src="'.$this->baseurl.'/templates/'.$this->template.'/js/jquery-1.
 				}, 300);
 			});
 		});
+		var newHtml = '';
+            jQuery('#selectnav1 li').each(function () {
+
+                if (jQuery(this).index() == 1 || jQuery(this).index() == 7 || jQuery(this).index() == 24) {
+                    newHtml += "<li>";
+                    newHtml += jQuery(this).clone().children('a').attr('href', '#').wrap('<p>').parent().html();
+                    newHtml += "<ul>";
+                    newHtml += "<li>" + jQuery(this).html() + "</li>";
+                }
+                else if (jQuery(this).index() == 6 || jQuery(this).index() == 23 || jQuery(this).index() == 26) {
+                    newHtml += jQuery(this).clone().wrap('<p>').parent().html();
+                    newHtml += "</li></ul>";
+                }
+                else {
+                    newHtml += jQuery(this).clone().wrap('<p>').parent().html();
+                }
+
+            });
+            jQuery('#selectnav1').html(newHtml);
+            jQuery('#selectnav1').addClass("sm sm-vertical sm-simple").smartmenus();
 	});
 	</script>
 	<?php endif; ?>
