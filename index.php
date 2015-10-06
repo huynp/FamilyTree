@@ -764,12 +764,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 </footer>
 <?php endif; ?>
 
-
+<script src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/js/mobile-layout-adjust.js"></script>
 <?php if($this->params->get("bodybackgroundimage")) : ?>
 <script type="text/javascript" src="<?php echo $this->baseurl ?>/templates/<?php echo $this->template; ?>/js/jquery.backstretch.min.js"></script>
 <script type="text/javascript">
 jQuery.backstretch("<?php echo $this->params->get("bodybackgroundimage"); ?>");
 </script>
+
 <?php endif; ?>
 <jdoc:include type="modules" name="debug" />
 <?php echo $this->params->get("footercode"); ?>
