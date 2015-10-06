@@ -3,7 +3,7 @@ jQuery(document).ready(function () {
 	jQuery('#LoginForm').removeClass('hide');
     if (screen.width < 768) {
         // Move social buttons to bottom
-        jQuery('#social-links').prependTo('#bottom-bg');
+        jQuery('#social-links').insertBefore('#footer');
 		
 		// Move LoginForm to bottom
 		jQuery('#LoginForm').appendTo('body');
