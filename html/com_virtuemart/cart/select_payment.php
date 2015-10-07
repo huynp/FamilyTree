@@ -40,34 +40,35 @@ if (VmConfig::get('oncheckout_show_steps', 1)) {
 		$buttonclass = 'button';
 	}
 ?>
-
-<div class="buttonBar-left">
-
-<button class="<?php echo $buttonclass ?>" type="submit"><?php echo JText::_('COM_VIRTUEMART_SAVE'); ?></button>
-     &nbsp;
-<button class="<?php echo $buttonclass ?>" type="reset" onClick="window.location.href='<?php echo JRoute::_('index.php?option=com_virtuemart&view=cart'); ?>'" ><?php echo JText::_('COM_VIRTUEMART_CANCEL'); ?></button>
-    </div>
-
+<style type="text/css">
+	.payment-item input,.payment-item label{
+		float: left;
+	}
+</style>
 <?php
      if ($this->found_payment_method OR (VmConfig::get('oncheckout_opc', 0) )) {
-
-
-    echo "<fieldset>";
 		foreach ($this->paymentplugins_payments as $paymentplugin_payments) {
 		    if (is_array($paymentplugin_payments)) {
-			foreach ($paymentplugin_payments as $paymentplugin_payment) {
-			    echo $paymentplugin_payment.'<br />';
-			}
+				foreach ($paymentplugin_payments as $paymentplugin_payment) {
+
+    				echo "<div class='payment-item span12'>";
+					    echo $paymentplugin_payment;
+					    echo "<div style='clear:both'></div>";
+    				echo "</div>";
+				}
 		    }
 		}
-    echo "</fieldset>";
-
     } else {
 	 echo "<h1>".$this->payment_not_found_text."</h1>";
     }
+?>
 
+	<div class="span12 buttonBar-left">
 
-    ?>
+		<button class="<?php echo $buttonclass ?>" type="submit"><?php echo JText::_('COM_VIRTUEMART_SAVE'); ?></button>
+	     &nbsp;
+		<button class="<?php echo $buttonclass ?>" type="reset" onClick="window.location.href='<?php echo JRoute::_('index.php?option=com_virtuemart&view=cart'); ?>'" ><?php echo JText::_('COM_VIRTUEMART_CANCEL'); ?></button>
+	</div>
 
     <input type="hidden" name="option" value="com_virtuemart" />
     <input type="hidden" name="view" value="cart" />

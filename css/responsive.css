@@ -56,6 +56,12 @@
     min-width: 100px;
     margin: 5px 1%;
 }
+table.cart-summary{
+  margin: 0px !important;
+}
+table.total-price td{
+  border-bottom: 2px solid #e1e1e1;
+}
 /*tablet*/
 @media (min-width: 768px) and (max-width: 979px) {
   .hidden-desktop {
@@ -119,6 +125,13 @@
 
   input.vmcustom-textinput{
     width: 96% !important;
+  }
+
+  .cart-view .coupon{
+    padding: 0 0 0 12px;
+  }
+  .cart-view .details-button{
+    margin: 0px;
   }
   /*End custom css*/
 }

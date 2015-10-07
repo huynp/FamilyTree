@@ -392,7 +392,9 @@ if (!empty($this->products)) {
 	jQuery(document).ready(function(){
 		var $=jQuery;
 		$("#nav-line, .moduletable, #tab-modules, #top-nav-handler").addClass("hidden-phone");
-		
+		$("#nav-line, .moduletable, #tab-modules, #top-nav-handler").addClass("hidden-tablet");
+		$(".moduletable").parent().addClass("hidden-tablet");
+		$(".productdetails-view").parents(".span9").addClass("full-width-tablet");
 	});
 </script>
 <!-- end browse-view -->

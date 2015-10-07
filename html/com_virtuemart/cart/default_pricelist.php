@@ -284,41 +284,43 @@ else {
 </table>
 
 <table class="cart-summary" cellspacing="0" cellpadding="0" border="0" width="100%">
-<?php
-if (VmConfig::get ('coupons_enable')) {
-	?>
-<tr class="sectiontableentry2">
-<td width="150"><b>Coupon Discount:</b></td>
-<td>
-	<?php if (!empty($this->layoutName) && $this->layoutName == 'default') {
-	// echo JHTML::_('link', JRoute::_('index.php?view=cart&task=edit_coupon',$this->useXHTML,$this->useSSL), JText::_('COM_VIRTUEMART_CART_EDIT_COUPON'));
-	echo $this->loadTemplate ('coupon');
-}
-	?>
+	<tr class="sectiontableentry1">
+		<td>
+			<?php
+			if (VmConfig::get ('coupons_enable')) { ?>
+				<div class="row-fluid">
+					<div class="span5"> <b>Coupon Discount:</b> </div>
+					<div class="span7">
+						
+						<?php if (!empty($this->layoutName) && $this->layoutName == 'default') {
+							echo $this->loadTemplate ('coupon');
+						}?>
 
-	<?php if (!empty($this->cart->cartData['couponCode'])) { ?>
-	<?php
-	echo $this->cart->cartData['couponCode'];
-	echo $this->cart->cartData['couponDescr'] ? (' (' . $this->cart->cartData['couponDescr'] . ')') : '';
-	?>
+					</div>
 
-				</td>
 
-					 <?php if (VmConfig::get ('show_tax')) { ?>
-		<td align="right"><?php echo $this->currencyDisplay->createPriceDiv ('couponTax', '', $this->cart->pricesUnformatted['couponTax'], FALSE); ?> </td>
-		<?php } ?>
-	<td align="right"></td>
-	<td align="right"><div style="text-align:right"><?php echo $this->currencyDisplay->createPriceDiv ('salesPriceCoupon', '', $this->cart->pricesUnformatted['salesPriceCoupon'], FALSE); ?></div></td>
-	<?php } else { ?>
-	<td colspan="6" align="left">&nbsp;</td>
-	<?php
-}
-
-	?>
-</tr>
-	<?php } ?>
+					<?php if (!empty($this->cart->cartData['couponCode'])) { ?>
+						<div class="span4">
+							<?php
+								echo $this->cart->cartData['couponCode'];
+								echo $this->cart->cartData['couponDescr'] ? (' (' . $this->cart->cartData['couponDescr'] . ')') : '';
+							?>	
+						</div>
+						<div class="span4">
+							
+							 <?php if (VmConfig::get ('show_tax')) { 
+							 	echo $this->currencyDisplay->createPriceDiv ('couponTax', '', $this->cart->pricesUnformatted['couponTax'], FALSE); 
+							 }?> 
+						</div>
+						<div class="span4">
+							<?php echo $this->currencyDisplay->createPriceDiv ('salesPriceCoupon', '', $this->cart->pricesUnformatted['salesPriceCoupon'], FALSE); ?>
+						</div>
+					<?php } ?>
+				</div>
+			<?php } ?>
+		</td>
+	</tr>
 </table>
-
 <table class="cart-summary" cellspacing="0" cellpadding="0" border="0" width="100%">
 
 <?php
@@ -383,72 +385,102 @@ foreach ($this->cart->cartData['DATaxRulesBill'] as $rule) {
 </table>
 
 <table class="cart-summary" cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr class="sectiontableentry1" valign="top">
-	<?php if (!$this->cart->automaticSelectedShipment) { ?>
+	<tr>
+		<td>
+			<div class="row-fluid">
+				<?php if (!$this->cart->automaticSelectedShipment) { ?>
+					<div class="span9" align="left">
+						<?php echo $this->cart->cartData['shipmentName']; ?>
+						<br/>
+						<?php
+							if (!empty($this->layoutName) && $this->layoutName == 'default' && !$this->cart->automaticSelectedShipment) {
+								if (VmConfig::get('oncheckout_opc', 0)) {
+									$previouslayout = $this->setLayout('select');
+									echo $this->loadTemplate('shipment');
+									$this->setLayout($previouslayout);
+								} else {
+									echo JHTML::_('link', JRoute::_('index.php?view=cart&task=edit_shipment', $this->useXHTML, $this->useSSL), $this->select_shipment_text, 'class=""');
+								}
+							} else {
+								echo JText::_ ('COM_VIRTUEMART_CART_SHIPPING');
+							}
+						?>
+					</div>
+				<?php
+				}
+				else {
+				?>
+					<div class="span3"><b>Shipping Information:</b></div>
+					<div class="span6"><?php echo $this->cart->cartData['shipmentName']; ?></div>
+				<?php } ?>
+					<div class="span3"><?php echo $this->currencyDisplay->createPriceDiv ('salesPriceShipment', '', $this->cart->pricesUnformatted['salesPriceShipment'], FALSE); ?>
+					</div>
+			</div>
+		</td>
+	</tr>
+</<table>
 
-	<?php /*	<td colspan="2" align="right"><?php echo JText::_('COM_VIRTUEMART_ORDER_PRINT_SHIPPING'); ?> </td> */ ?>
-				<td colspan="4" align="left">
-				<?php echo $this->cart->cartData['shipmentName']; ?>
-	<br/>
-	<?php
-	if (!empty($this->layoutName) && $this->layoutName == 'default' && !$this->cart->automaticSelectedShipment) {
-		if (VmConfig::get('oncheckout_opc', 0)) {
-			$previouslayout = $this->setLayout('select');
-			echo $this->loadTemplate('shipment');
-			$this->setLayout($previouslayout);
-		} else {
-			echo JHTML::_('link', JRoute::_('index.php?view=cart&task=edit_shipment', $this->useXHTML, $this->useSSL), $this->select_shipment_text, 'class=""');
-		}
-	} else {
-		echo JText::_ ('COM_VIRTUEMART_CART_SHIPPING');
-	}?>
-	</td>
-<?php
-} else {
-	?>
-	<td width="150"><b>Shipping Information:</b></td>
-    <td colspan="4" align="left">
-		<?php echo $this->cart->cartData['shipmentName']; ?>
-	</td>
-	<?php } ?>
+<table class="cart-summary" cellspacing="0" cellpadding="0" border="0" width="100%">
+	<tr>
+		<td>
+			<?php if ($this->cart->pricesUnformatted['salesPrice']>0.0 ) { ?>
+				<div class="row-fluid">
+					<?php if (!$this->cart->automaticSelectedPayment) { ?>
+						<div class="span5" align="left">
+							<b>Payment Selected:</b>
+						</div>
+						<div class="span7" align="left">
+							<?php echo $this->cart->cartData['paymentName']; ?>
+						</div>
+						<div class="span12" align="left">
+						<?php if (!empty($this->layoutName) && $this->layoutName == 'default') {
+								if (VmConfig::get('oncheckout_opc', 0)) {
+									$previouslayout = $this->setLayout('select');
+									echo $this->loadTemplate('payment');
+									$this->setLayout($previouslayout);
+								} else {
+									echo JHTML::_('link', JRoute::_('index.php?view=cart&task=editpayment', $this->useXHTML, $this->useSSL), $this->select_payment_text, 'class=""');
+								}
+						} 
+						else {?>
+						
+							<?php echo JText::_ ('COM_VIRTUEMART_CART_PAYMENT'); ?>
+						<?php } ?>
+						</div>
+					<?php } 
+					else { ?>
+						<div class="span5" align="left">
+							<b>Payment Information:</b>
+						</div>
+						<div class="span7" align="left">
+							<?php echo $this->cart->cartData['paymentName']; ?> 
+						</div>
+					<?php }  ?>
 
-	<?php if (VmConfig::get ('show_tax')) { ?>
-	<td align="right"><?php echo "<span  class='priceColor2'>" . $this->currencyDisplay->createPriceDiv ('shipmentTax', '', $this->cart->pricesUnformatted['shipmentTax'], FALSE) . "</span>"; ?> </td>
-	<?php } ?>
-	<td align="right"><?php if($this->cart->pricesUnformatted['salesPriceShipment'] < 0) echo $this->currencyDisplay->createPriceDiv ('salesPriceShipment', '', $this->cart->pricesUnformatted['salesPriceShipment'], FALSE); ?></td>
-	<td align="right" id="cartShippingPrice"><?php echo $this->currencyDisplay->createPriceDiv ('salesPriceShipment', '', $this->cart->pricesUnformatted['salesPriceShipment'], FALSE); ?> </td>
-</tr>
-<?php if ($this->cart->pricesUnformatted['salesPrice']>0.0 ) { ?>
-<tr class="sectiontableentry1" valign="top">
-	<?php if (!$this->cart->automaticSelectedPayment) { ?>
+					<?php if (VmConfig::get ('show_tax')) { ?>
+						<div class="span12" style="text-align:right">
+							<?php echo "<span  class='priceColor2'>" . $this->currencyDisplay->createPriceDiv ('paymentTax', '', $this->cart->pricesUnformatted['paymentTax'], FALSE) . "</span>"; ?> 
+						</div>
+					<?php } ?>
 
-	<td colspan="4" align="left">
-		<?php echo $this->cart->cartData['paymentName']; ?>
-		<br/>
-		<?php if (!empty($this->layoutName) && $this->layoutName == 'default') {
-			if (VmConfig::get('oncheckout_opc', 0)) {
-				$previouslayout = $this->setLayout('select');
-				echo $this->loadTemplate('payment');
-				$this->setLayout($previouslayout);
-			} else {
-				echo JHTML::_('link', JRoute::_('index.php?view=cart&task=editpayment', $this->useXHTML, $this->useSSL), $this->select_payment_text, 'class=""');
-			}
-		} else {
-		echo JText::_ ('COM_VIRTUEMART_CART_PAYMENT');
-	} ?> </td>
+					<?php if($this->cart->pricesUnformatted['salesPricePayment'] < 0){?>
+						<div class="span12" style="text-align:right">
+							<?php echo $this->currencyDisplay->createPriceDiv ('salesPricePayment', '', $this->cart->pricesUnformatted['salesPricePayment'], FALSE); ?>
+						</div>
+					<?php } ?>
 
-	</td>
-	<?php } else { ?>
-	<td width="150"><b>Payment Information:</b></td>
-    <td colspan="4" align="left"><?php echo $this->cart->cartData['paymentName']; ?> </td>
-	<?php } ?>
-	<?php if (VmConfig::get ('show_tax')) { ?>
-	<td align="right"><?php echo "<span  class='priceColor2'>" . $this->currencyDisplay->createPriceDiv ('paymentTax', '', $this->cart->pricesUnformatted['paymentTax'], FALSE) . "</span>"; ?> </td>
-	<?php } ?>
-	<td align="right"><?php if($this->cart->pricesUnformatted['salesPricePayment'] < 0) echo $this->currencyDisplay->createPriceDiv ('salesPricePayment', '', $this->cart->pricesUnformatted['salesPricePayment'], FALSE); ?></td>
-	<td align="right" valign="middle"><div style="text-align:right"><?php  echo $this->currencyDisplay->createPriceDiv ('salesPricePayment', '', $this->cart->pricesUnformatted['salesPricePayment'], FALSE); ?><i>*Redirected to PayPal after checekout</i></div></td>
-</tr>
-<?php } ?>
+					<div class="span12" style="text-align:right">
+						<?php  echo $this->currencyDisplay->createPriceDiv ('salesPricePayment', '', $this->cart->pricesUnformatted['salesPricePayment'], FALSE); ?>
+						<i>*Redirected to PayPal after checekout</i>
+					</div>
+				</div>
+			<?php }  ?>
+		</td>
+	</tr>
+</<table>
+
+<table class="cart-summary total-price" cellspacing="0" cellpadding="0" border="0" width="100%">
+
 <tr class="sectiontableentry2">
 	<td colspan="2" align="right"><b style="color:#709a00"><?php echo JText::_ ('COM_VIRTUEMART_CART_TOTAL') ?>:</b></td>
 
