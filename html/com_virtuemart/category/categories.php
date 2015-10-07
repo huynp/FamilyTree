@@ -68,7 +68,7 @@ if ($this->category->children ) {
 
 		    // Show Category ?>
 		    <div class="category floatleft <?php echo $category_cellwidth . $show_vertical_separator ?>">
-			    <div class="spacer">
+			    <div class="">
 				    <h2 class="category-view-title">
 					    <a href="<?php echo $caturl ?>" title="<?php echo $category->category_name ?>">
 					    <?php // if ($category->ids) {

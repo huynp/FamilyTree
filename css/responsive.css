@@ -62,6 +62,13 @@ table.cart-summary{
 table.total-price td{
   border-bottom: 2px solid #e1e1e1;
 }
+
+.box-option{
+  width: 30%;
+  float: left;
+  margin: 5px;
+}
+
 /*tablet*/
 @media (min-width: 768px) and (max-width: 979px) {
   .hidden-desktop {
@@ -84,6 +91,17 @@ table.total-price td{
   }
   input.vmcustom-textinput{
     width: 140px !important;
+  }
+
+
+  .category-view .row-fluid:hover .category,
+  .productdetails.row-fluid:hover .spacer,
+  .featured-view .row-fluid:hover .spacer,
+  .latest-view .row-fluid:hover .spacer,
+  .browse-view:hover .spacer
+   {
+    opacity: 1;
+    -webkit-filter: blur(0px);
   }
 }
 
@@ -132,6 +150,33 @@ table.total-price td{
   }
   .cart-view .details-button{
     margin: 0px;
+  }
+  .category-view .row-fluid:hover .category,
+  .productdetails.row-fluid:hover .spacer,
+  .featured-view .row-fluid:hover .spacer,
+  .latest-view .row-fluid:hover .spacer,
+  .browse-view:hover .spacer
+   {
+    opacity: 1;
+    -webkit-filter: blur(0px);
+  }
+  
+  .box-option{
+    width: 150px;
+    margin: 5;
+    border-bottom: 2px solid #CCC;
+    padding-bottom: 10px;
+  }
+
+  .box-option:last-child{
+    border-bottom:none;
+  }
+  .box-option b{
+    white-space: nowrap;
+  }
+
+  .box-option .input_three {
+    width: 130px
   }
   /*End custom css*/
 }

@@ -711,30 +711,57 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 			newElem.setStyle('text-align', 'center');
 			
 			var spn = document.createElement("span");
-			spn.innerHTML = "<center><table class=\"background_table\"><tbody>" +
-						    //"<tr><td colspan='3'><input type='button' value='Click Here To Keep Space Empty' onClick='setBottomLeft(0,\"Empty\");'><td></tr><tr>" +
-							"<td><b>Bottom Left Option 1:</b><br />Family Name & Established Date<br />Font Style 1</td>" +
-							"<td><b>Bottom Left Option 2:</b><br />Family Name & Established Date<br />Font Style 2</td>" +
-							"<td><b>Bottom Left Option 3:</b><br />Family Name & Established Date<br />Font Style 3</td>" +
-							"<td><b>Bottom Left Option Empty:</b><br />Family Name & Established Date<br />None</td>" +
-							"</tr><tr>" +
-							"<td align='center'><img id='BottomLeft_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Left Option 1.png' alt='BottomLeftOption1' /></td>" +
-							"<td align='center'><img id='BottomLeft_Option2' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Left Option 2.png' alt='BottomLeftOption2' /></td>" +
-							"<td align='center'><img id='BottomLeft_Option3' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Left Option 3.png' alt='BottomLeftOption3' /></td>" +
-							"<td align='center'><img id='BottomLeft_OptionNone' class='image_border' width='350' src='/images/products/"+selected+".png' alt='BottomLeftOption3' /></td>" +
-							"</tr><tr>" +
-							"<td>Enter your family name and<br />year established here.<br />" + 
-							    "<input class='input_three' style='text-align:center;' type='text' id='BottomLeftOption1'><br />" +
-								"<input type='button' value='Select Option 1' onclick='setBottomLeft(1,\"BottomLeftOption1\");'></td>" +
-							"<td>Enter your family name and<br />year established here.<br />" + 
-							    "<input class='input_three' style='text-align:center;' type='text' id='BottomLeftOption2'><br />" +
-								"<input type='button' value='Select Option 2' onclick='setBottomLeft(2,\"BottomLeftOption2\");'></td>" +
-							"<td>Enter your family name and<br />year established here.<br />" + 
-							    "<input class='input_three' style='text-align:center;' type='text' id='BottomLeftOption3'><br />" +
-								"<input type='button' value='Select Option 3' onclick='setBottomLeft(3,\"BottomLeftOption3\");'></td>" +
-						    "<td>" +
-								"<input type='button' value='Select Empty' id='BottomLeftNone' onclick='setBottomLeft(0,\"BottomLeftNone\");'></td>" +
-							"</tr></tbody></table></center>";
+			spn.innerHTML =  String.format("<div class='box-option'>\
+					<div>\
+						<b>Bottom Left Option 1:</b><br />Family Name & Established Date<br />Font Style 1\
+					</div>\
+					<div>\
+						<img id='BottomLeft_Option1' class='image_border' width='350' src='/images/products/{0}_Bottom Left Option 1.png' alt='BottomLeftOption1' />\
+					</div>\
+					<div>\
+						Enter your family name and<br />year established here.<br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomLeftOption1'><br />\
+						<input type='button' value='Select Option 1' onclick='setBottomLeft(1,\"BottomLeftOption1\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Left Option 2:</b><br />Family Name & Established Date<br />Font Style 2\
+					</div>\
+					<div>\
+						<img id='BottomLeft_Option2' class='image_border' width='350' src='/images/products/{0}_Bottom Left Option 2.png' alt='BottomLeftOption2' />\
+					</div>\
+					<div>\
+						Enter your family name and<br />year established here.<br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomLeftOption2'><br />\
+						<input type='button' value='Select Option 2' onclick='setBottomLeft(2,\"BottomLeftOption2\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Left Option 3:</b><br />Family Name & Established Date<br />Font Style 3\
+					</div>\
+					<div>\
+						<img id='BottomLeft_Option3' class='image_border' width='350' src='/images/products/{0}_Bottom Left Option 3.png' alt='BottomLeftOption3' />\
+					</div>\
+					<div>\
+						Enter your family name and<br />year established here.<br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomLeftOption3'><br />\
+						<input type='button' value='Select Option 3' onclick='setBottomLeft(3,\"BottomLeftOption3\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Left Option Empty:</b><br />Family Name & Established Date<br />None\
+					</div>\
+					<div>\
+						<img id='BottomLeft_OptionNone' class='image_border' width='350' src='/images/products/{0}.png' alt='BottomLeftOption3' />\
+					</div>\
+					<div>\
+						<br />\
+						<input type='button' value='Select Empty' id='BottomLeftNone' onclick='setBottomLeft(0,\"BottomLeftNone\");'>\
+					</div>\
+				</div>",selected);
 			newElem.appendChild(spn);
 			
 			showPopup(newElem);
@@ -781,39 +808,58 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 			//SqueezeBox.resize({x: 1150, y: 700})
 			
 			var newElem = new Element( 'div' );
-			/*newElem.setStyle('border', 'solid 1px #CCC');*/ 
-			//newElem.setStyle('width', '1125px');
-			//newElem.setStyle('height', '675px');
 			newElem.setStyle('padding', '10px');   
 			newElem.setStyle('text-align', 'center');
 			
 			var spn = document.createElement("span");
-			spn.innerHTML = "<center><table class=\"background_table\"><tbody>" +
-							"<td><b>Bottom Right Option 1:</b><br />Quote or Occasion<br />Font Style 1</td>" +
-							"<td><b>Bottom Right Option 2:</b><br />Quote or Occasion<br />Font Style 2</td>" +
-							"<td><b>Bottom Right Option 3:</b><br />Quote or Occasion<br />None</td>" +
-							"</tr><tr>" +
-							"<td align='center'><img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Right Option 1.png' alt='BottomRightOption1' /></td>" +
-							"<td align='center'><img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Right Option 2.png' alt='BottomRightOption2' /></td>" +
-							"<td align='center'><img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/"+selected+".png' alt='BottomRightOption3' /></td>" +
-							"</tr><tr>" +
-							"<td>Enter your quote<br />or occassion here.<br /><a href='/index.php/our-products/quote-ideas' target='_blank'><u>Click here for quote ideas.</u></a>" + 
-							    "<input class='input_three' style='text-align:center;' type='text' id='BottomRightOption1'><br />" +
-								"<input type='button' value='Select Option 1' onclick='setBottomRight(1,\"BottomRightOption1\");'></td>" +
-							"<td>Enter your quote<br />or occassion here.<br /><a href='/index.php/our-products/quote-ideas' target='_blank'><u>Click here for quote ideas.</u></a>" + 
-							    "<input class='input_three' style='text-align:center;' type='text' id='BottomRightOption2'><br />" +
-								"<input type='button' value='Select Option 2' onclick='setBottomRight(2,\"BottomRightOption2\");'></td>" +
-							"<td>" +
-								"<input type='button' value='Select Empty' id='BottomRightNone' onclick='setBottomRight(0,\"BottomRightNone\");'></td>" +
-							"</tr></tbody></table></center>"; 
+			spn.innerHTML = String.format("<div class='box-option'>\
+					<div>\
+						<b>Bottom Right Option 1:</b><br />Quote or Occasion<br />Font Style 1\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/{0}_Bottom Right Option 1.png' alt='BottomRightOption1' />\
+					</div>\
+					<div>\
+						Enter your quote<br />or occassion here.<br />\
+						<a href=\"/index.php/our-products/quote-ideas\" target=\"_blank\"><u>Click here for quote ideas.</u></a><br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomRightOption1'><br />\
+						<input type='button' value='Select Option 1' onclick='setBottomRight(1,\"BottomRightOption1\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Right Option 2:</b><br />Quote or Occasion<br />Font Style 2\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option2' class='image_border' width='350' src='/images/products/{0}_Bottom Right Option 2.png' alt='BottomRightOption2' />\
+					</div>\
+					<div>\
+						Enter your quote<br />or occassion here.<br />\
+						<a href=\"/index.php/our-products/quote-ideas\" target=\"_blank\"><u>Click here for quote ideas.</u></a><br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomRightOption2'><br />\
+						<input type='button' value='Select Option 2' onclick='setBottomRight(2,\"BottomRightOption2\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Right Option Empty:</b><br />Quote or Occasion<br />None\
+					</div>\
+					<div>\
+						<img id='BottomRight_OptionNone' class='image_border' width='350' src='/images/products/{0}.png' alt='BottomRightOption3' />\
+					</div>\
+					<div>\
+						<br />\
+						<input type='button' value='Select Empty' id='BottomRightNone' onclick='setBottomRight(0,\"BottomRightNone\");'>\
+					</div>\
+				</div>",selected);
 			newElem.appendChild(spn);
-			
 			showPopup(newElem);
 	  }
 	  return false;
   }
   
     function setBottomRight(num,id) {
+    	debugger;
 	  field = document.getElementById(id);
 	  if(field.value == "" || field.value == " ") {
 		  alert("Please enter your quote or occassion in the field above the option you selected");
@@ -844,6 +890,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
   }
   
   function show_bottom(id) {
+  		debugger;
 	  if(checkSelected(4)) {
 		  var selected = selectedTreeType(3);
 		  SqueezeBox.initialize({
@@ -862,49 +909,103 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 	  		roots = roots.options[roots.selectedIndex].text; 
 			var spn = document.createElement("span");
 			if(roots.indexOf("Yes") > -1) {
-				spn.innerHTML = "<center><table class=\"background_table\"><tbody>" +
-							"<td><b>Bottom Option 1:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 1</td>" +
-							"<td><b>Bottom Option 2:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />None</td>" +
-							"</tr><tr>" +
-							"<td align='center'><img id='Bottom_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Option 1.png' alt='BottomOption1' /></td>" +
-							"<td align='center'><img id='Bottom_Option2' class='image_border' width='350' src='/images/products/"+selected+".png' alt='BottomOption3' /></td>" +
-							"</tr><tr>" +
-							"<td>Enter your desired<br />\"ground\" text here.<br /><a href='/index.php/our-products/quote-ideas' target='_blank'><u>Click here for quote ideas.</u></a><br />" + 
-							    "<input class='input_three' style='text-align:center;' type='text' id='BottomOption1'><br />" +
-								"<input type='button' value='Select Option 1' onclick='setBottom(1,\"BottomOption1\");'></td>" +
-							"<td>" +
-								"<input type='button' value='Select Empty' id='BottomNone' onclick='setBottom(0,\"BottomNone\");'></td>" +
-							"</tr></tbody></table></center>";
+				spn.innerHTML = String.format("<div class='box-option'>\
+					<div>\
+						<b>Bottom Option 1:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 1\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/{0}_Bottom Option 1.png' alt='BottomOption1' />\
+					</div>\
+					<div>\
+						Enter your desired<br />\"ground\" text here.<br />\
+						<a href=\"/index.php/our-products/quote-ideas\" target=\"_blank\"><u>Click here for quote ideas.</u></a><br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomOption1'><br />\
+						<input type='button' value='Select Option 1' onclick='setBottom(1,\"BottomOption1\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Option 2:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />None\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/{0}.png' alt='BottomOption1' />\
+					</div>\
+					<div>\
+						<br />\
+						<input type='button' value='Select Empty'  id='BottomNone'  onclick='setBottom(0,\"BottomNone\");'>\
+					</div>\
+				</div>",selected);
 			}
 			else {
-				spn.innerHTML = "<center><table class=\"background_table\"><tbody>" +
-							"<td><b>Bottom Option 1:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 1</td>" +
-							"<td><b>Bottom Option 2:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 2</td>" +
-							"<td><b>Bottom Option 3:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 3</td>" +
-							"<td><b>Bottom Option 4:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 4</td>" +
-							"<td><b>Bottom Option 5:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />None</td>" +
-							"</tr><tr>" +
-							"<td align='center'><img id='Bottom_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Option 1.png' alt='BottomOption1' /></td>" +
-							"<td align='center'><img id='Bottom_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Option 2.png' alt='BottomOption1' /></td>" +
-							"<td align='center'><img id='Bottom_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Option 3.png' alt='BottomOption1' /></td>" +
-							"<td align='center'><img id='Bottom_Option1' class='image_border' width='350' src='/images/products/"+selected+"_Bottom Option 4.png' alt='BottomOption1' /></td>" +
-							"<td align='center'><img id='Bottom_Option2' class='image_border' width='350' src='/images/products/"+selected+".png' alt='BottomOption3' /></td>" +
-							"</tr><tr>" +
-							"<td>Enter your desired<br />\"ground\" text here.<br /><a href='/index.php/our-products/quote-ideas' target='_blank'><u>Click here for quote ideas.</u></a>" + 
-							    "<input class='input_three' style='text-align:center;' type='text' id='BottomOption1'><br />" +
-								"<input type='button' value='Select Option 1' onclick='setBottom(1,\"BottomOption1\");'></td>" +
-							"<td>Enter your desired<br />\"ground\" text here.<br /><a href='/index.php/our-products/quote-ideas' target='_blank'><u>Click here for quote ideas.</u></a>" + 
-						    	"<input class='input_three' style='text-align:center;' type='text' id='BottomOption2'><br />" +
-								"<input type='button' value='Select Option 2' onclick='setBottom(2,\"BottomOption2\");'></td>" +
-							"<td>Enter your desired<br />\"ground\" text here.<br /><a href='/index.php/our-products/quote-ideas' target='_blank'><u>Click here for quote ideas.</u></a>" + 
-					    		"<input class='input_three' style='text-align:center;' type='text' id='BottomOption3'><br />" +
-								"<input type='button' value='Select Option 3' onclick='setBottom(3,\"BottomOption3\");'></td>" +
-							"<td>Enter your desired<br />\"ground\" text here.<br /><a href='/index.php/our-products/quote-ideas' target='_blank'><u>Click here for quote ideas.</u></a>" + 
-				    			"<input class='input_three' style='text-align:center;' type='text' id='BottomOption4'><br />" +
-								"<input type='button' value='Select Option 4' onclick='setBottom(4,\"BottomOption4\");'></td>" +
-							"<td>" +
-								"<input type='button' value='Select Empty' id='BottomNone' onclick='setBottom(0,\"BottomNone\");'></td>" +
-							"</tr></tbody></table></center>";
+
+				spn.innerHTML = String.format("<div class='box-option'>\
+					<div>\
+						<b>Bottom Option 1:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 1\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/{0}_Bottom Option 1.png' alt='BottomOption1' />\
+					</div>\
+					<div>\
+						Enter your desired<br />\"ground\" text here.<br />\
+						<a href=\"/index.php/our-products/quote-ideas\" target=\"_blank\"><u>Click here for quote ideas.</u></a><br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomOption1'><br />\
+						<input type='button' value='Select Option 1' onclick='setBottom(1,\"BottomOption1\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Option 2:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 2\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option2' class='image_border' width='350' src='/images/products/{0}_Bottom Option 2.png' alt='BottomOption2' />\
+					</div>\
+					<div>\
+						Enter your desired<br />\"ground\" text here.<br />\
+						<a href=\"/index.php/our-products/quote-ideas\" target=\"_blank\"><u>Click here for quote ideas.</u></a><br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomOption2'><br />\
+						<input type='button' value='Select Option 2' onclick='setBottom(2,\"BottomOption2\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Option 3:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 3\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option3' class='image_border' width='350' src='/images/products/{0}_Bottom Option 3.png' alt='BottomOption3' />\
+					</div>\
+					<div>\
+						Enter your desired<br />\"ground\" text here.<br />\
+						<a href=\"/index.php/our-products/quote-ideas\" target=\"_blank\"><u>Click here for quote ideas.</u></a><br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomOption3'><br />\
+						<input type='button' value='Select Option 3' onclick='setBottom(3,\"BottomOption3\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Option 4:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />Font Style 4\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option4' class='image_border' width='450' src='/images/products/{0}_Bottom Option 4.png' alt='BottomOption4' />\
+					</div>\
+					<div>\
+						Enter your desired<br />\"ground\" text here.<br />\
+						<a href=\"/index.php/our-products/quote-ideas\" target=\"_blank\"><u>Click here for quote ideas.</u></a><br />\
+					    <input class='input_three' style='text-align:center;' type='text' id='BottomOption4'><br />\
+						<input type='button' value='Select Option 4' onclick='setBottom(4,\"BottomOption4\");'>\
+					</div>\
+				</div>\
+				<div class='box-option'>\
+					<div>\
+						<b>Bottom Option 5:</b><br />Quote, Occasion, Family Name, Scripture, or Title Name and Established Date<br />None\
+					</div>\
+					<div>\
+						<img id='BottomRight_Option1' class='image_border' width='350' src='/images/products/{0}.png' alt='BottomOption1' />\
+					</div>\
+					<div>\
+						<br />\
+						<input type='button'  id='BottomNone' value='Select Empty' onclick='setBottom(0,\"BottomNone\");'>\
+					</div>\
+				</div>",selected);
 			}
 			newElem.appendChild(spn);
 			
