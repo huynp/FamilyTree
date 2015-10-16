@@ -21,5 +21,13 @@ jQuery(document).ready(function () {
 		
 		// Remove slider
 		jQuery("#slideshow-handler-bg").remove();
+		
+		// Remove boxes in address edit page
+		var pathname = window.location.pathname;
+		if(pathname.indexOf('edit-address') > -1)
+		{
+			jQuery('#tab-modules').remove();
+			jQuery('#main-content-handler').find('.span3').remove();
+		}
     }
 });
