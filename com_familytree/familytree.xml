@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension type="component" version="2.5" method="upgrade">
+    <name>COM_FAMILYTREE</name>
+    <author>Huy Nguyen</author>
+    <authorEmail>huynp88@gmail.com</authorEmail>
+    <copyright>This extension in released under the GNU/GPL </copyright>
+    <license>GNU/GPL</license>
+    <version>1.0.1</version>
+    <files folder="site">
+        <folder>language</folder>
+        <folder>css</folder>
+        <folder>images</folder>
+        <folder>js</folder>
+        <filename>familytree.php</filename>
+        <filename>controller.php</filename>
+        <filename>index.html</filename>
+    </files>
+    <languages folder="site">
+            <language tag="en-GB">language/en-GB/en-GB.com_familytree.ini</language>
+    </languages>
+    <administration>
+        <menu img="./components/com_familytree/images/tree-icon-16.png">COM_FAMILYTREE</menu>
+        <submenu>
+            <menu link="option=com_familytree&amp;task=listFamilyTree" img="./components/com_familytree/images/list-icon-16.png">COM_FAMILYTREE_MENU_LISTFTREE</menu>
+            <menu link="option=com_familytree&amp;task=create" img="./components/com_familytree/images/plus-icon-16.png">COM_FAMILYTREE_MENU_CREATE</menu>
+        </submenu>
+        <files folder="admin">
+            <folder>language</folder>
+            <folder>install</folder>
+            <folder>css</folder>
+            <folder>images</folder>
+            <folder>js</folder>
+            <filename>familytree.php</filename>
+            <filename>controller.php</filename>
+            <filename>index.html</filename>
+        </files>
+        <languages folder="admin">
+            <language tag="en-GB">language/en-GB/en-GB.com_familytree.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_familytree.sys.ini</language>
+        </languages>
+    </administration>
+    <install>
+        <sql>
+            <file charset="utf8" driver="mysql">install/install.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file charset="utf8" driver="mysql">install/uninstall.sql</file>
+        </sql>
+    </uninstall>
+    <update>
+        <sql>
+            <file charset="utf8" driver="mysql">install/update.sql</file>
+        </sql>
+    </update>
+</extension>

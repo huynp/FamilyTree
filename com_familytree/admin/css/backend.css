@@ -1,0 +1,17 @@
+#create{
+	background: red;
+	color: blue;
+	border-radius: 3px;
+	padding: 10px;
+}
+.icon-48-family-tree-list{
+	background: url('../images/list-icon.png') 0 0 no-repeat;
+}
+
+.icon-48-family-tree-create{
+	background: url('../images/plus-icon.png') 0 0 no-repeat;
+}
+
+.icon-48-family-tree{
+	background: url('../images/tree-icon.png') 0 0 no-repeat;
+}

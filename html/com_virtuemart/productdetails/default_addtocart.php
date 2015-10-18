@@ -1258,10 +1258,10 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 				frameCost = "$70.00";	
 			}
 			else if(size.indexOf("16x20") > -1) {
-				frameCost = "$95.00";	
+				frameCost = "$90.00";	
 			}
 			else if(size.indexOf("20x24") > -1) {
-				frameCost = "$115.00";	
+				frameCost = "$110.00";	
 			}
 			else if(size.indexOf("24x30") > -1) {
 				frameCost = "$145.00";	

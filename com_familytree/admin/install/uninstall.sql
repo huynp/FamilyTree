@@ -1,0 +1,1 @@
+Drop table if EXISTS   #__familytree_tree_data;

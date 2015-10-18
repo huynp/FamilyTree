@@ -67,7 +67,7 @@ defined ('_JEXEC') or die('Restricted access');
 				}
 			}
 			?>
-            <a href="<?php echo $url; ?>">Download Your Form Here</a>
+            <a href="<?php echo $url; ?>">Download Your Form Here 123</a>
         </td>
     </tr>
 </table>

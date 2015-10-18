@@ -100,7 +100,7 @@ table.total-price td{
   .latest-view .row-fluid:hover .spacer,
   .browse-view:hover .spacer
    {
-    opacity: 1;
+    opacity: 1 !important;
     -webkit-filter: blur(0px);
   }
 }
@@ -157,8 +157,8 @@ table.total-price td{
   .latest-view .row-fluid:hover .spacer,
   .browse-view:hover .spacer
    {
-    opacity: 1;
-    -webkit-filter: blur(0px);
+    opacity: 1 !important;
+    -webkit-filter: blur(0px) !important;;
   }
   
   .box-option{
