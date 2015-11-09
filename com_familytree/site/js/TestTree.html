@@ -58,27 +58,80 @@
 		.inner-popup-content table.has-spouse{
 			display: none;
 		}
+		.tree-type-container{
+			font-size: 22px;
+			font-weight: bold;
+			margin: 5px;
+			color: gray;
+		}
 	</style>
 	<script type="text/javascript">
 		(function($){
 			$(document).ready(function(){
-				var tree = $('#custom-tree').familyTree();
-				
-				$('#add-child').click(function(){
-					tree.addChild();
-				});
+				$('.tree-type').change(function(){
+					var _treeType=$('.tree-type:checked').val(),
+					options= {
+						TreeType:_treeType,
+						nodeSelected:function(node){
+							if(_treeType ==='Ancestor')
+							{
+								$('.ancestor-toolbox button').removeAttr('disabled');
+								var childNode =node.data.childNodes;
+								for(var i=0;childNode && i< childNode.length;i++)
+								{
+									childNode[i].type==='Father'? $('#add-father').attr('disabled','disabled') :  $('#add-mother').attr('disabled','disabled');
+								}
+							}
 
-				$('#edit-node').click(function(){
-					tree.editNode();
+						}
+					},
+					tree = $('#custom-tree').familyTree(options);
+					if(options.TreeType ==='Ancestor' )
+					{
+						$('.ancestor-toolbox').show();
+						$('.descendant-toolbox').hide();
+					}
+					else
+					{
+						$('.descendant-toolbox').show();
+						$('.ancestor-toolbox').hide();
+					}
+
+					$('#add-child').unbind('click').click(function(){
+						tree.addChild();
+					});
+
+					$('#add-father').unbind('click').click(function(){
+						tree.addChild('Father');
+					});
+
+					$('#add-mother').unbind('click').click(function(){
+						tree.addChild('Mother');
+					});
+
+					$('.edit-node').unbind('click').click(function(){
+						tree.editNode();
+					});
 				});
+				$('.tree-type').change();
 			});
 		}(jQuery))
 	</script>
 	<div class='container'>
+		<div class='tree-type-container'>
+			<label style='cursor:pointer' for="rd-ancestor"><input type='radio' class='tree-type' name='tree-type' value='Ancestor' id='rd-ancestor' checked>Ancestor Tree</label>
+			<label style='cursor:pointer' for="rd-descendant"><input type='radio' class='tree-type' name='tree-type' value='Descendant' id='rd-descendant'>Descendant Tree</label>
+		</div>
 		<div class="tool-box">
-
-			<button id="add-child">Add Child</button>
-			<button id="edit-node">Edit Node</button>
+			<div class='ancestor-toolbox'>
+				<button id="add-father">Add Father</button>
+				<button id="add-mother">Add Mother</button>
+				<button class="edit-node">Edit Node</button>
+			</div>
+			<div class='descendant-toolbox'>
+				<button id="add-child">Add Child</button>
+				<button class="edit-node">Edit Node</button>
+			</div>
 		</div>
 		<div id="custom-tree" class="orgChart">
 	   		

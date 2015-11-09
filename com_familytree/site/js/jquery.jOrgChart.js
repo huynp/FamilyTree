@@ -22,6 +22,13 @@
     var $container = $("<div class='" + opts.chartClass + "'/>"),
     $rootNode = buildNode(data, $container, opts);
     $appendTo.append($container); 
+    opts.displayHorizontal && displayHorizontal();
+    function displayHorizontal (){
+      $container.addClass('jOrgChart-horizontal');
+      $container.find('>table').addClass('horizontal');
+      var tableWidth = $container.find('>table').width();
+      $container.find('>table').css({top:tableWidth+"px"});
+    }
 
     function renderNode($node)
     {
@@ -29,6 +36,8 @@
       $nodeContainer.empty();
       $selectedNode = buildNode($node[0].data, $nodeContainer,opts);
       $selectedNode.addClass('selected');
+      opts.displayHorizontal && displayHorizontal();
+      opts.onNodeSelected($selectedNode);
     }
 
     // Method that recursively builds the tree
@@ -53,7 +62,7 @@
       //Increaments the node count which is used to link the source list and the org chart
       $nodeDiv = $("<div>").addClass("node").append($nodeContent);
       $nodeDiv[0].data= nodeData;
-      $nodeDiv.on('click',function(){
+      $nodeDiv.unbind('click').on('click',function(){
         $selectedNode && $selectedNode.removeClass('selected');
         $selectedNode = $nodeDiv.addClass('selected');
         opts.onNodeSelected($nodeDiv);
@@ -115,17 +124,15 @@
     return {
       addNode:function(data)
       {
-          $selectedNode[0].data.childNodes|| ($selectedNode[0].data.childNodes=[])
-          $selectedNode[0].data.childNodes.push(data);
+          $selectedNode && $selectedNode[0].data.childNodes|| ($selectedNode[0].data.childNodes=[])
+          $selectedNode && $selectedNode[0].data.childNodes.push(data);
           renderNode($selectedNode);
       },
       removeNode:function(){},
       updateNode:function(data){
           $.extend($selectedNode[0].data, data);
           renderNode($selectedNode);
-      },
-      $selectedNode:$selectedNode
-      
+      }
     }
   };
 

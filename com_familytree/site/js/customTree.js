@@ -113,10 +113,10 @@
     function FamilyTree($el, options) {
         var _options = {
             TreeName: 'familyTree',
-            data: {
+            TreeType:'Descendant',
+            DescendantData: {
                 name:'Main Person',
                 spouse:'spouse Name',
-                treeType:'Ancestor',
                 childNodes:[
                     {
                         name:'Child 1',
@@ -167,17 +167,48 @@
                         ]
                     }
                 ]
+            },
+            AncestorData:{
+                name:'Main Person',
+                spouse:'spouse Name',
+                childNodes:[
+                    {
+                        name: 'Father 1',
+                        type:'Father',
+                        childNodes:[
+                            {
+                                name: 'Father 1-1',
+                                type:'Father'
+                            },
+                            {
+                                name: 'Mother 1-1',
+                                type: 'Mother'
+                            }
+                        ]
+
+                    },
+                    {
+                        name: 'Mother 2',
+                        type: 'Mother',
+                        childNodes:[
+                            {
+                                name: 'Father 2-1',
+                                type:'Father'
+                            }]
+                    }
+                ]
             }
         };
         _options = $.extend(_options, options);
-        var  $selectedNode,$rootNode , _isAdd,
-        _treeInstance = renderTree(_options.data||[]),
+        var  $selectedNode, _isAdd,
+        _sampleData = _options.TreeType ==='Ancestor' ? _options.AncestorData :_options.DescendantData,
+        _treeInstance = renderTree(_sampleData),
         _ancestorContentTmp ='<div class="inner-popup-content ancestor-content-popup">\
                 <h3>Ancestor Popup</h3>\
                 <table>\
                     <tr>\
                         <td>Name</td>\
-                        <td><input type="text" class="txtName" /></td>\
+                        <td><input type="text" class="txtName" /><input type="hidden" class="txtType"/></td>\
                     </tr>\
                 </table>\
             </div>',
@@ -185,24 +216,24 @@
             <h3>Descendant Popup</h3>\
             <table>\
                 <tr>\
-                    <td>Name</td>\
+                    <td width="100px">Name</td>\
                     <td><input type="text" class="txtName" /></td>\
                 </tr>\
                 <tr>\
                     <td>Has Spouse</td>\
                     <td><input type="checkbox" class="cbHasSpouse" /></td>\
                 </tr>\
-                <tr class="has-spouse">\
+                <tr class="has-spouse hide">\
                     <td>Spouse Name</td>\
                     <td><input type="text" class="txtSpouseName" /></td>\
                 </tr>\
             </table>\
         </div>',
-        $popupTemplate = _options.treeType == 'Ancestor'? $(_ancestorContentTmp) : $(_descendantContentTmp),
+        $popupTemplate = _options.TreeType == 'Ancestor'? $(_ancestorContentTmp) : $(_descendantContentTmp),
         $spouseName = $popupTemplate.find('.txtSpouseName'),
         $name = $popupTemplate.find('.txtName'),
+        $nodeType = $popupTemplate.find('.txtType'),
         $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
-
         $cbHasSpouse.on('change',function(){
             var $rowHasSpouse =  $popupTemplate.find('.has-spouse');
             $(this).is(':checked')? $rowHasSpouse.show():$rowHasSpouse.hide();
@@ -220,31 +251,54 @@
                             var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
                             var data={
                                 name:$name.val(),
-                                spouseName:spouseName
+                                spouse:spouseName
                             }
                             _isAdd ? _treeInstance.addNode(data) : _treeInstance.updateNode(data);
                             popupInstance.display(false);
-                            $cbHasSpouse.attr('checked', false)
-                            $spouseName.val('');
-                            $name.val('');
                         }
                     }];
 
         var popupOptions={
             buttons:popupButtons
         }
-        var instance = {
-            addChild: function() {
+        var _instance = {
+            addChild: function(type) {
                 _isAdd = true;
+                if(!$selectedNode)
+                {
+                    alert('Please select a node!!!');
+                    return;
+                }
+                var data ={
+                    name:'',
+                    type:type,
+                    spouse:''
+                }
+                bindDataToTemplate(data)
                 $popupTemplate.jPopup(popupOptions);
+
             },
             editNode:function() {
                 _isAdd = false;
+                if(!$selectedNode)
+                {
+                    alert('Please select a node!!!');
+                    return;
+                }
+                bindDataToTemplate($selectedNode[0].data)
                 $popupTemplate.jPopup(popupOptions);
+               
             }
 
         };
-
+        function bindDataToTemplate(data)
+        {
+            $name.val(data.name);
+            $spouseName.val(data.spouse);
+            $nodeType.val(data.type);
+            $cbHasSpouse.attr('checked',data.spouse !='');
+            $cbHasSpouse.change();
+        }
         function renderTree(data)
         {
             $el.find('.jOrgChart').remove();
@@ -253,11 +307,13 @@
                 onNodeSelected:function($node){
                     $selectedNode && $selectedNode.removeClass('selected');
                     $selectedNode = $node.addClass('selected');
+                    _options.nodeSelected($node[0])
+
                 },
+                displayHorizontal:true
             },data);
         }
-
-        return instance;
+        return _instance;
 
     }
 

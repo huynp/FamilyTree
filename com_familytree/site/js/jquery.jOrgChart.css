@@ -39,16 +39,45 @@
   margin               : 0 2px;
 }
 
-/* jQuery drag 'n drop */
-
-.drag-active {
-  border-style			: dotted !important;
-}
-
-.drop-hover {
-  border-style			: solid !important;
-  border-color 			: #E05E00 !important;
-}
 .padding-top{
   padding-top:3px !important;
+}
+.jOrgChart-horizontal {
+  position: relative;
+}
+
+.horizontal{
+
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -sand-transform: rotate(-90deg);
+
+
+  /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+  -webkit-transform-origin: 0 0;
+  -moz-transform-origin:0 0;
+  -ms-transform-origin:0 0;
+  -o-transform-origin:0 0;
+  position: absolute;
+}
+
+
+.horizontal .node{
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -sand-transform: rotate(90deg);
+    width:100px;
+    height: 60px;
+
+}
+
+.horizontal .down, .horizontal  .top{
+  padding-top: 20px;
+}
+.hide{
+  display: none;
 }
