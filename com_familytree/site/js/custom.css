@@ -1,0 +1,53 @@
+body, html, div, p, span, a, h1, h2, h3, h4, h5{
+	margin 				: 0;
+	padding 			: 0;
+}
+
+body, html{	
+	width 				: 100%;
+}
+
+body{
+	background 			: url('bkgd.png') repeat top left;
+	color 				: white;
+	font-family 		: tahoma;
+	font-weight 		: lighter;
+	padding-top 		: 40px;
+}
+
+	
+/* list stuff */
+#org{
+	background-color 	: white;
+	margin 				: 10px;
+	padding 			: 10px;
+}
+
+/* Custom chart styling */
+.jOrgChart {
+  margin                : 10px;
+  padding               : 20px;
+}
+
+/* Custom node styling */
+.jOrgChart .node {
+	font-size 			: 14px;
+	background-color 	: #35363B;
+	border-radius 		: 8px;
+	border 				: 5px solid white;
+	color 				: #F38630;
+	-moz-border-radius 	: 8px;
+}
+	.node p{
+		font-family 	: tahoma;
+		font-size 		: 10px;
+		line-height 	: 11px;
+		padding 		: 2px;
+	}
+	.node span{
+		display: block;
+	}
+
+	.node.selected{
+		border-color: gray;
+	}

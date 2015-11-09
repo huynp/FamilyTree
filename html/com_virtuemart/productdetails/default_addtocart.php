@@ -273,6 +273,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		else { }
 	  }
     }
+
   }
   
   function closeWindow() {
@@ -397,10 +398,11 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 	  select_TreeType = id;
 	  document.getElementById(id_TreeType).style.borderWidth = "1px";
       selIndex = document.getElementById(id).selectedIndex;
+	  jQuery("#img_boder").hide();
 	  if (txt.indexOf("Select One ...") > -1) {
 	  	select_TreeType = "";
 		document.getElementById('PDP_Image').src = originalBackground;
-		document.getElementById('main-image').style.backgroundImage = "";
+		jQuery('#img_Background').empty();
 		thisForm = document.getElementById(id).form;
 		thisForm.reset();
 		setLeaves("Select One");
@@ -408,72 +410,12 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 		setBottomRight(0,id_BottomRight);
 		setBottom(0,id_Bottom);
 		initForm();
+		updatePrice();   
       }
-	  /*else if (txt.indexOf("Descendant - 5 Generation") > -1) {
-	  	var options = {size: {x: 300, y: 195}};
-		SqueezeBox.initialize(options);
-		//SqueezeBox.resize({x: 300, y: 195})
-		var newElem = document.createElement("span");
-		
-		newElem.innerHTML = "<center><table><tbody>" +
-		                    "<tr>" +
-			                "<td>For 5+ generation trees you'll need to submit a request through the contact us page.<br /><br >" +
-							    "Include 'Descendant 5 Generation Request' in the subject line.<br /><br />" +
-							    "<a href='/index.php/contact-us'><u>Click here to go to that form.</u></a></td>" +
-		                    "</tr></tbody></table></center>"; 
-		
-	    showPopup(newElem);
-		
-		thisForm = document.getElementById(id).form;
-		thisForm.reset();
-		initForm();
-	  }*/
 	  else { 
-		/*
-		SqueezeBox.initialize({
-          size: {x: 700, y: 585}
-        });
-		
-	    var newElem = new Element( 'div' );
-	    //newElem.setStyle('width', '675px');
-	    //newElem.setStyle('height', '560px');
-	    newElem.setStyle('padding', '10px');
-		newElem.setStyle('text-align', 'center');
-        
-		var anchr = document.createElement("a");
-		
-		var n = txt.indexOf('+');
-		var location = txt.substring(0, n != -1 ? n : txt.length);
-		location = location.trim();
-
-		anchr.setAttribute("href", "/forms/" + location);
-		anchr.setStyle('text-decoration', 'underline');
-		anchr.setStyle('font-size', '16px');
-		anchr.innerHTML = "Download:  " + txt + " Form";   
-		
-		var newElem = document.createElement("span");
-		
-		newElem.innerHTML = "<center><table style='width: 667px; height: 740px;'><tbody>" +
-		                    "<tr style=\"width: 667px; height: 190px;\">" +
-			                "<td valign='middle' style='width: 270px; background: url(\"/images/Step_1.png\") no-repeat left center;'>&nbsp;</td>" +
-			                "<td valign='middle' style='padding: 22px 30px 38px 30px;' valign='top'><span style='font-weight: bold; color: #ff4b26; font-size: 30px;'>Step 1</span>" +
-							                                             "<br /><a href='/forms/"+location+".xlsx'><u><b>CLICK HERE</b></u></a> to download the form for the Generations you've selected.<br /><i>("+txt+")</i></td>" +
-		                    "</tr><tr style=\"width: 667px; height: 190px;\">" +
-			                "<td valign='middle' style='width: 270px; background: url(\"/images/Step_2.png\") no-repeat left center;'>&nbsp;</td>" +
-			                "<td valign='middle' style='padding: 22px 30px 38px 30px;' valign='top'><span style='font-weight: bold; color: #a2c404; font-size: 30px;'>Step 2</span>" +
-							                                              "<br />Fill out the form you downloaded.<br />Enter your family member's names.</td>" +
-							"</tr><tr style=\"width: 667px; height: 190px;\">" +
-			                "<td valign='middle' style='width: 270px; background: url(\"/images/Step_3.png\") no-repeat left center;'>&nbsp;</td>" +
-			                "<td valign='middle' style='padding: 22px 30px 38px 30px;' valign='top'><span style='font-weight: bold; color: #378bc3; font-size: 30px;'>Step 3</span>" +
-							                                              "<br />Customize your tree and then upload your completed form to this order." +
-																		  "<br /><a href=# onClick='SqueezeBox.close();'><u>Continue...</u></a></td>" +
-		                    "</tr></tbody></table></center>";
-		
-	    showPopup(newElem);
-		*/
-				
 		document.getElementById('PDP_Image').src = originalBackground;
-		
+		jQuery('#img_Background').empty();
+		jQuery('#img_Frame').empty();
 		thisForm = document.getElementById(id).form;
 		thisForm.reset();
 		setLeaves("Select One");
@@ -554,6 +496,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 	jQuery("#img_boder").show();
 	initForm();
 	closeWindow(); 
+	setLeaves(jQuery("#"+id_ShowLeaves+" option:selected").text());
 	//SqueezeBox.close();  
   }
   
@@ -611,16 +554,10 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
 	}
 	
 	document.getElementById('PDP_Image').src = createTreeImage(selectedTreeType());
-
-	//update leaves if they've already been set
-	var leaves = document.getElementById(id_ShowLeaves);
-	if(leaves.selectedIndex > 0) {
-		setLeaves(document.getElementById(id_ShowLeaves).selectedIndex.text);
-	}
-	
 	document.getElementById(id_IncludeRoots).style.backgroundColor = "#ffffff";
 	initForm();
 	SqueezeBox.close();  
+	setLeaves(jQuery("#"+id_ShowLeaves+" option:selected").text());
 	updatePrice();
   }
   
@@ -662,12 +599,12 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
   function setLeaves(imgID) {
 	var index = 1;
 	var selected = "";
-	if(imgID == "No Leaves") {
+	if(imgID.indexOf("No Leaves")!=-1) {
     	index = 1;
 		leaves = "/images/products/Leaves_None.png";
 		selected = leaves;
 	}
-	else if(imgID == "Yes Leaves") {
+	else if(imgID.indexOf("Yes Leaves")!=-1) {
 		index = 2;
 		leaves = "_Leaves";
 		selected = createTreeImage(selectedTreeType(3) + leaves);
@@ -770,6 +707,7 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
   }
   
   function setBottomLeft(num,id) {
+  		
 	  field = document.getElementById(id);
 	  if(field.value == "" || field.value == " ") {
 		  alert("Please enter your family name and established date in the field above the option you selected");
@@ -859,7 +797,6 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
   }
   
     function setBottomRight(num,id) {
-    	debugger;
 	  field = document.getElementById(id);
 	  if(field.value == "" || field.value == " ") {
 		  alert("Please enter your quote or occassion in the field above the option you selected");
@@ -890,7 +827,6 @@ $alert=JText::sprintf ('COM_VIRTUEMART_WRONG_AMOUNT_ADDED', $step);
   }
   
   function show_bottom(id) {
-  		debugger;
 	  if(checkSelected(4)) {
 		  var selected = selectedTreeType(3);
 		  SqueezeBox.initialize({

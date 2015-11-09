@@ -1,39 +1,4 @@
-(function($) {
-    function EventHandler() {
-        var _handlers = {};
-        return {
-            registerEvent: function(name, funct) {
-                var handler = _handlers[name] || [];
-                handler.push(funct);
-                _handlers[name] = handler;
-            },
-            triggerEvent: function(name, args) {
-                var handler = _handlers[name] || [];
-                for (var i in handler) {
-                    handler[i](args);
-                }
-            }
-        }
-    }
-
-    function FamilyTree($el, options) {
-        var _options = {
-            TreeName: 'familyTree',
-            Data: {}
-        };
-        _options = $.extend(_options, options);
-        var seletedNode = $root = $('<li class="tree-node selected" />');
-        var contextMenu = buildContextMenu($el, _options.treeType);
-        var popup = buildFamilyTreePopup($el, _options.treeType);
-
-        function buildFamilyTreePopup(_options.treeType)
-        {
-            var popup = new PopupManager();
-            popup.onSaveClick(function(data){
-
-            });
-            return popup;
-        }
+/*
 
         function buildContextMenu($el, treeType) {
             var contextMenu = new MenuContext($el);
@@ -62,11 +27,6 @@
             });
 
         }
-
-        function render() {
-
-        }
-
         function MenuContext($el) {
             var me = this,
             _eventHandler = new EventHandler(),
@@ -104,9 +64,9 @@
                     }
                 });
 
-	            _instance.onMenuItemClick(function(){
-	            	_instance.display(false);
-	            })
+                _instance.onMenuItemClick(function(){
+                    _instance.display(false);
+                })
 
             }
 
@@ -130,59 +90,178 @@
 
             return _instance;
         }
+*/
 
-        function PopupManager($el,treeType) {
-            var _isDisplay=false,
-            _eventHandler = new EventHandler(),
-            $ancestorContentTmp ='<div class="ancestor-content-popup">Ancestor Popup</div>',
-            $descendantContentTmp = '<div class="descendant-content-popup">Descendant Popup</div>',
-            $popupBackdrop = $('<div class="back-drop"></div>').appendTo('body'),
-            $popupContainer = $('<div class="popup-container"></div>').appendTo('body'),
-            $popupHeader =$('<div  class="popup-header"></div>').appendTo($popupContainer),
-            $popupContent = $('<div class="popup-content></div>"').appendTo($popupContainer),
-            $popupFooter =$('<div class="popup-footer"></div>').appendTo($popupContainer),
-            $buttonSave = $('<button class="btn-save">Save</buton>').appendTo($popupFooter),
-            $buttonCancel = $('<button class="btn-cancel">Cancel</buton>').appendTo($popupFooter),
-            treeType == 'Ancestor'? $popupContent.append($ancestorContentTmp): $popupContent.append($descendantContentTmp);
-            bindPopupEvent();
-            var _instance ={
-                display:display,
-                onSaveClick:function(handler){
-                    _eventHandler.registerEvent('onSaveClick');
-                },
-                onCancelClick:function(handler){
-                    _eventHandler.registerEvent('onCancelClick');
-                }
-            };
-
-            function bindDataToTemplate(selectedItem){
-
-            }
-            function display(isDisplay,selectedItem) {
-               if(isDisplay){
-                    selectedItem && bindDataToTemplate(selectedItem);
-                    $popupContainer.show();
-
-               }
-               else{
-                    $popupContainer.hide();
-               }
-            }
-
-            function bindPopupEvent(){
-                //Window resize s
-            }
-
-            return _instance;
-        }
-
+(function($) {
+    function EventHandler() {
+        var _handlers = {};
         return {
+            registerEvent: function(name, funct) {
+                var handler = _handlers[name] || [];
+                handler.push(funct);
+                _handlers[name] = handler;
+            },
+            triggerEvent: function(name, args) {
+                var handler = _handlers[name] || [];
+                for (var i in handler) {
+                    handler[i].apply(handler[i],args);
+                }
+            }
+        }
+    }
+
+    function FamilyTree($el, options) {
+        var _options = {
+            TreeName: 'familyTree',
+            data: {
+                name:'Main Person',
+                spouse:'spouse Name',
+                treeType:'Ancestor',
+                childNodes:[
+                    {
+                        name:'Child 1',
+                        spouse:'Child 1 spouse',
+                        childNodes:[
+                            {
+                                name:'Child 1-1',
+                                spouse:'Child 1-1 spouse'
+                            },
+                            {
+                                name:'Child 1-2',
+                                spouse:'Child 1-2 spouse'
+                            }
+                        ]
+                    },
+                    {
+                        name:'Child 2',
+                        spouse:'Child 2 spouse',
+                        childNodes:[
+                            {
+                                name:'Child 2-1',
+                                spouse:'Child 2-1 spouse'
+                            }
+                        ]
+                    },
+                    {
+                        name:'Child 3',
+                        spouse:'Child 3 spouse',
+                        childNodes:[
+                            {
+                                name:'Child 3-1',
+                                spouse:'Child 3-1 spouse'
+                            },
+                            {
+                                name:'Child 3-2',
+                                spouse:'Child 3-2 spouse',
+                                childNodes:[
+                                    {
+                                        name:'Child 3-2-1',
+                                        spouse:'Child 3-2-1 spouse'
+                                    }
+                                ]
+                            },
+                            {
+                                name:'Child 3-3',
+                                spouse:'Child 3-3 spouse'
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+        _options = $.extend(_options, options);
+        var  $selectedNode,$rootNode , _isAdd,
+        _treeInstance = renderTree(_options.data||[]),
+        _ancestorContentTmp ='<div class="inner-popup-content ancestor-content-popup">\
+                <h3>Ancestor Popup</h3>\
+                <table>\
+                    <tr>\
+                        <td>Name</td>\
+                        <td><input type="text" class="txtName" /></td>\
+                    </tr>\
+                </table>\
+            </div>',
+        _descendantContentTmp = '<div class="inner-popup-content descendant-content-popup">\
+            <h3>Descendant Popup</h3>\
+            <table>\
+                <tr>\
+                    <td>Name</td>\
+                    <td><input type="text" class="txtName" /></td>\
+                </tr>\
+                <tr>\
+                    <td>Has Spouse</td>\
+                    <td><input type="checkbox" class="cbHasSpouse" /></td>\
+                </tr>\
+                <tr class="has-spouse">\
+                    <td>Spouse Name</td>\
+                    <td><input type="text" class="txtSpouseName" /></td>\
+                </tr>\
+            </table>\
+        </div>',
+        $popupTemplate = _options.treeType == 'Ancestor'? $(_ancestorContentTmp) : $(_descendantContentTmp),
+        $spouseName = $popupTemplate.find('.txtSpouseName'),
+        $name = $popupTemplate.find('.txtName'),
+        $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
+
+        $cbHasSpouse.on('change',function(){
+            var $rowHasSpouse =  $popupTemplate.find('.has-spouse');
+            $(this).is(':checked')? $rowHasSpouse.show():$rowHasSpouse.hide();
+        });
+
+        var popupButtons =  [{
+                        title:'cancel',
+                        onClick:function(popupInstance){
+                            popupInstance.display(false);
+                        }
+                    },
+                    {
+                        title:'save',
+                        onClick:function(popupInstance){
+                            var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
+                            var data={
+                                name:$name.val(),
+                                spouseName:spouseName
+                            }
+                            _isAdd ? _treeInstance.addNode(data) : _treeInstance.updateNode(data);
+                            popupInstance.display(false);
+                            $cbHasSpouse.attr('checked', false)
+                            $spouseName.val('');
+                            $name.val('');
+                        }
+                    }];
+
+        var popupOptions={
+            buttons:popupButtons
+        }
+        var instance = {
+            addChild: function() {
+                _isAdd = true;
+                $popupTemplate.jPopup(popupOptions);
+            },
+            editNode:function() {
+                _isAdd = false;
+                $popupTemplate.jPopup(popupOptions);
+            }
 
         };
+
+        function renderTree(data)
+        {
+            $el.find('.jOrgChart').remove();
+            return $.fn.jOrgChart({
+                chartElement : $el,
+                onNodeSelected:function($node){
+                    $selectedNode && $selectedNode.removeClass('selected');
+                    $selectedNode = $node.addClass('selected');
+                },
+            },data);
+        }
+
+        return instance;
 
     }
 
     $.fn.familyTree = function(options) {
-        return new FamilyTree(this, option);
+        return new FamilyTree(this, options);
     }
 }(jQuery));
