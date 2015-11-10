@@ -202,65 +202,9 @@
         _options = $.extend(_options, options);
         var  $selectedNode, _isAdd,
         _sampleData = _options.TreeType ==='Ancestor' ? _options.AncestorData :_options.DescendantData,
-        _treeInstance = renderTree(_sampleData),
-        _ancestorContentTmp ='<div class="inner-popup-content ancestor-content-popup">\
-                <h3>Ancestor Popup</h3>\
-                <table>\
-                    <tr>\
-                        <td>Name</td>\
-                        <td><input type="text" class="txtName" /><input type="hidden" class="txtType"/></td>\
-                    </tr>\
-                </table>\
-            </div>',
-        _descendantContentTmp = '<div class="inner-popup-content descendant-content-popup">\
-            <h3>Descendant Popup</h3>\
-            <table>\
-                <tr>\
-                    <td width="100px">Name</td>\
-                    <td><input type="text" class="txtName" /></td>\
-                </tr>\
-                <tr>\
-                    <td>Has Spouse</td>\
-                    <td><input type="checkbox" class="cbHasSpouse" /></td>\
-                </tr>\
-                <tr class="has-spouse hide">\
-                    <td>Spouse Name</td>\
-                    <td><input type="text" class="txtSpouseName" /></td>\
-                </tr>\
-            </table>\
-        </div>',
-        $popupTemplate = _options.TreeType == 'Ancestor'? $(_ancestorContentTmp) : $(_descendantContentTmp),
-        $spouseName = $popupTemplate.find('.txtSpouseName'),
-        $name = $popupTemplate.find('.txtName'),
-        $nodeType = $popupTemplate.find('.txtType'),
-        $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
-        $cbHasSpouse.on('change',function(){
-            var $rowHasSpouse =  $popupTemplate.find('.has-spouse');
-            $(this).is(':checked')? $rowHasSpouse.show():$rowHasSpouse.hide();
-        });
+        _treeInstance = renderTree(_sampleData);
 
-        var popupButtons =  [{
-                        title:'cancel',
-                        onClick:function(popupInstance){
-                            popupInstance.display(false);
-                        }
-                    },
-                    {
-                        title:'save',
-                        onClick:function(popupInstance){
-                            var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
-                            var data={
-                                name:$name.val(),
-                                spouse:spouseName
-                            }
-                            _isAdd ? _treeInstance.addNode(data) : _treeInstance.updateNode(data);
-                            popupInstance.display(false);
-                        }
-                    }];
-
-        var popupOptions={
-            buttons:popupButtons
-        }
+      
         var _instance = {
             addChild: function(type) {
                 _isAdd = true;
@@ -276,7 +220,6 @@
                 }
                 bindDataToTemplate(data)
                 $popupTemplate.jPopup(popupOptions);
-
             },
             editNode:function() {
                 _isAdd = false;
@@ -286,11 +229,10 @@
                     return;
                 }
                 bindDataToTemplate($selectedNode[0].data)
-                $popupTemplate.jPopup(popupOptions);
-               
+                $popupTemplate.jPopup(popupOptions);      
             }
-
         };
+
         function bindDataToTemplate(data)
         {
             $name.val(data.name);
@@ -299,6 +241,68 @@
             $cbHasSpouse.attr('checked',data.spouse !='');
             $cbHasSpouse.change();
         }
+
+        function buildPopupTemplate(){
+            var _ancestorContentTmp ='<div class="inner-popup-content ancestor-content-popup">\
+                <h3>Ancestor Popup</h3>\
+                <table>\
+                    <tr>\
+                        <td>Name</td>\
+                        <td><input type="text" class="txtName" /><input type="hidden" class="txtType"/></td>\
+                    </tr>\
+                </table>\
+            </div>',
+            _descendantContentTmp = '<div class="inner-popup-content descendant-content-popup">\
+                <h3>Descendant Popup</h3>\
+                <table>\
+                    <tr>\
+                        <td width="100px">Name</td>\
+                        <td><input type="text" class="txtName" /></td>\
+                    </tr>\
+                    <tr>\
+                        <td>Has Spouse</td>\
+                        <td><input type="checkbox" class="cbHasSpouse" /></td>\
+                    </tr>\
+                    <tr class="has-spouse hide">\
+                        <td>Spouse Name</td>\
+                        <td><input type="text" class="txtSpouseName" /></td>\
+                    </tr>\
+                </table>\
+            </div>',
+            $popupTemplate = _options.TreeType == 'Ancestor'? $(_ancestorContentTmp) : $(_descendantContentTmp),
+            $spouseName = $popupTemplate.find('.txtSpouseName'),
+            $name = $popupTemplate.find('.txtName'),
+            $nodeType = $popupTemplate.find('.txtType'),
+            $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
+            $cbHasSpouse.on('change',function(){
+                var $rowHasSpouse =  $popupTemplate.find('.has-spouse');
+                $(this).is(':checked')? $rowHasSpouse.show():$rowHasSpouse.hide();
+            });
+
+            var popupButtons =  [{
+                            title:'cancel',
+                            onClick:function(popupInstance){
+                                popupInstance.display(false);
+                            }
+                        },
+                        {
+                            title:'save',
+                            onClick:function(popupInstance){
+                                var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
+                                var data={
+                                    name:$name.val(),
+                                    spouse:spouseName
+                                }
+                                _isAdd ? _treeInstance.addNode(data) : _treeInstance.updateNode(data);
+                                popupInstance.display(false);
+                            }
+                        }];
+
+            var popupOptions={
+                buttons:popupButtons
+            }
+        }
+        
         function renderTree(data)
         {
             $el.find('.jOrgChart').remove();
@@ -314,7 +318,6 @@
             },data);
         }
         return _instance;
-
     }
 
     $.fn.familyTree = function(options) {

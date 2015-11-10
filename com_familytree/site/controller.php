@@ -25,14 +25,18 @@ class FamilyTreeController extends JController{
 		$query="select Tree_Data from `#__familytree_tree_data` where Order_Number='$orderNumber' and Order_Pass ='$orderPass'";
 		$db = JFactory::getDBO();
 		$treeData = $db->setQuery($query)->loadResult();
-		echo '<form method="post" action="index.php?option=com_familytree&task=save">
+		//load view
+		$view = $this->getView( 'Create', 'html' );
+		//$view->setLayout('modal');
+		$view->display();
+		/*echo '<form method="post" action="index.php?option=com_familytree&task=save">
 			<input type="text"  value="'.$orderNumber.'" disabled />
 			<input type="hidden" name="orderNumber" value="'.$orderNumber.'" />
 			<input type="text" value="'.$orderPass.'"  disabled/>
 			<input type="hidden" name="orderPass" value="'.$orderPass.'" />
 			<textarea row="10" col="10" name="treeData">'.$treeData.'</textarea>
 			<input type="submit" value="submit"/>
-		</form>';
+		</form>';*/
 	}
 	
 	function save()
