@@ -104,7 +104,7 @@
             triggerEvent: function(name, args) {
                 var handler = _handlers[name] || [];
                 for (var i in handler) {
-                    handler[i].apply(handler[i],args);
+                    handler[i].apply(handler[i], args);
                 }
             }
         }
@@ -113,137 +113,111 @@
     function FamilyTree($el, options) {
         var _options = {
             TreeName: 'familyTree',
-            TreeType:'Descendant',
+            TreeType: 'Descendant',
             DescendantData: {
-                name:'Main Person',
-                spouse:'spouse Name',
-                childNodes:[
-                    {
-                        name:'Child 1',
-                        spouse:'Child 1 spouse',
-                        childNodes:[
-                            {
-                                name:'Child 1-1',
-                                spouse:'Child 1-1 spouse'
-                            },
-                            {
-                                name:'Child 1-2',
-                                spouse:'Child 1-2 spouse'
-                            }
-                        ]
-                    },
-                    {
-                        name:'Child 2',
-                        spouse:'Child 2 spouse',
-                        childNodes:[
-                            {
-                                name:'Child 2-1',
-                                spouse:'Child 2-1 spouse'
-                            }
-                        ]
-                    },
-                    {
-                        name:'Child 3',
-                        spouse:'Child 3 spouse',
-                        childNodes:[
-                            {
-                                name:'Child 3-1',
-                                spouse:'Child 3-1 spouse'
-                            },
-                            {
-                                name:'Child 3-2',
-                                spouse:'Child 3-2 spouse',
-                                childNodes:[
-                                    {
-                                        name:'Child 3-2-1',
-                                        spouse:'Child 3-2-1 spouse'
-                                    }
-                                ]
-                            },
-                            {
-                                name:'Child 3-3',
-                                spouse:'Child 3-3 spouse'
-                            }
-                        ]
-                    }
-                ]
+                name: 'Main Person',
+                spouse: 'spouse Name',
+                childNodes: [{
+                    name: 'Child 1',
+                    spouse: 'Child 1 spouse',
+                    childNodes: [{
+                        name: 'Child 1-1',
+                        spouse: 'Child 1-1 spouse'
+                    }, {
+                        name: 'Child 1-2',
+                        spouse: 'Child 1-2 spouse'
+                    }]
+                }, {
+                    name: 'Child 2',
+                    spouse: 'Child 2 spouse',
+                    childNodes: [{
+                        name: 'Child 2-1',
+                        spouse: 'Child 2-1 spouse'
+                    }]
+                }, {
+                    name: 'Child 3',
+                    spouse: 'Child 3 spouse',
+                    childNodes: [{
+                        name: 'Child 3-1',
+                        spouse: 'Child 3-1 spouse'
+                    }, {
+                        name: 'Child 3-2',
+                        spouse: 'Child 3-2 spouse',
+                        childNodes: [{
+                            name: 'Child 3-2-1',
+                            spouse: 'Child 3-2-1 spouse'
+                        }]
+                    }, {
+                        name: 'Child 3-3',
+                        spouse: 'Child 3-3 spouse'
+                    }]
+                }]
             },
-            AncestorData:{
-                name:'Main Person',
-                spouse:'spouse Name',
-                childNodes:[
-                    {
-                        name: 'Father 1',
-                        type:'Father',
-                        childNodes:[
-                            {
-                                name: 'Father 1-1',
-                                type:'Father'
-                            },
-                            {
-                                name: 'Mother 1-1',
-                                type: 'Mother'
-                            }
-                        ]
+            AncestorData: {
+                name: 'Main Person',
+                spouse: 'spouse Name',
+                childNodes: [{
+                    name: 'Father 1',
+                    type: 'Father',
+                    childNodes: [{
+                        name: 'Father 1-1',
+                        type: 'Father'
+                    }, {
+                        name: 'Mother 1-1',
+                        type: 'Mother'
+                    }]
 
-                    },
-                    {
-                        name: 'Mother 2',
-                        type: 'Mother',
-                        childNodes:[
-                            {
-                                name: 'Father 2-1',
-                                type:'Father'
-                            }]
-                    }
-                ]
+                }, {
+                    name: 'Mother 2',
+                    type: 'Mother',
+                    childNodes: [{
+                        name: 'Father 2-1',
+                        type: 'Father'
+                    }]
+                }]
             }
         };
         _options = $.extend(_options, options);
-        var  $selectedNode, _isAdd,
-        _sampleData = _options.TreeType ==='Ancestor' ? _options.AncestorData :_options.DescendantData,
-        _treeInstance = renderTree(_sampleData);
+        var $selectedNode, _isAdd,
+            _sampleData = _options.treeType === 'Ancestor' ? _options.AncestorData : _options.DescendantData,
+            _treeInstance = renderTree(_sampleData);
 
-      
+
         var _instance = {
             addChild: function(type) {
                 _isAdd = true;
-                if(!$selectedNode)
-                {
+                if (!$selectedNode) {
                     alert('Please select a node!!!');
                     return;
                 }
-                var data ={
-                    name:'',
-                    type:type,
-                    spouse:''
+                var data = {
+                    name: '',
+                    type: type,
+                    spouse: ''
                 }
                 bindDataToTemplate(data)
                 $popupTemplate.jPopup(popupOptions);
             },
-            editNode:function() {
+            editNode: function() {
                 _isAdd = false;
-                if(!$selectedNode)
-                {
+                if (!$selectedNode) {
                     alert('Please select a node!!!');
                     return;
                 }
                 bindDataToTemplate($selectedNode[0].data)
-                $popupTemplate.jPopup(popupOptions);      
+                $popupTemplate.jPopup(popupOptions);
             }
         };
 
-        function bindDataToTemplate(data)
-        {
+        function bindDataToTemplate(data) {
             $name.val(data.name);
             $spouseName.val(data.spouse);
             $nodeType.val(data.type);
-            $cbHasSpouse.attr('checked',data.spouse !='');
+            $cbHasSpouse.attr('checked', data.spouse != '');
             $cbHasSpouse.change();
         }
 
-        function buildPopupTemplate(){
-            var _ancestorContentTmp ='<div class="inner-popup-content ancestor-content-popup">\
+        var _ancestorContentTmp = '<div class="inner-popup-content ancestor-content-popup">\
                 <h3>Ancestor Popup</h3>\
                 <table>\
                     <tr>\
@@ -269,53 +243,54 @@
                     </tr>\
                 </table>\
             </div>',
-            $popupTemplate = _options.TreeType == 'Ancestor'? $(_ancestorContentTmp) : $(_descendantContentTmp),
-            $spouseName = $popupTemplate.find('.txtSpouseName'),
-            $name = $popupTemplate.find('.txtName'),
-            $nodeType = $popupTemplate.find('.txtType'),
-            $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
-            $cbHasSpouse.on('change',function(){
-                var $rowHasSpouse =  $popupTemplate.find('.has-spouse');
-                $(this).is(':checked')? $rowHasSpouse.show():$rowHasSpouse.hide();
-            });
+        $popupTemplate = _options.treeType == 'Ancestor' ? $(_ancestorContentTmp) : $(_descendantContentTmp),
+        $spouseName = $popupTemplate.find('.txtSpouseName'),
+        $name = $popupTemplate.find('.txtName'),
+        $nodeType = $popupTemplate.find('.txtType'),
+        $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
+        $cbHasSpouse.on('change', function() {
+            var $rowHasSpouse = $popupTemplate.find('.has-spouse');
+            $(this).is(':checked') ? $rowHasSpouse.show() : $rowHasSpouse.hide();
+        });
 
-            var popupButtons =  [{
-                            title:'cancel',
-                            onClick:function(popupInstance){
-                                popupInstance.display(false);
-                            }
-                        },
-                        {
-                            title:'save',
-                            onClick:function(popupInstance){
-                                var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
-                                var data={
-                                    name:$name.val(),
-                                    spouse:spouseName
-                                }
-                                _isAdd ? _treeInstance.addNode(data) : _treeInstance.updateNode(data);
-                                popupInstance.display(false);
-                            }
-                        }];
-
-            var popupOptions={
-                buttons:popupButtons
+        var popupButtons = [{
+            title: 'cancel',
+            onClick: function(popupInstance) {
+                popupInstance.display(false);
             }
+        }, {
+            title: 'save',
+            onClick: function(popupInstance) {
+                var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
+                var data = {
+                    name: $name.val(),
+                    spouse: spouseName,
+                    type:$nodeType.val()
+                }
+                _isAdd ? _treeInstance.addNode(data) : _treeInstance.updateNode(data);
+                popupInstance.display(false);
+            }
+        }];
+
+        var popupOptions = {
+            buttons: popupButtons
         }
-        
-        function renderTree(data)
-        {
+
+        function renderTree(data) {
             $el.find('.jOrgChart').remove();
             return $.fn.jOrgChart({
-                chartElement : $el,
-                onNodeSelected:function($node){
+                chartElement: $el,
+                onNodeSelected: function($node) {
                     $selectedNode && $selectedNode.removeClass('selected');
                     $selectedNode = $node.addClass('selected');
                     _options.nodeSelected($node[0])
 
                 },
-                displayHorizontal:true
-            },data);
+                displayHorizontal: true,
+                treeType : _options.treeType,
+                andStyle : _options.andStyle
+            }, data);
+
         }
         return _instance;
     }

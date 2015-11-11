@@ -19,15 +19,17 @@
     var $appendTo = $(opts.chartElement);
 
     // build the tree
-    var $container = $("<div class='" + opts.chartClass + "'/>"),
+    var $container = $("<div class='" + opts.chartClass + "'/>").addClass(opts.TreeType == 'Ancestor'?'ancestor-tree':'descendant-tree'),
     $rootNode = buildNode(data, $container, opts);
+    $rootNode.addClass('main');
     $appendTo.append($container); 
     opts.displayHorizontal && displayHorizontal();
     function displayHorizontal (){
       $container.addClass('jOrgChart-horizontal');
       $container.find('>table').addClass('horizontal');
       var tableWidth = $container.find('>table').width();
-      $container.find('>table').css({top:tableWidth+"px"});
+      $container.find('>table').css({top:(tableWidth+50)+"px",left:"20px"});
+      $container.height(tableWidth+120);
     }
 
     function renderNode($node)
@@ -57,8 +59,23 @@
       // Draw the node
       var $nodeContent = $(opts.nodeTemplate);
       $nodeContent.find('.name').text(nodeData.name);
-      $nodeContent.find('.spouse-name').text(nodeData.spouse);
+      if(nodeData.spouse && nodeData.spouse!=='')
+      {
+        var andText = 'and';
+        if(opts.andStyle == 'sign') 
+          andText = '&';
 
+        var $andStyle =$('<label class="end-style"></label>').text(andText);
+        opts.andStyle == 'italized' && $andStyle.addClass('italized');
+        var $spouseName = $('<label class="spouse-name"></label>').text(nodeData.spouse)
+        $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseName);
+      } 
+      else{
+        $nodeContent.find('.spouse-name-container').remove();
+      }
+
+      var iconClass = nodeData.type || '' ;
+      $nodeContent.find('.icon').addClass(iconClass);
       //Increaments the node count which is used to link the source list and the org chart
       $nodeDiv = $("<div>").addClass("node").append($nodeContent);
       $nodeDiv[0].data= nodeData;
@@ -67,7 +84,7 @@
         $selectedNode = $nodeDiv.addClass('selected');
         opts.onNodeSelected($nodeDiv);
       });
-
+      var $nodeWrapper =$('<div class="node-wrapper"></div>');
       $nodeCell.append($nodeDiv);
       $nodeRow.append($nodeCell);
       $tbody.append($nodeRow);
@@ -143,7 +160,7 @@
     chartClass : "jOrgChart",
     dragAndDrop: false,
     onNodeSelected:function(){},
-    nodeTemplate:'<div class="node-content"><span class="name"></span><span class="spouse-name"></span></div>'
+    nodeTemplate:'<div class="node-content"><i class="icon"></i><span class="name"></span><div class="spouse-name-container"></div></div>'
   };
 	
 
