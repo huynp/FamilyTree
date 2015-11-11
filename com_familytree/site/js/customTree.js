@@ -235,11 +235,11 @@
                     </tr>\
                 </table>\
             </div>',
-        $popupTemplate = _options.treeType == 'Ancestor' ? $(_ancestorContentTmp) : $(_descendantContentTmp),
-        $spouseName = $popupTemplate.find('.txtSpouseName'),
-        $name = $popupTemplate.find('.txtName'),
-        $nodeType = $popupTemplate.find('.txtType'),
-        $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
+            $popupTemplate = _options.treeType == 'Ancestor' ? $(_ancestorContentTmp) : $(_descendantContentTmp),
+            $spouseName = $popupTemplate.find('.txtSpouseName'),
+            $name = $popupTemplate.find('.txtName'),
+            $nodeType = $popupTemplate.find('.txtType'),
+            $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
         $cbHasSpouse.on('change', function() {
             var $rowHasSpouse = $popupTemplate.find('.has-spouse');
             $(this).is(':checked') ? $rowHasSpouse.show() : $rowHasSpouse.hide();
@@ -255,8 +255,7 @@
             onClick: function(popupInstance) {
                 var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
                 var name = $.trim($name.val());
-                if(name ==='')
-                {
+                if (name === '') {
                     alert("Please enter name!!!");
                     return;
                 }
@@ -264,8 +263,8 @@
                 var data = {
                     name: $name.val(),
                     spouse: spouseName,
-                    type:$nodeType.val(),
-                    isDummy:false
+                    type: $nodeType.val(),
+                    isDummy: false
                 };
                 _treeInstance.updateNode(data);
                 popupInstance.display(false);
@@ -284,8 +283,8 @@
                     _options.nodeSelected($node[0])
                 },
                 displayHorizontal: true,
-                treeType : _options.treeType,
-                andStyle : _options.andStyle
+                treeType: _options.treeType,
+                andStyle: _options.andStyle
             }, data);
 
         }
