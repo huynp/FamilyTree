@@ -1,16 +1,3 @@
-/**
- * jQuery org-chart/tree plugin.
- *
- * Author: Wes Nolte
- * http://twitter.com/wesnolte
- *
- * Based on the work of Mark Lee
- * http://www.capricasoftware.co.uk 
- *
- * Copyright (c) 2011 Wesley Nolte
- * Dual licensed under the MIT and GPL licenses.
- *
- */
 (function($) {
 
   $.fn.jOrgChart = function(options,data) {
@@ -19,7 +6,7 @@
     var $appendTo = $(opts.chartElement);
 
     // build the tree
-    var $container = $("<div class='" + opts.chartClass + "'/>").addClass(opts.TreeType == 'Ancestor'?'ancestor-tree':'descendant-tree'),
+    var $container = $("<div class='node-container " + opts.chartClass + "'/>").addClass(opts.TreeType == 'Ancestor'?'ancestor-tree':'descendant-tree'),
     $rootNode = buildNode(data, $container, opts);
     $rootNode.addClass('main');
     $appendTo.append($container); 
@@ -37,22 +24,75 @@
       var $nodeContainer =$node[0]!= $rootNode[0]? $node.parents(".node-container:first") : $container;
       $nodeContainer.empty();
       $selectedNode = buildNode($node[0].data, $nodeContainer,opts);
-      $selectedNode.addClass('selected');
       opts.displayHorizontal && displayHorizontal();
-      opts.onNodeSelected($selectedNode);
     }
 
     // Method that recursively builds the tree
     function buildNode(nodeData,$container,opts) {
+
       var $table = $("<table cellpadding='0' cellspacing='0' border='0'/>");
       var $tbody = $("<tbody/>");
 
       // Construct the node container(s)
       var $nodeRow = $("<tr/>").addClass("node-cells");
       var $nodeCell = $("<td/>").addClass("node-cell").attr("colspan", 2);
-      var _childNodes = nodeData.childNodes;
-      var $nodeDiv;
+      var _childNodes = nodeData.childNodes||[];
+      var $nodeDiv=$("<div>").addClass("node");
       
+      //Add dummy data
+      if(!nodeData.isDummy) {
+         switch(opts.treeType){
+            case 'Ancestor':
+               var hasFather=hasMother =false;
+               for(var i=0 ;i<_childNodes.length;i++)
+               {
+                  switch(_childNodes[i].type)
+                  {
+                    case 'Father':
+                        hasFather=true;
+                    break;
+                    case 'Mother':
+                      hasMother= true;
+                    break;
+                  }
+               }
+               
+               !hasFather && _childNodes.push({
+                  isDummy:true,
+                  name:'Add Father',
+                  type:'Father'
+               });
+
+               !hasMother && _childNodes.push({
+                  isDummy:true,
+                  name:'Add Mother',
+                  type:'Mother'
+               });
+            break;
+            case 'Descendant':
+              var _hasDummyNode =false;
+              for(var i=0 ;i<_childNodes.length;i++)
+               {
+                  if(_childNodes[i].isDummy)
+                  {
+                    _hasDummyNode=true
+                    break;
+                  }
+               }
+
+              !_hasDummyNode && _childNodes.push({
+                  isDummy:true,
+                  name:'Add Child',
+                  type:'Child'
+               });
+            break;
+        }
+      }
+      else{
+        $nodeDiv.addClass('dummy-node');
+      }
+
+
       if(_childNodes && _childNodes.length > 1) {
         $nodeCell.attr("colspan", _childNodes.length * 2);
       }
@@ -77,11 +117,10 @@
       var iconClass = nodeData.type || '' ;
       $nodeContent.find('.icon').addClass(iconClass);
       //Increaments the node count which is used to link the source list and the org chart
-      $nodeDiv = $("<div>").addClass("node").append($nodeContent);
+      $nodeDiv.append($nodeContent);
       $nodeDiv[0].data= nodeData;
       $nodeDiv.unbind('click').on('click',function(){
-        $selectedNode && $selectedNode.removeClass('selected');
-        $selectedNode = $nodeDiv.addClass('selected');
+        $selectedNode=$nodeDiv;
         opts.onNodeSelected($nodeDiv);
       });
       var $nodeWrapper =$('<div class="node-wrapper"></div>');
@@ -148,7 +187,8 @@
       removeNode:function(){},
       updateNode:function(data){
           $.extend($selectedNode[0].data, data);
-          renderNode($selectedNode);
+          var $parentNode = $selectedNode.parents('.node-container').eq(1).find('.node:first');
+          renderNode($parentNode);
       }
     }
   };

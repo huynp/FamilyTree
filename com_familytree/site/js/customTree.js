@@ -186,10 +186,6 @@
         var _instance = {
             addChild: function(type) {
                 _isAdd = true;
-                if (!$selectedNode) {
-                    alert('Please select a node!!!');
-                    return;
-                }
                 var data = {
                     name: '',
                     type: type,
@@ -198,13 +194,9 @@
                 bindDataToTemplate(data)
                 $popupTemplate.jPopup(popupOptions);
             },
-            editNode: function() {
+            editNode: function(data) {
                 _isAdd = false;
-                if (!$selectedNode) {
-                    alert('Please select a node!!!');
-                    return;
-                }
-                bindDataToTemplate($selectedNode[0].data)
+                bindDataToTemplate(data)
                 $popupTemplate.jPopup(popupOptions);
             }
         };
@@ -262,12 +254,20 @@
             title: 'save',
             onClick: function(popupInstance) {
                 var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
+                var name = $.trim($name.val());
+                if(name ==='')
+                {
+                    alert("Please enter name!!!");
+                    return;
+                }
+
                 var data = {
                     name: $name.val(),
                     spouse: spouseName,
-                    type:$nodeType.val()
-                }
-                _isAdd ? _treeInstance.addNode(data) : _treeInstance.updateNode(data);
+                    type:$nodeType.val(),
+                    isDummy:false
+                };
+                _treeInstance.updateNode(data);
                 popupInstance.display(false);
             }
         }];
@@ -281,10 +281,7 @@
             return $.fn.jOrgChart({
                 chartElement: $el,
                 onNodeSelected: function($node) {
-                    $selectedNode && $selectedNode.removeClass('selected');
-                    $selectedNode = $node.addClass('selected');
                     _options.nodeSelected($node[0])
-
                 },
                 displayHorizontal: true,
                 treeType : _options.treeType,

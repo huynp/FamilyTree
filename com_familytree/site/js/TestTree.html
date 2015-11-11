@@ -19,47 +19,12 @@
 					options= {
 						treeType:_treeType,
 						nodeSelected:function(node){
-							if(_treeType ==='Ancestor')
-							{
-								$('.ancestor-toolbox button').removeAttr('disabled');
-								var childNode =node.data.childNodes;
-								for(var i=0;childNode && i< childNode.length;i++)
-								{
-									childNode[i].type==='Father'? $('#add-father').attr('disabled','disabled') :  $('#add-mother').attr('disabled','disabled');
-								}
-							}
+							node.data.isDummy ? tree.addChild(node.data.type) : tree.editNode(node.data);
 
 						},
 						andStyle : $('#ddl-and-style option:selected').val()
 					},
 					tree = $('#custom-tree').familyTree(options);
-
-					if(options.TreeType ==='Ancestor' )
-					{
-						$('.ancestor-toolbox').show();
-						$('.descendant-toolbox').hide();
-					}
-					else
-					{
-						$('.descendant-toolbox').show();
-						$('.ancestor-toolbox').hide();
-					}
-
-					$('#add-child').unbind('click').click(function(){
-						tree.addChild('Child');
-					});
-
-					$('#add-father').unbind('click').click(function(){
-						tree.addChild('Father');
-					});
-
-					$('#add-mother').unbind('click').click(function(){
-						tree.addChild('Mother');
-					});
-
-					$('.edit-node').unbind('click').click(function(){
-						tree.editNode();
-					});
 				}
 				$('.tree-type').change(function(){
 					initTree();
@@ -81,15 +46,6 @@
 				<br>
 		</div>
 		<div class="tool-box">
-			<div class='ancestor-toolbox'>
-				<button id="add-father">Add Father</button>
-				<button id="add-mother">Add Mother</button>
-				<button class="edit-node">Edit Node</button>
-			</div>
-			<div class='descendant-toolbox'>
-				<button id="add-child">Add Child</button>
-				<button class="edit-node">Edit Node</button>
-			</div>
 			<div class="add-style">
 				<label style='cursor:pointer' for="ddl-and-style">	"And" style
 					<select id='ddl-and-style'>
