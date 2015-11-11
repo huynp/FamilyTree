@@ -11,63 +11,6 @@
     <link rel="stylesheet" href="jquery.jOrgChart.css"/>
     <link rel="stylesheet" href="custom.css"/>
 
-    <title></title>
-</head>
-<body>
-	<style type="text/css">
-		
-		.popup-container {
-		    position: fixed;
-		    z-index: 999;
-		    background:white;
-		    border: 1px solid #dadada;
-		    border-radius: 5px;
-		    font-family:sans-serif;
-		    padding:  10px 20px;
-		    -webkit-box-shadow: 3px 4px 20px 2px rgba(121,122,115,0.58);
-			-moz-box-shadow: 3px 4px 20px 2px rgba(121,122,115,0.58);
-			box-shadow: 3px 4px 20px 2px rgba(121,122,115,0.58);
-		}
-
-		.back-drop{
-		    width: 100%;
-		    position: absolute;
-		    top: 0;
-		    left: 0;
-		    opacity: 0.2;
-		    background: gray;
-		    z-index: 900;
-		}
-		
-		.popup-footer{
-			margin: 10px 0; 
-		}
-
-		.popup-footer button{
-			margin:  0 5px;
-			float: left;
-		}
-
-		.inner-popup-content{
-			color: black;
-			font-size:15px;
-		}
-		.inner-popup-content table{
-			margin: 5px;
-		}
-		.inner-popup-content table.has-spouse{
-			display: none;
-		}
-		.tree-type-container{
-			font-size: 22px;
-			font-weight: bold;
-			color: gray;
-		}
-
-		.tree-type-container,.tool-box{
-		  margin: 20px;
-		}
-	</style>
 	<script type="text/javascript">
 		(function($){
 			$(document).ready(function(){
@@ -128,6 +71,9 @@
 			});
 		}(jQuery))
 	</script>
+    <title></title>
+</head>
+<body>
 	<div class='container'>
 		<div class='tree-type-container'>
 			<label style='cursor:pointer' for="rd-ancestor"><input type='radio' class='tree-type' name='tree-type' value='Ancestor' id='rd-ancestor' checked>Ancestor Tree</label>
@@ -160,9 +106,9 @@
 				</label>
 			</div>
 		</div>
-		<div id="custom-tree" class="orgChart">
-	   		
-		</div>
+	</div>
+	<div id="custom-tree" class="orgChart">
+   		
 	</div>
 </body>
 </html>
