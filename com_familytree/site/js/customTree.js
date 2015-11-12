@@ -237,7 +237,7 @@
         }, {
             title: 'save',
             onClick: function(popupInstance) {
-                var spouseName = $cbHasSpouse.length && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
+                var spouseName = $cbHasSpouse.length &&$cbHasSpouse.is(':visible') && $cbHasSpouse.is(':checked') ? $spouseName.val() : '';
                 var name = $.trim($name.val());
                 if (name === '') {
                     alert("Please enter name!!!");
@@ -272,7 +272,7 @@
             },
             editNode: function($node) {
                 _isAdd = false;
-                var allowAddSpouse = _options.treeType == 'Descendant' || ($node[0] == _treeInstance.$rootNode[0]) ;
+                var allowAddSpouse = _options.treeType == 'Descendant' || ($node[0] == _treeInstance.getRootNode()[0]) ;
                 bindDataToTemplate($node[0].data, 'Edit ' + $node[0].data.type, allowAddSpouse);
                 var popupOptions = {
                     buttons: popupButtons

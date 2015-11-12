@@ -24,9 +24,12 @@
         }
 
         function renderNode($node) {
+            var isRoot = $node.hasClass('main');
             var $nodeContainer = $node[0] != $rootNode[0] ? $node.parents(".node-container:first") : $container;
             $nodeContainer.empty();
             $selectedNode = buildNode($node[0].data, $nodeContainer, opts);
+            if(isRoot)
+              $rootNode = $selectedNode.addClass('main');
             opts.displayHorizontal && displayHorizontal();
         }
 
@@ -184,10 +187,13 @@
             removeNode: function() {},
             updateNode: function(data) {
                 $.extend($selectedNode[0].data, data);
-                var $parentNode = !$selectedNode.hasClass('main')? $selectedNode.parents('.node-container').eq(1).find('.node:first') :$selectedNode;
+                var isRoot = $selectedNode.hasClass('main');
+                var $parentNode = !isRoot? $selectedNode.parents('.node-container').eq(1).find('.node:first') :$selectedNode;
                 renderNode($parentNode);
             },
-            $rootNode: $rootNode
+            getRootNode:function(){
+              return $rootNode;
+            } 
         };
     };
 
