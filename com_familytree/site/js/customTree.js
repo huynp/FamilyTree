@@ -185,12 +185,20 @@
 
 
 
-        function bindDataToTemplate(data) {
+        function bindDataToTemplate(data, title, allowAddSpouse) {
+
+            if (allowAddSpouse) {
+                $rowAllowAddSpouse.show();
+                $cbHasSpouse.attr('checked', data.spouse != '');
+                $cbHasSpouse.change();
+                $spouseName.val(data.spouse);
+            } else {
+                $rowAllowAddSpouse.hide();
+                $rowHasSpouse.hide();
+            }
+            $popupTitle.text(title);
             $name.val(data.name);
-            $spouseName.val(data.spouse);
             $nodeType.val(data.type);
-            $cbHasSpouse.attr('checked', data.spouse != '');
-            $cbHasSpouse.change();
         }
 
         var $popupTemplate = $('<div class="inner-popup-content">\
@@ -210,14 +218,16 @@
                     </tr>\
                 </table>\
             </div>'),
-            $spouseName = $popupTemplate.find('.txtSpouseName'),
+            $rowAllowAddSpouse = $popupTemplate.find('.allow-add-spouse');
+            $rowHasSpouse = $popupTemplate.find('.has-spouse');
+        $popupTitle = $popupTemplate.find('.title');
+        $spouseName = $popupTemplate.find('.txtSpouseName'),
             $name = $popupTemplate.find('.txtName'),
             $nodeType = $popupTemplate.find('.txtType'),
             $cbHasSpouse = $popupTemplate.find('.cbHasSpouse');
-            $cbHasSpouse.on('change', function() {
-                var $rowHasSpouse = $popupTemplate.find('.has-spouse');
-                $(this).is(':checked') ? $rowHasSpouse.show() : $rowHasSpouse.hide();
-            });
+        $cbHasSpouse.on('change', function() {
+            $(this).is(':checked') ? $rowHasSpouse.show() : $rowHasSpouse.hide();
+        });
 
         var popupButtons = [{
             title: 'cancel',
@@ -250,26 +260,22 @@
                 _isAdd = true;
                 var data = {
                     name: '',
-                    type: type,
+                    type: $node[0].data.type,
                     spouse: ''
                 }
-                bindDataToTemplate(data);
-                var allowAddSpouse = _options.treeType =='Descendant' || ($node == _treeInstance.$rootNode[0]);
+                var allowAddSpouse = _options.treeType == 'Descendant' || ($node[0] == _treeInstance.$rootNode[0]);
+                bindDataToTemplate(data, 'Add ' + $node[0].data.type, allowAddSpouse);
                 var popupOptions = {
-                    buttons: popupButtons,
-                    title:'Add '+ $node[0].data.type,
-                    allowAddSpouse:''
+                    buttons: popupButtons
                 }
                 $popupTemplate.jPopup(popupOptions);
             },
             editNode: function($node) {
                 _isAdd = false;
-                bindDataToTemplate($node[0].data);
-                var allowAddSpouse = _options.treeType =='Descendant' || ($node == _treeInstance.$rootNode[0]);
+                var allowAddSpouse = _options.treeType == 'Descendant' || ($node[0] == _treeInstance.$rootNode[0]) ;
+                bindDataToTemplate($node[0].data, 'Edit ' + $node[0].data.type, allowAddSpouse);
                 var popupOptions = {
-                    buttons: popupButtons,
-                    title:'Edit '+ $node[0].data.type,
-                    allowAddSpouse:''
+                    buttons: popupButtons
                 }
                 $popupTemplate.jPopup(popupOptions);
             }

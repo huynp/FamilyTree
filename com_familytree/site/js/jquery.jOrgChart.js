@@ -69,6 +69,7 @@
                             name: 'Add Mother',
                             type: 'Mother'
                         });
+                        nodeData.childNodes = _childNodes;
                         break;
                     case 'Descendant':
                         var _hasDummyNode = false;
@@ -84,6 +85,7 @@
                             name: 'Add Child',
                             type: 'Child'
                         });
+                        nodeData.childNodes = _childNodes;
                         break;
                 }
             } else {
@@ -182,7 +184,7 @@
             removeNode: function() {},
             updateNode: function(data) {
                 $.extend($selectedNode[0].data, data);
-                var $parentNode = $selectedNode.parents('.node-container').eq(1).find('.node:first');
+                var $parentNode = !$selectedNode.hasClass('main')? $selectedNode.parents('.node-container').eq(1).find('.node:first') :$selectedNode;
                 renderNode($parentNode);
             },
             $rootNode: $rootNode
