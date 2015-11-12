@@ -9,8 +9,7 @@
             $footer = $('<div class="popup-footer"></div>').appendTo($container);
         $content.append($el);
         var _instance = {
-            display: display,
-
+            display: display
         }
 
         opts.buttons && $.each(opts.buttons, function(index, button) {

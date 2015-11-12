@@ -18,11 +18,12 @@
 					var _treeType=$('.tree-type:checked').val(),
 					options= {
 						treeType:_treeType,
-						nodeSelected:function(node){
-							node.data.isDummy ? tree.addChild(node.data.type) : tree.editNode(node.data);
+						nodeSelected:function($node){
+							$node[0].data.isDummy ? tree.addChild($node) : tree.editNode($node);
 
 						},
-						andStyle : $('#ddl-and-style option:selected').val()
+						andStyle : $('#ddl-and-style option:selected').val(),
+						isRootHaveSpouse:true
 					},
 					tree = $('#custom-tree').familyTree(options);
 				}

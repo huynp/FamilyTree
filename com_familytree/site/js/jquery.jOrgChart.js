@@ -184,8 +184,9 @@
                 $.extend($selectedNode[0].data, data);
                 var $parentNode = $selectedNode.parents('.node-container').eq(1).find('.node:first');
                 renderNode($parentNode);
-            }
-        }
+            },
+            $rootNode: $rootNode
+        };
     };
 
     // Option defaults
