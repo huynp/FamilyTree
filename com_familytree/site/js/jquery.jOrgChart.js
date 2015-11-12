@@ -83,7 +83,7 @@
                             }
                         }
 
-                        !_hasDummyNode && _childNodes.push({
+                        !_hasDummyNode && _childNodes.unshift({
                             isDummy: true,
                             name: 'Add Child',
                             type: 'Child'

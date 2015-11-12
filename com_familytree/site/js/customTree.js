@@ -203,7 +203,7 @@
                     type: $node[0].data.type,
                     spouse: ''
                 }
-                var allowAddSpouse = _options.treeType == 'Descendant' || ($node[0] == _treeInstance.getRootNode()[0]);
+                var allowAddSpouse = _options.treeType == 'Descendant';
                 bindDataToTemplate(data, 'Add ' + $node[0].data.type, allowAddSpouse);
                 var popupOptions = {
                     buttons: popupButtons
@@ -212,7 +212,7 @@
             },
             editNode: function($node) {
                 _isAdd = false;
-                var allowAddSpouse = _options.treeType == 'Descendant' || ($node[0] == _treeInstance.getRootNode()[0]) ;
+                var allowAddSpouse = _options.treeType == 'Descendant';
                 bindDataToTemplate($node[0].data, 'Edit ' + $node[0].data.type, allowAddSpouse);
                 var popupOptions = {
                     buttons: popupButtons
