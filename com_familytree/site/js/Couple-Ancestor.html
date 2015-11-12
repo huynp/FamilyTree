@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="customTree.js"></script>
+    <script type="text/javascript" src="jquery.jOrgChart.js"></script>
+    <script type="text/javascript" src="jquery.popup.js"></script>
+    <script type="text/javascript" src="jquery.bpopup.js"></script>
+    <link rel="stylesheet" href="jquery.jOrgChart.css" />
+    <link rel="stylesheet" href="custom.css" />
+    <script type="text/javascript">
+    (function($) {
+        $(document).ready(function() {
+
+            var DescendantData = {
+                    name: 'Main Person',
+                    spouse: 'spouse Name',
+                    childNodes: [{
+                        name: 'Child 1',
+                        spouse: 'Child 1 spouse',
+                        childNodes: [{
+                            name: 'Child 1-1',
+                            spouse: 'Child 1-1 spouse'
+                        }, {
+                            name: 'Child 1-2',
+                            spouse: 'Child 1-2 spouse'
+                        }]
+                    }, {
+                        name: 'Child 2',
+                        spouse: 'Child 2 spouse',
+                        childNodes: [{
+                            name: 'Child 2-1',
+                            spouse: 'Child 2-1 spouse'
+                        }]
+                    }, {
+                        name: 'Child 3',
+                        spouse: 'Child 3 spouse',
+                        childNodes: [{
+                            name: 'Child 3-1',
+                            spouse: 'Child 3-1 spouse'
+                        }, {
+                            name: 'Child 3-2',
+                            spouse: 'Child 3-2 spouse',
+                            childNodes: [{
+                                name: 'Child 3-2-1',
+                                spouse: 'Child 3-2-1 spouse'
+                            }]
+                        }, {
+                            name: 'Child 3-3',
+                            spouse: 'Child 3-3 spouse'
+                        }]
+                    }]
+                },
+                AncestorData = {
+                    name: 'Main Person',
+                    spouse: 'spouse Name',
+                    childNodes: [{
+                        name: 'Father 1',
+                        type: 'Father',
+                        childNodes: [{
+                            name: 'Father 1-1',
+                            type: 'Father'
+                        }, {
+                            name: 'Mother 1-1',
+                            type: 'Mother'
+                        }]
+
+                    }, {
+                        name: 'Mother 2',
+                        type: 'Mother',
+                        childNodes: [{
+                            name: 'Father 2-1',
+                            type: 'Father'
+                        }]
+                    }]
+                },
+                SimpleData = {
+                    name: 'Main Person',
+                    spouse: 'spouse Name',
+                };
+            var initMainPersonData; //Set default data here
+            var initSpousePersonData; //Set default data here
+            var isCouple =true;//set is couple tree here
+            var treeType ='Ancestor'; //set tree type here
+           // var treeType ='Descendant'; //set tree type here
+            function initTree() {
+                //var _treeType = $('.tree-type:checked').val(),
+                if(initMainPersonData)
+                {
+	                options = {
+	                    treeType: treeType,
+	                    nodeSelected: function($node) {
+	                        $node[0].data.isDummy ? tree.addChild($node) : tree.editNode($node);
+
+	                    },
+	                    andStyle: $('#ddl-and-style option:selected').val(),
+	                    data: initMainPersonData
+	                };
+	                tree = $('#custom-tree').familyTree(options);
+                }
+                if(initSpousePersonData){
+	                options = {
+	                    treeType: 'Ancestor',
+	                    nodeSelected: function($node) {
+	                        $node[0].data.isDummy ? tree.addChild($node) : tree.editNode($node);
+
+	                    },
+	                    andStyle: $('#ddl-and-style option:selected').val(),
+	                    data: initSpousePersonData
+	                };
+	                tree1 = $('#custom-tree-1').familyTree(options);
+                }
+            }
+
+            function showInitScreen() {
+                var $initPopupTemplate = $('<div class="inner-popup-content">\
+				                <h3 class="title"></h3>\
+				                <table>\
+				                    <tr>\
+				                        <td width="100px">Main Person</td>\
+				                        <td><input type="text" class="txtName" /></td>\
+				                    </tr>\
+				                    <tr class="has-spouse">\
+				                        <td>Spouse Name</td>\
+				                        <td><input type="text" class="txtSpouseName" /></td>\
+				                    </tr>\
+				                </table>\
+				            </div>');
+                !isCouple && $initPopupTemplate.find('.has-spouse').hide();
+                var popupButtons = [{
+                    title: 'save',
+                    onClick: function(popupInstance) {
+                        var spouseName = $.trim($initPopupTemplate.find('.txtSpouseName').val());
+                        var name = $.trim($initPopupTemplate.find('.txtName').val());
+                        if (name === '') {
+                            alert("Please enter name!!!");
+                            return;
+                        }
+
+                        var mainPersonData = {
+                            name: name,
+                            isDummy: false
+                        };
+                        initMainPersonData = mainPersonData;
+                        if(isCouple){
+	                        var spousePersonData = {
+	                            name: spouseName,
+	                            isDummy: false
+	                        };
+	                        initSpousePersonData =spousePersonData;
+                        }
+                     	initTree();
+                        popupInstance.display(false);
+                    }
+                }];
+              	var popupOptions = {
+	                buttons: popupButtons
+                }
+                $initPopupTemplate.jPopup(popupOptions);
+            }
+
+            if (initMainPersonData == undefined) {
+                showInitScreen();
+            } else {
+                initTree();
+            }
+            /*  $('.tree-type').change(function() {
+                  initTree();
+              });*/
+            $('#ddl-and-style').change(function() {
+                initTree();
+            });
+        });
+    }(jQuery))
+    </script>
+    <title></title>
+</head>
+
+<body>
+    <div class='container'>
+       <!-- <div class='tree-type-container'>
+            <label style='cursor:pointer' for="rd-ancestor">
+                <input type='radio' class='tree-type' name='tree-type' value='Ancestor' id='rd-ancestor' checked>Ancestor Tree</label>
+            <label style='cursor:pointer' for="rd-descendant">
+                <input type='radio' class='tree-type' name='tree-type' value='Descendant' id='rd-descendant'>Descendant Tree</label>
+            <br>
+        </div>
+        <div class="tool-box">
+            <div class="add-style">
+                <label style='cursor:pointer' for="ddl-and-style"> "And" style
+                    <select id='ddl-and-style'>
+                        <option value="and">
+                            I want the standard "and"
+                        </option>
+                        <option value="italized">
+                            I want the "and" italized
+                        </option>
+                        <option value="sign">
+                            I want "&"
+                        </option>
+                    </select>
+                </label>
+            </div>
+        </div>-->
+    </div>
+    <div id="custom-tree" class="orgChart">
+    </div>
+    <div id="custom-tree-1" class="orgChart">
+    </div>
+</body>
+
+</html>
