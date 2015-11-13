@@ -111,6 +111,7 @@
     }
 
     function FamilyTree($el, options) {
+        var me = this;
         var _options = {
             treeName: 'familyTree',
             treeType: 'Descendant',
@@ -118,9 +119,9 @@
 
         };
         _options = $.extend(_options, options);
-        var $selectedNode, _isAdd,
+        var $selectedNode, _isAdd;
            // _sampleData = _options.treeType === 'Ancestor' ? _options.AncestorData : _options.DescendantData,
-            _treeInstance = renderTree(_options.data);
+        me._treeInstance = renderTree(_options.data);
 
 
 
@@ -157,9 +158,9 @@
                     </tr>\
                 </table>\
             </div>'),
-            $rowAllowAddSpouse = $popupTemplate.find('.allow-add-spouse');
-            $rowHasSpouse = $popupTemplate.find('.has-spouse');
-            $popupTitle = $popupTemplate.find('.title');
+            $rowAllowAddSpouse = $popupTemplate.find('.allow-add-spouse'),
+            $rowHasSpouse = $popupTemplate.find('.has-spouse'),
+            $popupTitle = $popupTemplate.find('.title'),
             $spouseName = $popupTemplate.find('.txtSpouseName'),
             $name = $popupTemplate.find('.txtName'),
             $nodeType = $popupTemplate.find('.txtType'),
@@ -190,7 +191,7 @@
                         type: $nodeType.val(),
                         isDummy: false
                     };
-                    _treeInstance.updateNode(data);
+                    me._treeInstance.updateNode(data);
                     popupInstance.display(false);
                 }
             }];

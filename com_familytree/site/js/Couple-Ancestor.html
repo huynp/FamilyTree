@@ -89,7 +89,7 @@
                 //var _treeType = $('.tree-type:checked').val(),
                 if(initMainPersonData)
                 {
-	                options = {
+	                var options1 = {
 	                    treeType: treeType,
 	                    nodeSelected: function($node) {
 	                        $node[0].data.isDummy ? tree.addChild($node) : tree.editNode($node);
@@ -98,19 +98,19 @@
 	                    andStyle: $('#ddl-and-style option:selected').val(),
 	                    data: initMainPersonData
 	                };
-	                tree = $('#custom-tree').familyTree(options);
+	                tree = $('#custom-tree').familyTree(options1);
                 }
                 if(initSpousePersonData){
-	                options = {
+	                var options2 = {
 	                    treeType: 'Ancestor',
 	                    nodeSelected: function($node) {
-	                        $node[0].data.isDummy ? tree.addChild($node) : tree.editNode($node);
+	                        $node[0].data.isDummy ? tree1.addChild($node) : tree1.editNode($node);
 
 	                    },
 	                    andStyle: $('#ddl-and-style option:selected').val(),
 	                    data: initSpousePersonData
 	                };
-	                tree1 = $('#custom-tree-1').familyTree(options);
+	                tree1 = $('#custom-tree-1').familyTree(options2);
                 }
             }
 

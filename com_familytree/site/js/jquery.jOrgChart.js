@@ -1,5 +1,5 @@
 (function($) {
-
+    
     $.fn.jOrgChart = function(options, data) {
         var opts = $.extend({}, $.fn.jOrgChart.defaults, options);
         var $selectedNode;
@@ -178,7 +178,7 @@
             return $nodeDiv;
         };
 
-        return {
+        var _instance = {
             addNode: function(data) {
                 $selectedNode && $selectedNode[0].data.childNodes || ($selectedNode[0].data.childNodes = [])
                 $selectedNode && $selectedNode[0].data.childNodes.push(data);
@@ -195,6 +195,7 @@
               return $rootNode;
             } 
         };
+        return _instance;
     };
 
     // Option defaults
