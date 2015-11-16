@@ -3,9 +3,10 @@
 
 /* Draw the lines */
 
-.jOrgChart {
+.jOrgChart,#family-tree-container {
     background: #726E67;
-    margin: 20px 0;
+    height: 100%;
+    min-width: 100%;
 }
 
 .jOrgChart .line {
@@ -65,6 +66,10 @@
 
 .jOrgChart-horizontal {
     position: relative;
+}
+
+.jOrgChart-horizontal table{
+    border-collapse: separate !important;  
 }
 
 .horizontal {
@@ -157,6 +162,8 @@
     -ms-transform: rotate(90deg);
     -sand-transform: rotate(90deg);
     transform-origin: 0% 0%;
+    text-transform: capitalize;
+    top: 40px;
 }
 
 .horizontal .main .node-content span {
@@ -210,43 +217,36 @@
     display: inline-block;
     height: 170xpx;
     transform: rotate(90deg);
-    transform-origin: 0px -3px;
+    transform-origin: 0 0;
     height: 20px;
     background: gray;
     padding: 2px 0;
     transform-style: flat;
+    margin-left: -3px;
+    margin-top: -5px;
 }
 
 .horizontal .spouse-name {
     float: left;
     margin-left: 5px;
+    text-transform: capitalize;
+    width: 132px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
 }
 
 .horizontal .end-style {
     float: left;
     margin-left: 5px;
-    text-transform: capitalize;
     font-weight: bold;
     color: lightblue;
 }
-
 .italized {
     font-style: italic;
 }
 
-.ancestor-tree .spouse-name {
-    display: none !important;
-}
-
 .hide {
     display: none;
-}
-
-.add-style {
-    color: black;
-    margin: 10px;
-}
-
-.add-style label {
-    margin-right: 10px;
 }

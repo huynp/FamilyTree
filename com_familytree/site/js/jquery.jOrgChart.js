@@ -1,12 +1,13 @@
 (function($) {
-    
+    $.fn.generateUID = function() {
+        return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
+    };
     $.fn.jOrgChart = function(options, data) {
-        var opts = $.extend({}, $.fn.jOrgChart.defaults, options);
-        var $selectedNode;
-        var $appendTo = $(opts.chartElement);
-
-        // build the tree
-        var $container = $("<div class='node-container " + opts.chartClass + "'/>").addClass(opts.TreeType == 'Ancestor' ? 'ancestor-tree' : 'descendant-tree'),
+        data.level = 0;
+        var opts = $.extend({}, $.fn.jOrgChart.defaults, options),
+            $selectedNode, $appendTo = $(opts.chartElement),
+            _treeLevel = 0,
+            $container = $("<div class='node-container " + opts.chartClass + "'/>").addClass(opts.treeType),
             $rootNode = buildNode(data, $container, opts);
         $rootNode.addClass('main');
         $appendTo.append($container);
@@ -16,11 +17,13 @@
             $container.addClass('jOrgChart-horizontal');
             $container.find('>table').addClass('horizontal');
             var tableWidth = $container.find('>table').width();
+            var tableHeight = $container.find('>table').height();
             $container.find('>table').css({
                 top: (tableWidth + 50) + "px",
                 left: "20px"
             });
             $container.height(tableWidth + 120);
+            $container.parents('#family-tree-container').width(tableHeight + 120);
         }
 
         function renderNode($node) {
@@ -28,14 +31,13 @@
             var $nodeContainer = $node[0] != $rootNode[0] ? $node.parents(".node-container:first") : $container;
             $nodeContainer.empty();
             $selectedNode = buildNode($node[0].data, $nodeContainer, opts);
-            if(isRoot)
-              $rootNode = $selectedNode.addClass('main');
+            if (isRoot)
+                $rootNode = $selectedNode.addClass('main');
             opts.displayHorizontal && displayHorizontal();
         }
 
         // Method that recursively builds the tree
         function buildNode(nodeData, $container, opts) {
-
             var $table = $("<table cellpadding='0' cellspacing='0' border='0'/>");
             var $tbody = $("<tbody/>");
 
@@ -45,8 +47,10 @@
             var _childNodes = nodeData.childNodes || [];
             var $nodeDiv = $("<div>").addClass("node");
 
-            //Add dummy data
-            if (!nodeData.isDummy) {
+            if (nodeData.isDummy) {
+                $nodeDiv.addClass('dummy-node');
+            } else if (!nodeData.isDummy && nodeData.level < opts.maxLevel - 1) {
+                //Add dummy data
                 switch (opts.treeType) {
                     case 'Ancestor':
                         var hasFather = hasMother = false;
@@ -61,16 +65,20 @@
                             }
                         }
 
-                        !hasFather && _childNodes.push({
+                        !hasFather && _childNodes.unshift({
+                            name: 'Father Name',
+                            level: nodeData.level + 1,
+                            type: 'Father',
                             isDummy: true,
-                            name: 'Add Father',
-                            type: 'Father'
+                            id: $.fn.generateUID()
                         });
 
                         !hasMother && _childNodes.push({
+                            name: 'Mother Name',
+                            level: nodeData.level + 1,
+                            type: 'Mother',
                             isDummy: true,
-                            name: 'Add Mother',
-                            type: 'Mother'
+                            id: $.fn.generateUID()
                         });
                         nodeData.childNodes = _childNodes;
                         break;
@@ -84,15 +92,16 @@
                         }
 
                         !_hasDummyNode && _childNodes.unshift({
+                            name: 'Child Name',
+                            spouse: 'Child\'s spouse',
+                            level: nodeData.level + 1,
+                            type: 'Child',
                             isDummy: true,
-                            name: 'Add Child',
-                            type: 'Child'
+                            id: $.fn.generateUID(),
                         });
                         nodeData.childNodes = _childNodes;
                         break;
                 }
-            } else {
-                $nodeDiv.addClass('dummy-node');
             }
 
 
@@ -101,8 +110,9 @@
             }
             // Draw the node
             var $nodeContent = $(opts.nodeTemplate);
-            $nodeContent.find('.name').text(nodeData.name);
-            if (nodeData.spouse && nodeData.spouse !== '') {
+            var nodeDisplayText = nodeData.isDummy ? 'Add ' + nodeData.type : nodeData.name;
+            $nodeContent.find('.name').text(nodeDisplayText);
+            if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
                 var andText = 'and';
                 if (opts.andStyle == 'sign')
                     andText = '&';
@@ -184,16 +194,30 @@
                 $selectedNode && $selectedNode[0].data.childNodes.push(data);
                 renderNode($selectedNode);
             },
-            removeNode: function() {},
+            removeNode: function() {
+                var $parentNode = $selectedNode.parents('.node-container').eq(1).find('.node:first');
+                var childNodes = $parentNode[0].data.childNodes;
+                for (var i = 0; i < childNodes.length; i++) {
+                    if (childNodes[i].id == $selectedNode[0].data.id) {
+                        $parentNode[0].data.childNodes.splice(i, 1);
+                        renderNode($parentNode);
+                        break;
+                    }
+                }
+            },
             updateNode: function(data) {
                 $.extend($selectedNode[0].data, data);
                 var isRoot = $selectedNode.hasClass('main');
-                var $parentNode = !isRoot? $selectedNode.parents('.node-container').eq(1).find('.node:first') :$selectedNode;
+                var $parentNode = !isRoot ? $selectedNode.parents('.node-container').eq(1).find('.node:first') : $selectedNode;
                 renderNode($parentNode);
             },
-            getRootNode:function(){
-              return $rootNode;
-            } 
+            updateAndStyle: function(andStyle) {
+                opts.andStyle = andStyle;
+                renderNode($rootNode);
+            },
+            getTreeData: function() {
+                return $rootNode[0].data;
+            }
         };
         return _instance;
     };

@@ -30,59 +30,224 @@ body {
     position: fixed;
     z-index: 999;
     background: white;
-    border: 1px solid #dadada;
     border-radius: 5px;
     font-family: sans-serif;
-    padding: 10px 20px;
-    -webkit-box-shadow: 3px 4px 20px 2px rgba(121, 122, 115, 0.58);
-    -moz-box-shadow: 3px 4px 20px 2px rgba(121, 122, 115, 0.58);
-    box-shadow: 3px 4px 20px 2px rgba(121, 122, 115, 0.58);
+    color: black;
+  /*  -webkit-box-shadow: 0px 1px 30px 1px lightgrey;
+    -moz-box-shadow: 0px 1px 30px 1px lightgrey;
+    box-shadow: 0px 1px 30px 1px lightgrey;
+*/
+    box-shadow: 1px 1px 20px 1px #999;
+    color: #555;
+}
+.popup-container input{
+    height: 20px;
+    padding: 6px 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    line-height: 20px;
 }
 
+.popup-container input[type='text']{
+    width:345px;
+    margin: 5px;
+    font-size: 14px;    
+}
+
+.popup-container input[readonly]
+{
+    background-color:white;
+    cursor: text;
+}
+
+.popup-container input[type='checkbox']{
+    margin: 5px;    
+    width: 15px;
+}
+
+.popup-container>div{
+    padding: 10px 20px;
+
+}
+
+.popup-content{
+    padding: 30px 20px;
+    font-weight: 700;
+}
+.popup-content td{
+    white-space: normal;
+    font-size: 15px;
+}
+
+.popup-header{
+    border-bottom: 1px solid #ccc;
+    font-size: 18px;
+    font-weight: bold;
+    color: gray;
+    position: relative;
+    text-transform: capitalize;
+}
+.popup-header .b-close{
+    position: absolute;
+    font: bold 14px sans-serif;
+    border-radius: 34%;
+    box-shadow: none;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    width: 22px;
+    height: 22px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    background: #2b91af;
+    text-align: center;
+}
+.popup-header .b-close:hover{
+    background: black;
+}
+
+.popup-footer{
+    border-top: 1px solid #ccc;
+    height: 30px;
+    text-align: right;
+}
+.popup-footer button {
+    margin: 0 5px;
+    color: #333;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid  #ccc;
+    border-radius: 4px;
+    background-color: white;
+}
+.popup-footer button:hover{
+    background-color: rgb(230, 230, 230) !important;
+}
 .back-drop {
     width: 100%;
     position: absolute;
     top: 0;
     left: 0;
-    opacity: 0.2;
-    background: gray;
+    opacity: 0.7;
+    background: black;
     z-index: 900;
 }
+.anniversaries-container{
 
-.popup-footer {
-    margin: 10px 0;
 }
-
-.popup-footer button {
-    margin: 0 5px;
-    float: left;
-}
-
-.inner-popup-content {
-    color: black;
-    font-size: 15px;
-}
-
-.inner-popup-content table {
+.anniversary-item{
+    font-size: 0;
     margin: 5px;
 }
+.btn-add-anniverary{
+    padding: 6px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    margin: 5px;
+    display: block;
+}
+.anniversary-item .anniversary-name{
+    width: 150px;
+    margin-right: 0;
+    border-right: 0;
+    border-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.anniversary-item .anniversary-date{
+    width: 138px;
+    margin-left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.anniversary-item.error input,.error {
+    border-color: red !important;
+}
+.btn-remove-anniverary{
+    font-size: 17px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    vertical-align: middle;
+    text-align: center;
+    padding: 6px 12px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.btn-remove-anniverary:hover{
+    color: #fff;
+    background-color: #c9302c;
+    border-color: #ac2925;
+}
+.lbHasSpouse, .lbHasExSpouse{
+    display: inline-block !important;
+    cursor: pointer;
+}
+.lbAnStyle{
+    cursor:pointer;
+    display: block;
+    background-color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+}
 
-.inner-popup-content table.has-spouse {
+.lbAnStyle select{
+    font-size: 14px;
+    margin-left: 10px;
+    margin-top: 5px;
+}
+.toolbar-container{
+    background: white;
+}
+.toolbar-container .tree-tabs{
+   
+    margin-bottom: 0;
+    margin-left: 5px;
+    border-width: 2px;
+    border-bottom-width: 0;
+}
+
+.toolbar-container .tree-tab{
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    text-transform: capitalize;
+}
+.toolbar-container .tree-tab.active{
+    border: 2px solid #726E67 !important;
+    background: #726E67 !important;
+    color: white !important;
+}
+.tab-item{
     display: none;
 }
 
-.tree-type-container {
-    font-size: 22px;
-    font-weight: bold;
-    color: gray;
-}
-
-.tree-type-container,
-.tool-box {
-    margin: 20px;
-}
-
-.container {
-    background: white;
-    padding: 10px 0;
+.tab-item.active{
+    display: block;
 }
