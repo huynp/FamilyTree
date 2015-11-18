@@ -28,7 +28,7 @@ body {
 
 .popup-container {
     position: fixed;
-    z-index: 999;
+    z-index: 99999;
     background: white;
     border-radius: 5px;
     font-family: sans-serif;
@@ -78,6 +78,9 @@ body {
 .popup-content td{
     white-space: normal;
     font-size: 15px;
+    border: none;
+    padding: 1px 0;
+
 }
 
 .popup-header{
@@ -250,4 +253,7 @@ body {
 
 .tab-item.active{
     display: block;
+}
+.datepicker.dropdown-menu{
+    z-index: 100000;
 }

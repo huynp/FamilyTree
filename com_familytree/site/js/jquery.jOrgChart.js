@@ -119,7 +119,8 @@
 
                 var $andStyle = $('<label class="end-style"></label>').text(andText);
                 opts.andStyle == 'italized' && $andStyle.addClass('italized');
-                var $spouseName = $('<label class="spouse-name"></label>').text(nodeData.spouse)
+                var spouseName =nodeData.spouse;
+                var $spouseName = $('<label class="spouse-name"></label>').text(spouseName)
                 $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseName);
             } else {
                 $nodeContent.find('.spouse-name-container').remove();
@@ -216,7 +217,10 @@
                 renderNode($rootNode);
             },
             getTreeData: function() {
-                return $rootNode[0].data;
+                return { 
+                        name:opts.treeName,
+                        data:$rootNode[0].data
+                    };
             }
         };
         return _instance;

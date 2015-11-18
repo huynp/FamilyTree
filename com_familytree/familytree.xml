@@ -12,6 +12,7 @@
         <folder>images</folder>
         <folder>js</folder>
 		<folder>views</folder>
+		<folder>models</folder>
         <filename>familytree.php</filename>
         <filename>controller.php</filename>
         <filename>index.html</filename>
