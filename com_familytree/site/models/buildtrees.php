@@ -119,6 +119,7 @@ class FamilyTreeModelBuildtrees extends JModel
 			$treeData->hasRoot =$hasRoot;
 			$treeData->descendantLevel =$descendantLevel;
 			$treeData->ancestorLevel =$ancestorLevel;
+			$treeData->allowAddBirthDay=false;
 
 			$treeData = json_encode($treeData);
 		}

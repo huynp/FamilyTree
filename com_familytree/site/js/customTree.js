@@ -22,8 +22,7 @@
             init: function() {
                 var me = this;
                 _instance.initPopup();
-                (me.options.mainAncestorData||me.options.mainDescendantData) ? _instance.initTree(me.options.mainAncestorData,me.options.mainDescendantData,me.options.spouseAncestorData)
-                                                                                :_instance.showInitScreen();
+                (me.options.mainAncestorData || me.options.mainDescendantData) ? _instance.initTree(me.options.mainAncestorData, me.options.mainDescendantData, me.options.spouseAncestorData): _instance.showInitScreen();
             },
             showInitScreen: function() {
                 var me = this;
@@ -45,8 +44,8 @@
                         isDummy: false,
                         id: $.fn.generateUID(),
                         isRoot: true,
-                        anniversary:returnData.anniversary,
-                        birthday:returnData.birthday
+                        anniversary: returnData.anniversary,
+                        birthday: returnData.birthday
                     };
 
                     me.options.mainDescendantData = {
@@ -58,8 +57,8 @@
                         isDummy: false,
                         id: $.fn.generateUID(),
                         isRoot: true,
-                        anniversary:returnData.anniversary,
-                        birthday:returnData.birthday
+                        anniversary: returnData.anniversary,
+                        birthday: returnData.birthday
                     };
 
                     me.options.spouseAncestorData = {
@@ -71,12 +70,12 @@
                         id: $.fn.generateUID(),
                         isRoot: true
                     };
-                    me.initTree(me.options.mainAncestorData, me.options.mainDescendantData,me.options.spouseAncestorData);
+                    me.initTree(me.options.mainAncestorData, me.options.mainDescendantData, me.options.spouseAncestorData);
                     me.saveTreeData();
                 };
                 me.showPopup(data, callback)
             },
-            initTree: function(mainAncestorData, mainDescendantData,spouseAncestorData) {
+            initTree: function(mainAncestorData, mainDescendantData, spouseAncestorData) {
                 var me = this;
 
                 function buildToolBar(hasRoot, treeType) {
@@ -96,20 +95,35 @@
                             item.updateAndStyle($andStyleDDL.find('option:selected').val())
                         });
                         $('.tab-content').addClass('tab-item');
+                        me.saveTreeData();
+                    });
+                    var $addBirthDayContainer = $('<div class="add-birthday-container">Add Birthday and Anniversary</div>').appendTo($toolbarContainer);
+                    var $lbForAddBirthDay = $('<label class="lbAddBirthday" for="cb-add-birthday"> </label>').prependTo($addBirthDayContainer);
+                    var $cbAddBirthday = $('<input type="checkbox" id="cb-add-birthday"/>').prependTo($addBirthDayContainer);
+                    $cbAddBirthday.prop('checked', me.options.allowAddBirthDay);
+                    $cbAddBirthday.change(function() {
+                        me.options.allowAddBirthDay = $(this).is(":checked");
+                        me.options.allowAddBirthDay && alert('Adding date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
+                        me.saveTreeData();
                     });
                     //build tabs
                     if (hasRoot) {
-                        var mainTabTitle, rootTabTitle;
+                        var mainTabTitle, rootTabTitle,mainTabTreeType,rootTabTreeType;
                         switch (treeType) {
                             case 'Descendant':
                                 mainTabTitle = 'Main Descendant Tree';
                                 rootTabTitle = 'Root Ancestor Tree';
+                                mainTabTreeType =treeType;
+                                rootTabTreeType ='AncestorCouple';
+
                                 break;
 
                             case 'AncestorSingle':
                             case 'AncestorCouple':
                                 mainTabTitle = 'Main Ancestor Tree';
                                 rootTabTitle = 'Root Descendant Tree';
+                                mainTabTreeType =treeType;
+                                rootTabTreeType ='Descendant';
                                 break;
                         }
                         var $navTabs = $('<ul class="nav nav-tabs tree-tabs"></ul>');
@@ -121,6 +135,15 @@
                             var contentId = $(this).attr('tab-content');
                             $(this).addClass('active').parent().addClass('active');
                             $(contentId).addClass('active');
+                            if(contentId=='#main-tab-container')
+                            {
+                                me.options.currentTree = mainTabTreeType;
+                            }
+                            else{
+
+                                me.options.currentTree = rootTabTreeType;
+                            }
+
                         });
                     }
                     $el.append($toolbarContainer);
@@ -128,9 +151,9 @@
                 }
                 me.$toolbar = buildToolBar(me.options.hasRoot, me.options.treeType);
 
-                function createFamilyTree(treeType, data, $treeContainer,treeName) {
+                function createFamilyTree(treeType, data, $treeContainer, treeName) {
                     var tree = $.fn.jOrgChart({
-                        treeName:treeName,
+                        treeName: treeName,
                         chartElement: $treeContainer,
                         onNodeSelected: function($node) {
                             me.addUpdateTreeNode($node, tree);
@@ -148,36 +171,36 @@
                 switch (me.options.treeType) {
                     case 'Descendant':
                         var $mainDescendantTree = $('<div id="main-descendant-tree" class="orgChart"></div>').appendTo($mainTab);
-                        me.trees.push(createFamilyTree('Descendant', mainDescendantData , $mainDescendantTree,'mainDescendantData'))
+                        me.trees.push(createFamilyTree('Descendant', mainDescendantData, $mainDescendantTree, 'mainDescendantData'))
                         if (me.options.hasRoot) {
                             var $mainAncestorTree = $('<div id="main-ancestor-tree" class="orgChart"></div>').appendTo($rootTab);
-                            me.trees.push(createFamilyTree('Ancestor', mainAncestorData, $mainAncestorTree,'mainAncestorData'));
+                            me.trees.push(createFamilyTree('Ancestor', mainAncestorData, $mainAncestorTree, 'mainAncestorData'));
 
                             var $spouseAncestorTree = $('<div id="spouse-ancestor-tree" class="orgChart" ></div>').appendTo($rootTab);
-                            me.trees.push(createFamilyTree('Ancestor', spouseAncestorData, $spouseAncestorTree,'spouseAncestorData'));
+                            me.trees.push(createFamilyTree('Ancestor', spouseAncestorData, $spouseAncestorTree, 'spouseAncestorData'));
                         }
                         break;
 
                     case 'AncestorSingle':
                         var $mainAncestorTree = $('<div id="main-ancestor-tree-tree" class="orgChart" ></div>').appendTo($mainTab);
-                        me.trees.push(createFamilyTree('Ancestor', mainAncestorData, $mainAncestorTree,'mainAncestorData'));
+                        me.trees.push(createFamilyTree('Ancestor', mainAncestorData, $mainAncestorTree, 'mainAncestorData'));
                         if (me.options.hasRoot) {
                             var $mainDescendantTree = $('<div id="main-descendant-tree-tree" class="orgChart" ></div>').appendTo($rootTab);
-                            me.trees.push(createFamilyTree('Descendant', mainDescendantData, $mainDescendantTree,'mainDescendantData'));
+                            me.trees.push(createFamilyTree('Descendant', mainDescendantData, $mainDescendantTree, 'mainDescendantData'));
                         }
 
                         break;
 
                     case 'AncestorCouple':
                         var $mainAncestorTree = $('<div id="main-ancestor-tree" class="orgChart" ></div>').appendTo($mainTab);
-                        me.trees.push(createFamilyTree('Ancestor', mainAncestorData, $mainAncestorTree,'mainAncestorData'));
+                        me.trees.push(createFamilyTree('Ancestor', mainAncestorData, $mainAncestorTree, 'mainAncestorData'));
 
                         var $spouseAncestorTree = $('<div id="spouse-ancestor-tree" class="orgChart" ></div>').appendTo($mainTab);
-                        me.trees.push(createFamilyTree('Ancestor', spouseAncestorData, $spouseAncestorTree,'spouseAncestorData'));
+                        me.trees.push(createFamilyTree('Ancestor', spouseAncestorData, $spouseAncestorTree, 'spouseAncestorData'));
 
                         if (me.options.hasRoot) {
                             var $mainDescendantTree = $('<div id="main-descendant-tree" class="orgChart"></div>').appendTo($rootTab);
-                            me.trees.push(createFamilyTree('Descendant', mainDescendantData, $mainDescendantTree,'mainDescendantData'));
+                            me.trees.push(createFamilyTree('Descendant', mainDescendantData, $mainDescendantTree, 'mainDescendantData'));
                         }
                         break;
                 }
@@ -192,13 +215,13 @@
                                 <td>Name</td>\
                                 <td><input type="text" class="txtName" /></td>\
                             </tr>\
-                            <tr>\
+                            <tr class="allow-add-birthday">\
                                 <td>Birthday</td>\
-                                <td><input type="text"  class="birthday date-picker" placeholder="Select A Date" data-date-format="dd-mm-yyyy" data-date-viewmode="years" readonly/></td>\
+                                <td><input type="text"  class="birthday date-picker" placeholder="Select A Date" data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
                             </tr>\
-                            <tr>\
+                            <tr class="allow-add-birthday">\
                                 <td>Anniversary</td>\
-                                <td><input type="text"  class="anniversary-date date-picker" placeholder="Select A Date" data-date-format="dd-mm-yyyy" data-date-viewmode="years" readonly/></td>\
+                                <td><input type="text"  class="anniversary-date date-picker" placeholder="Select A Date" data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
                             </tr>\
                             <tr  class="allow-add-spouse">\
                                 <td>Spouses</td>\
@@ -217,9 +240,10 @@
                             </tr>\
                         </table>\
                     </div>'),
-                    $birthday =$popup.find('.birthday'),
-                    $anniversary =$popup.find('.anniversary-date');
+                    $birthday = $popup.find('.birthday'),
+                    $anniversary = $popup.find('.anniversary-date');
                     $rowAllowAddSpouse = $popup.find('.allow-add-spouse'),
+                    $rowsAllowAddBirthday = $popup.find('.allow-add-birthday');
                     $rowHasSpouse = $popup.find('.has-spouse'),
                     $rowHasExSpouse = $popup.find('.has-ex-spouse'),
                     $popupTitle = $popup.find('.title'),
@@ -229,7 +253,7 @@
                     $nodeType = $popup.find('.txtType'),
                     $cbHasSpouse = $popup.find('.cbHasSpouse'),
                     $cbHasExSpouse = $popup.find('.cbHasExSpouse');
-                    
+
                 $cbHasSpouse.on('change', function() {
                     $(this).is(':checked') ? $rowHasSpouse.show().find('input').focus() : $rowHasSpouse.hide();
                 });
@@ -257,7 +281,7 @@
                         exSpouse: exSpouseName,
                         type: $nodeType.val(),
                         isDummy: false,
-                        birthday:$birthday.val(),
+                        birthday: $birthday.val(),
                         anniversary: $anniversary.val()
                     };
                     return data;
@@ -300,7 +324,7 @@
                     !data.isDummy && data.exSpouse && data.exSpouse != '' && $cbHasExSpouse.prop('checked', true);
                     data.isDummy ? $spouseName.attr('placeholder', data.spouse) : $spouseName.val(data.spouse);
                     data.isDummy ? $exSpouseName.attr('placeholder', data.exSpouse) : $exSpouseName.val(data.exSpouse);
-                    !data.isInitialize && me.options.treeType != 'Descendant' && $rowAllowAddSpouse.hide();
+                    !data.isInitialize && me.options.currentTree != 'Descendant' ? $rowAllowAddSpouse.hide() : $rowAllowAddSpouse.show();
                     data.isInitialize && $cbHasSpouse.attr('disabled', 'disabled').prop('checked', true);
                     $cbHasExSpouse.change();
                     $cbHasSpouse.change();
@@ -308,6 +332,7 @@
                     data.anniversary && $anniversary.val(data.anniversary);
                     data.isDummy ? $name.attr('placeholder', data.name) : $name.val(data.name);
                     $nodeType.val(data.type);
+                    me.options.allowAddBirthDay ? $rowsAllowAddBirthday.show() : $rowsAllowAddBirthday.hide();
                 };
                 me.myPopup = $.fn.jPopup();
             },
@@ -354,12 +379,12 @@
                     allowManualClose: !data.isInitialize,
                     onShow: function(popupInstance) {
                         popupInstance.$container.find('.date-picker').each(function() {
-                                var $datePicker = $(this).datepicker().on('changeDate', function(ev) {
-                                    if (ev.viewMode === "days") {
-                                        $datePicker.hide();
-                                        $(this).show();
-                                    }
-                                }).data('datepicker');
+                            var $datePicker = $(this).datepicker().on('changeDate', function(ev) {
+                                if (ev.viewMode === "days") {
+                                    $datePicker.hide();
+                                    $(this).show();
+                                }
+                            }).data('datepicker');
 
                         });
                     },
@@ -372,54 +397,51 @@
             },
             saveTreeData: function() {
 
-                function enCodeDataString(str)
-                {
+                function enCodeDataString(str) {
                     str = str.replace(/\\/g, "%%H%%U%%Y%%");
                     str = str.replace(/\"/g, "@@H@@U@@Y@@");
                     str = str.replace(/\'/g, "!!H!!U!!Y!!");
                     return str;
                 }
 
-                function enCodeData(data)
-                {
+                function enCodeData(data) {
                     data.name && (data.name = enCodeDataString(data.name));
-                    data.spouse && (data.spouse= enCodeDataString(data.spouse));
-                    data.exSpouse && (data.exSpouse= enCodeDataString(data.exSpouse));
-                    if(data.childNodes && data.childNodes.length >0 )
-                    {
-                        for(var i=0;i<data.childNodes.length;i++)
+                    data.spouse && (data.spouse = enCodeDataString(data.spouse));
+                    data.exSpouse && (data.exSpouse = enCodeDataString(data.exSpouse));
+                    if (data.childNodes && data.childNodes.length > 0) {
+                        for (var i = 0; i < data.childNodes.length; i++)
                             enCodeData(data.childNodes[i]);
                     }
                 }
 
-                var me=this;
-                var treeDataToSave =
-                    {
-                        mainAncestorData:null,
-                        mainDescendantData:null,
-                        spouseAncestorData:null,
-                        treeType:options.treeType,
-                        hasRoot:options.hasRoot,
-                        andStyle:me.$toolbar.find('select option:selected').val()
-                    };
-                    $.each(me.trees,function(){
-                        var treeData = this.getTreeData();
-                        enCodeData(treeData.data);
-                        treeDataToSave[treeData.name] = treeData.data;
-                    });
+                var me = this;
+                var treeDataToSave = {
+                    mainAncestorData: null,
+                    mainDescendantData: null,
+                    spouseAncestorData: null,
+                    treeType: options.treeType,
+                    hasRoot: options.hasRoot,
+                    andStyle: me.$toolbar.find('select option:selected').val(),
+                    allowAddBirthDay:me.options.allowAddBirthDay
+                };
+                $.each(me.trees, function() {
+                    var treeData = this.getTreeData();
+                    enCodeData(treeData.data);
+                    treeDataToSave[treeData.name] = treeData.data;
+                });
                 $.ajax({
-                    type:'POST',
-                    data:{
-                        orderNumber:me.options.orderNumber,
+                    type: 'POST',
+                    data: {
+                        orderNumber: me.options.orderNumber,
                         orderPass: me.options.orderPass,
-                        treeData :JSON.stringify(treeDataToSave),
-                        dataName :'dataToSave.name'
+                        treeData: JSON.stringify(treeDataToSave),
+                        dataName: 'dataToSave.name'
                     },
-                    url:'/index.php/?option=com_familytree&task=save&format=raw',
-                    success:function(result){
+                    url: '/index.php/?option=com_familytree&task=save&format=raw',
+                    success: function(result) {
 
                     },
-                    error:function(error){
+                    error: function(error) {
                         alert(error);
                     }
                 });

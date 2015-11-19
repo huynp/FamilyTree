@@ -20,20 +20,27 @@
             var option ={
                 orderNumber:'<?php print_r($this->orderNumber);?>',
                 orderPass:'<?php echo $this->orderPass; ?>',
-                andStyle:'and'
+                andStyle:'and',
+                ancestorLevel:4,
+                descendantLevel:3,
+                allowAddBirthDay:false
             };
 
             $.extend(option,dataObject);
             $('#family-tree-container').familyTree(option);
+            $('#nav-line').remove();
+            $('#tab-modules').remove();
             $(".tree-builder-container").parents('.row-fluid').find('.span3').remove();
 	         $(".tree-builder-container").parents('.row-fluid').find('.span9').addClass('span12').removeClass('span9');
 	         $('.tree-builder-container').css({
 				"width": "100%",
-				"height": "600px",
+				"height": "auto",
 				"padding": "5px",
 				"border-radius": "4px",
 				"overflow":"auto",
 				"border": "1px solid #CCC"});
+             $('#main-handler').width('98%');
+             $('#bottom-bg').remove();
         });
     }(jQuery))
     </script>

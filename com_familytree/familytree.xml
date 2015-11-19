@@ -21,20 +21,9 @@
             <language tag="en-GB">language/en-GB/en-GB.com_familytree.ini</language>
     </languages>
     <administration>
-        <menu img="./components/com_familytree/images/tree-icon-16.png">COM_FAMILYTREE</menu>
-        <submenu>
-            <menu link="option=com_familytree&amp;task=listFamilyTree" img="./components/com_familytree/images/list-icon-16.png">COM_FAMILYTREE_MENU_LISTFTREE</menu>
-            <menu link="option=com_familytree&amp;task=create" img="./components/com_familytree/images/plus-icon-16.png">COM_FAMILYTREE_MENU_CREATE</menu>
-        </submenu>
         <files folder="admin">
             <folder>language</folder>
             <folder>install</folder>
-            <folder>css</folder>
-            <folder>images</folder>
-            <folder>js</folder>
-            <filename>familytree.php</filename>
-            <filename>controller.php</filename>
-            <filename>index.html</filename>
         </files>
         <languages folder="admin">
             <language tag="en-GB">language/en-GB/en-GB.com_familytree.ini</language>

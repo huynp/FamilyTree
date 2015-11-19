@@ -33,10 +33,7 @@ body {
     border-radius: 5px;
     font-family: sans-serif;
     color: black;
-  /*  -webkit-box-shadow: 0px 1px 30px 1px lightgrey;
-    -moz-box-shadow: 0px 1px 30px 1px lightgrey;
-    box-shadow: 0px 1px 30px 1px lightgrey;
-*/
+    display:none;
     box-shadow: 1px 1px 20px 1px #999;
     color: #555;
 }
@@ -92,20 +89,21 @@ body {
     text-transform: capitalize;
 }
 .popup-header .b-close{
-    position: absolute;
     font: bold 14px sans-serif;
-    border-radius: 34%;
+    border-radius: 24%;
     box-shadow: none;
     position: absolute;
     right: -10px;
     top: -10px;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border: none;
     cursor: pointer;
     color: white;
     background: #2b91af;
     text-align: center;
+    margin: 0;
+    padding: 0;
 }
 .popup-header .b-close:hover{
     background: black;
@@ -143,86 +141,61 @@ body {
     background: black;
     z-index: 900;
 }
-.anniversaries-container{
 
-}
-.anniversary-item{
-    font-size: 0;
-    margin: 5px;
-}
-.btn-add-anniverary{
-    padding: 6px 12px;
-    font-size: 14px;
-    font-weight: 400;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #2e6da4;
-    margin: 5px;
-    display: block;
-}
-.anniversary-item .anniversary-name{
-    width: 150px;
-    margin-right: 0;
-    border-right: 0;
-    border-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-.anniversary-item .anniversary-date{
-    width: 138px;
-    margin-left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-.anniversary-item.error input,.error {
-    border-color: red !important;
-}
-.btn-remove-anniverary{
-    font-size: 17px;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    vertical-align: middle;
-    text-align: center;
-    padding: 6px 12px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    color: #fff;
-    background-color: #d9534f;
-    border-color: #d43f3a;
-    border-right: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-}
-.btn-remove-anniverary:hover{
-    color: #fff;
-    background-color: #c9302c;
-    border-color: #ac2925;
-}
 .lbHasSpouse, .lbHasExSpouse{
     display: inline-block !important;
     cursor: pointer;
 }
 .lbAnStyle{
-    cursor:pointer;
+    cursor: pointer;
     display: block;
     background-color: white;
-    padding: 10px 20px;
+    padding: 0px 20px;
     font-size: 16px;
+    float: left;
+    margin: 0;
+    line-height: 40px;
+    height: 35px;
+}
+.add-birthday-container {
+    vertical-align: middle;
+    line-height: 40px;
+    font-size: 16px;
+}
+.lbAddBirthday{
+    cursor: pointer;
+    display: inline-block;
+    background-color: #b3d239;
+    width: 20px;
+    position: relative;
+    height: 20px;
+    border-radius: 3px;
+    margin: 10px 5px;
+    float: left;
+}
+
+input[type="checkbox"]:checked + label.lbAddBirthday:before
+{
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+}
+#cb-add-birthday{
+    display: none;
+}
+.lbAddBirthday:before{
+    transform: rotate(40deg);
+    content: ' ';
+    width: 6px;
+    height: 12px;
+    position: absolute;
+    top: -1px;
+    left: 6px;
 }
 
 .lbAnStyle select{
     font-size: 14px;
     margin-left: 10px;
-    margin-top: 5px;
+    margin-bottom: 0;
 }
 .toolbar-container{
     background: white;
@@ -233,6 +206,7 @@ body {
     margin-left: 5px;
     border-width: 2px;
     border-bottom-width: 0;
+    margin: 10px;
 }
 
 .toolbar-container .tree-tab{
@@ -241,6 +215,9 @@ body {
     font-size: 16px;
     line-height: 20px;
     text-transform: capitalize;
+}
+.tab-content{
+    min-height: 700px;
 }
 .toolbar-container .tree-tab.active{
     border: 2px solid #726E67 !important;
@@ -256,4 +233,7 @@ body {
 }
 .datepicker.dropdown-menu{
     z-index: 100000;
+}
+.date-picker{
+    display: block !important;
 }
