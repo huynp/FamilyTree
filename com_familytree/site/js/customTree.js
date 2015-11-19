@@ -45,7 +45,7 @@
                         isDummy: false,
                         id: $.fn.generateUID(),
                         isRoot: true,
-                        anniversariy:returnData.anniversary,
+                        anniversary:returnData.anniversary,
                         birthday:returnData.birthday
                     };
 
@@ -58,7 +58,7 @@
                         isDummy: false,
                         id: $.fn.generateUID(),
                         isRoot: true,
-                        anniversariy:returnData.anniversary,
+                        anniversary:returnData.anniversary,
                         birthday:returnData.birthday
                     };
 
@@ -304,8 +304,8 @@
                     data.isInitialize && $cbHasSpouse.attr('disabled', 'disabled').prop('checked', true);
                     $cbHasExSpouse.change();
                     $cbHasSpouse.change();
-                    $birthday.val(data.birthday);
-                    $anniversary.val(data.anniversary);
+                    data.birthday && $birthday.val(data.birthday);
+                    data.anniversary && $anniversary.val(data.anniversary);
                     data.isDummy ? $name.attr('placeholder', data.name) : $name.val(data.name);
                     $nodeType.val(data.type);
                 };
@@ -354,16 +354,17 @@
                     allowManualClose: !data.isInitialize,
                     onShow: function(popupInstance) {
                         popupInstance.$container.find('.date-picker').each(function() {
-                            var $datePicker = $(this).datepicker().on('changeDate', function(ev) {
-                                if (ev.viewMode === "days") {
-                                    $datePicker.hide();
-                                }
-                            }).data('datepicker');
+                                var $datePicker = $(this).datepicker().on('changeDate', function(ev) {
+                                    if (ev.viewMode === "days") {
+                                        $datePicker.hide();
+                                        $(this).show();
+                                    }
+                                }).data('datepicker');
+
                         });
                     },
                     onHide: function() {
                         //Reset and clear on popup data
-                        $('.datepicker').remove();
                         me.$popup.cleanUp();
                     }
                 }
@@ -406,7 +407,7 @@
                         enCodeData(treeData.data);
                         treeDataToSave[treeData.name] = treeData.data;
                     });
-                /*$.ajax({
+                $.ajax({
                     type:'POST',
                     data:{
                         orderNumber:me.options.orderNumber,
@@ -421,7 +422,7 @@
                     error:function(error){
                         alert(error);
                     }
-                });*/
+                });
             }
         }
         _instance.init();
