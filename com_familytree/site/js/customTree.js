@@ -422,12 +422,15 @@
                     treeType: options.treeType,
                     hasRoot: options.hasRoot,
                     andStyle: me.$toolbar.find('select option:selected').val(),
-                    allowAddBirthDay:me.options.allowAddBirthDay
+                    allowAddBirthDay:me.options.allowAddBirthDay,
+                    ancestorLevel: me.options.ancestorLevel,
+                    descendantLevel: me.options.descendantLevel
                 };
                 $.each(me.trees, function() {
-                    var treeData = this.getTreeData();
-                    enCodeData(treeData.data);
-                    treeDataToSave[treeData.name] = treeData.data;
+                    var treeData ={};
+                     $.extend(true,treeData,this.getTreeData().data);
+                    enCodeData(treeData);
+                    treeDataToSave[this.getTreeData().name] = treeData;
                 });
                 $.ajax({
                     type: 'POST',
