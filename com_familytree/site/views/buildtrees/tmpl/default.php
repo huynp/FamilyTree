@@ -38,9 +38,12 @@
 				"padding": "5px",
 				"border-radius": "4px",
 				"overflow":"auto",
-				"border": "1px solid #CCC"});
+				"border": "1px solid #CCC",
+                "margin-top":"20px"});
              $('#main-handler').width('98%');
              $('#bottom-bg').remove();
+             $('#slideshow-header').remove();
+             $('#menu-handler li').removeClass('active');
         });
     }(jQuery))
     </script>

@@ -146,6 +146,7 @@
 
                         });
                     }
+                    me.options.currentTree = treeType;
                     $el.append($toolbarContainer);
                     return $toolbarContainer;
                 }
@@ -232,15 +233,19 @@
                             </tr>\
                             <tr class="has-spouse hide">\
                                 <td>Spouse</td>\
-                                <td><input type="text" class="txtSpouseName" placeholder="spouse name" /></td>\
+                                <td><input type="text" class="txtSpouseName" placeholder="spouse name" />\
+                                <input type="text"  class="spouse-birthday date-picker" placeholder="Spouse Birthday" data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
                             </tr>\
                             <tr class="has-ex-spouse hide">\
                                 <td>Ex Spouse</td>\
-                                <td><input type="text" class="txtExSpouseName" placeholder="ex Spouse name" /></td>\
+                                <td><input type="text" class="txtExSpouseName" placeholder="ex Spouse name" />\
+                                <input type="text"  class="ex-spouse-birthday date-picker" placeholder="ex Spouse Birthday " data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
                             </tr>\
                         </table>\
                     </div>'),
                     $birthday = $popup.find('.birthday'),
+                    $spouseBirthday = $popup.find('.spouse-birthday'),
+                    $exSpouseBirthday = $popup.find('.ex-spouse-birthday'),
                     $anniversary = $popup.find('.anniversary-date');
                     $rowAllowAddSpouse = $popup.find('.allow-add-spouse'),
                     $rowsAllowAddBirthday = $popup.find('.allow-add-birthday');
@@ -255,15 +260,22 @@
                     $cbHasExSpouse = $popup.find('.cbHasExSpouse');
 
                 $cbHasSpouse.on('change', function() {
-                    $(this).is(':checked') ? $rowHasSpouse.show().find('input').focus() : $rowHasSpouse.hide();
+                    $(this).is(':checked') ? $rowHasSpouse.show().find('input:first').focus() : $rowHasSpouse.hide();
                 });
                 $cbHasExSpouse.on('change', function() {
-                    $(this).is(':checked') ? $rowHasExSpouse.show().find('input').focus() : $rowHasExSpouse.hide();
+                    $(this).is(':checked') ? $rowHasExSpouse.show().find('input:first').focus() : $rowHasExSpouse.hide();
                 });
 
 
                 me.$popup = $popup;
-
+                me.$popup.find('.date-picker').each(function() {
+                            var $datePicker = $(this).datepicker().on('changeDate', function(ev) {
+                                if (ev.viewMode === "days") {
+                                    $datePicker.hide();
+                                    $(this).show();
+                                }
+                            }).data('datepicker');
+                        });
                 me.$popup.getData = function() {
                     var isValid = me.$popup.valid();
                     if (!isValid) {
@@ -278,7 +290,9 @@
                     var data = {
                         name: name,
                         spouse: spouseName,
+                        spouseBirthday: $spouseBirthday.val(),
                         exSpouse: exSpouseName,
+                        exSpouseBirthday: $exSpouseBirthday.val(),
                         type: $nodeType.val(),
                         isDummy: false,
                         birthday: $birthday.val(),
@@ -317,6 +331,7 @@
                     $cbHasSpouse.prop('checked', false);
                     $cbHasSpouse.removeAttr('disabled');
                     $cbHasExSpouse.prop('checked', false);
+                   // $('.datepicker').remove();
                 };
 
                 me.$popup.bindDataToPopup = function(data) {
@@ -324,11 +339,13 @@
                     !data.isDummy && data.exSpouse && data.exSpouse != '' && $cbHasExSpouse.prop('checked', true);
                     data.isDummy ? $spouseName.attr('placeholder', data.spouse) : $spouseName.val(data.spouse);
                     data.isDummy ? $exSpouseName.attr('placeholder', data.exSpouse) : $exSpouseName.val(data.exSpouse);
-                    !data.isInitialize && me.options.currentTree != 'Descendant' ? $rowAllowAddSpouse.hide() : $rowAllowAddSpouse.show();
+                    me.options.currentTree != 'Descendant' ? $rowAllowAddSpouse.hide() : $rowAllowAddSpouse.show();
                     data.isInitialize && $cbHasSpouse.attr('disabled', 'disabled').prop('checked', true);
                     $cbHasExSpouse.change();
                     $cbHasSpouse.change();
                     data.birthday && $birthday.val(data.birthday);
+                    data.spouseBirthday && $spouseBirthday.val(data.spouseBirthday);
+                    data.exSpouseBirthday && $exSpouseBirthday.val(data.exSpouseBirthday);
                     data.anniversary && $anniversary.val(data.anniversary);
                     data.isDummy ? $name.attr('placeholder', data.name) : $name.val(data.name);
                     $nodeType.val(data.type);
@@ -378,15 +395,6 @@
                     title: data.isDummy ? ('Add ' + data.type) : ('Edit ' + data.name),
                     allowManualClose: !data.isInitialize,
                     onShow: function(popupInstance) {
-                        popupInstance.$container.find('.date-picker').each(function() {
-                            var $datePicker = $(this).datepicker().on('changeDate', function(ev) {
-                                if (ev.viewMode === "days") {
-                                    $datePicker.hide();
-                                    $(this).show();
-                                }
-                            }).data('datepicker');
-
-                        });
                     },
                     onHide: function() {
                         //Reset and clear on popup data

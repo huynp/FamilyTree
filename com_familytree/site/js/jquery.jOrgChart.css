@@ -147,7 +147,7 @@
     background-color: black;
 }
 
-.horizontal .node span {
+.horizontal .node span,.horizontal span.main-date {
     display: block;
     width: 170px;
     position: absolute;
@@ -219,11 +219,10 @@
     background-color: transparent;
 }
 
-.horizontal div.spouse-name-container {
+.horizontal div.spouse-name-container{
     color: white;
     width: 170px;
     display: inline-block;
-    height: 170xpx;
     transform: rotate(90deg);
     transform-origin: 0 0;
     height: 20px;
@@ -232,6 +231,21 @@
     transform-style: flat;
     margin-left: -3px;
     margin-top: -5px;
+}
+
+.horizontal div.ex-spouse-name-container {
+    color: white;
+    width: 170px;
+    display: inline-block;
+    transform: rotate(90deg);
+    transform-origin: 20px -20px;
+    height: 20px;
+    background: gray;
+    padding: 2px 0;
+    transform-style: flat;
+    margin-left: -30px;
+    margin-top: 11px;
+    background-color: rgba(112, 162, 246, 0.4);
 }
 
 .horizontal .spouse-name {
@@ -257,4 +271,45 @@
 
 .hide {
     display: none;
+}
+.read-only .horizontal td.node-cell{
+    padding: 0 35px;
+}
+
+
+.read-only .horizontal div.spouse-name-container {
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+}
+
+.read-only .horizontal .node span,.read-only .horizontal .node label  {
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+    text-align: left;
+    padding-left: 5px;
+    cursor: default;
+}
+
+.read-only .horizontal .node label {
+    width: 210px;
+}
+
+.read-only .horizontal span.main-date{
+    margin-left: -20px;
+}
+.read-only .horizontal div.ex-spouse-name-container {
+    width: 210px;
+    transform-origin: 40px -40px;
+}
+
+.read-only .horizontal div.spouse-name-container {
+    width: 210px;
+    transform-origin: 20px -20px;
+}
+.read-only .horizontal .spouse-name,.read-only .horizontal .ex-spouse-name
+{
+    margin: 0;
+    padding: 0;
 }

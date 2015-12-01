@@ -12,7 +12,7 @@
         $rootNode.addClass('main');
         $appendTo.append($container);
         opts.displayHorizontal && displayHorizontal();
-
+        opts.mode =='readOnly' && $container.addClass('read-only');
         function displayHorizontal() {
             $container.addClass('jOrgChart-horizontal');
             $container.find('>table').addClass('horizontal');
@@ -38,6 +38,7 @@
 
         // Method that recursively builds the tree
         function buildNode(nodeData, $container, opts) {
+
             var $table = $("<table cellpadding='0' cellspacing='0' border='0'/>");
             var $tbody = $("<tbody/>");
 
@@ -45,11 +46,27 @@
             var $nodeRow = $("<tr/>").addClass("node-cells");
             var $nodeCell = $("<td/>").addClass("node-cell").attr("colspan", 2);
             var _childNodes = nodeData.childNodes || [];
+
+            //if readonly mode remove dummy node
+            if(opts.mode =='readOnly')
+            {
+                for(var i=0;i<_childNodes.length;i++)
+                {
+                    if(_childNodes[i].isDummy)
+                    {
+                        _childNodes.splice(i,1);
+                        i--;    
+                    }
+                    
+                }   
+            }
+
             var $nodeDiv = $("<div>").addClass("node");
 
             if (nodeData.isDummy) {
                 $nodeDiv.addClass('dummy-node');
-            } else if (!nodeData.isDummy && nodeData.level < opts.maxLevel - 1) {
+            } 
+            else if (!nodeData.isDummy && nodeData.level < opts.maxLevel - 1 && opts.mode == 'edit') {
                 //Add dummy data
                 switch (opts.treeType) {
                     case 'Ancestor':
@@ -109,32 +126,65 @@
                 $nodeCell.attr("colspan", _childNodes.length * 2);
             }
             // Draw the node
-            var $nodeContent = $(opts.nodeTemplate);
-            var nodeDisplayText = nodeData.isDummy ? 'Add ' + nodeData.type : nodeData.name;
-            $nodeContent.find('.name').text(nodeDisplayText);
-            if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
-                var andText = 'and';
-                if (opts.andStyle == 'sign')
-                    andText = '&';
+            
+            if(opts.mode=='edit')
+            {
+                var $nodeContent = $(opts.nodeTemplate.edit);
+                var nodeDisplayText = nodeData.isDummy ? 'Add ' + nodeData.type : nodeData.name;
+                $nodeContent.find('.name').text(nodeDisplayText);
+                if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
+                    var andText = 'and';
+                    if (opts.andStyle == 'sign')
+                        andText = '&';
 
-                var $andStyle = $('<label class="end-style"></label>').text(andText);
-                opts.andStyle == 'italized' && $andStyle.addClass('italized');
-                var spouseName =nodeData.spouse;
-                var $spouseName = $('<label class="spouse-name"></label>').text(spouseName)
-                $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseName);
-            } else {
-                $nodeContent.find('.spouse-name-container').remove();
+                    var $andStyle = $('<label class="end-style"></label>').text(andText);
+                    opts.andStyle == 'italized' && $andStyle.addClass('italized');
+                    var spouseName =nodeData.spouse;
+                    var $spouseName = $('<label class="spouse-name"></label>').text(spouseName)
+                    $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseName);
+                } else {
+                    $nodeContent.find('.spouse-name-container').remove();
+                }
+
+                var iconClass = nodeData.type || '';
+                $nodeContent.find('.icon').addClass(iconClass);
+                //Increaments the node count which is used to link the source list and the org chart
+                $nodeDiv.append($nodeContent);
+                $nodeDiv[0].data = nodeData;
+                $nodeDiv.unbind('click').on('click', function() {
+                    $selectedNode = $nodeDiv;
+                    opts.onNodeSelected($nodeDiv);
+                });
             }
+            else
+            {
+               
+                var $nodeContent = $(opts.nodeTemplate.readOnly);
+                var nodeDisplayText =  nodeData.name;
+                var nodeMainDate ='';
+                nodeData.birthday && (nodeMainDate+=  nodeData.birthday);
+                nodeData.anniversary && (nodeMainDate += ' | '+ nodeData.anniversary);
+                $nodeContent.find('.name').text(nodeDisplayText);
+                $nodeContent.find('.main-date').text(nodeMainDate);
+                if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
+                    var spouseConent = nodeData.spouse;
+                    nodeData.spouseBirthday && (spouseConent+= ' | ' +  nodeData.spouseBirthday);
+                    var $spouseContent = $('<label class="spouse-name"></label>').text(spouseConent);
+                    $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseContent);
+                }
 
-            var iconClass = nodeData.type || '';
-            $nodeContent.find('.icon').addClass(iconClass);
-            //Increaments the node count which is used to link the source list and the org chart
-            $nodeDiv.append($nodeContent);
-            $nodeDiv[0].data = nodeData;
-            $nodeDiv.unbind('click').on('click', function() {
-                $selectedNode = $nodeDiv;
-                opts.onNodeSelected($nodeDiv);
-            });
+                if (!nodeData.isDummy && nodeData.exSpouse && nodeData.exSpouse !== '') {
+                    var exSpouseConent = nodeData.exSpouse;
+                    nodeData.exSpouseBirthday && (exSpouseConent+= ' | ' +  nodeData.exSpouseBirthday);
+                    var $exSpouseContent = $('<label class="ex-spouse-name"></label>').text(exSpouseConent)
+                    $nodeContent.find('.ex-spouse-name-container').append($andStyle).append($exSpouseContent);
+                }
+
+                var iconClass = nodeData.type || '';
+                $nodeContent.find('.icon').addClass(iconClass);
+                //Increaments the node count which is used to link the source list and the org chart
+                $nodeDiv.append($nodeContent);
+            }
             var $nodeWrapper = $('<div class="node-wrapper"></div>');
             $nodeCell.append($nodeDiv);
             $nodeRow.append($nodeCell);
@@ -233,7 +283,11 @@
         chartClass: "jOrgChart",
         dragAndDrop: false,
         onNodeSelected: function() {},
-        nodeTemplate: '<div class="node-content"><i class="icon"></i><span class="name"></span><div class="spouse-name-container"></div></div>'
+        nodeTemplate:{
+            edit:'<div class="node-content"><i class="icon"></i><span class="name"></span><div class="spouse-name-container"></div></div>',
+            readOnly:'<div class="node-content"><i class="icon"></i><span class="name"></span><span class="main-date"></span><div class="spouse-name-container"></div><div class="ex-spouse-name-container"></div></div>'
+        },
+        mode:'readOnly'
     };
 
 
