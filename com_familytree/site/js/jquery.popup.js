@@ -17,7 +17,7 @@
         }
        
         $( window ).resize(function() {
-            calculatePosition();
+            $backdrop.width()>0 && $backdrop.height()>0 && $backdrop.is(':visible') && calculatePosition();
         });
         function prepairPopup($el,options){
             var me = this;

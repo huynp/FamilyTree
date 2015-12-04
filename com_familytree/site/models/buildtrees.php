@@ -23,12 +23,10 @@ class FamilyTreeModelBuildtrees extends JModel
 	 * @author Max Milbers
 	 */
 	public function getOrderIdByOrderPass($orderNumber,$orderPass){
-
 		$db = JFactory::getDBO();
 		$q = 'SELECT `virtuemart_order_id` FROM `#__virtuemart_orders` WHERE `order_pass`="'.$db->getEscaped($orderPass).'" AND `order_number`="'.$db->getEscaped($orderNumber).'"';
 		$db->setQuery($q);
 		$orderId = $db->loadResult();
-
 		return $orderId;
 
 	}
@@ -37,8 +35,28 @@ class FamilyTreeModelBuildtrees extends JModel
 	 * Load a single order, Attention, this function is not protected! Do the right manangment before, to be certain
      * we suggest to use getMyOrderDetails
 	 */
-	public function getOrderProductAttribute($virtuemart_order_id){
+	public function getOrder($virtuemart_order_id){
+		//sanitize id
+		$virtuemart_order_id = (int)$virtuemart_order_id;
+		$db = JFactory::getDBO();
+		$orderDetail = array();
+		$q = "select o.*, CONCAT_WS(' ',u.first_name,u.middle_name,u.last_name) AS order_name "
+		.', u.email as order_email'
+		.' FROM #__virtuemart_orders as o
+				LEFT JOIN #__virtuemart_order_userinfos as u
+				ON u.virtuemart_order_id = o.virtuemart_order_id AND u.address_type="BT"'
+		.' Where o.virtuemart_order_id='.$virtuemart_order_id;
+		$db->setQuery($q);
+		$orderDetail = $db->loadObjectList();
+		return $orderDetail;
 
+	}
+
+	/**
+	 * Load a single order, Attention, this function is not protected! Do the right manangment before, to be certain
+     * we suggest to use getMyOrderDetails
+	 */
+	public function getOrderProductAttribute($virtuemart_order_id){
 		//sanitize id
 		$virtuemart_order_id = (int)$virtuemart_order_id;
 		$db = JFactory::getDBO();
@@ -52,8 +70,6 @@ class FamilyTreeModelBuildtrees extends JModel
 		return $product_attribute;
 	}
 	public function getTreeData() {
-
-
 		$app = JFactory::getApplication();
 		$input = $app->input;
 		$orderNumber=$input->get('orderNumber', '', 'string');
@@ -133,21 +149,69 @@ class FamilyTreeModelBuildtrees extends JModel
 		$orderNumber=$postData->get('orderNumber', '', 'string');
 		$orderPass=$postData->get('orderPass', '', 'string');
 		$treeData =$postData->get('treeData', '', 'string');
-		$dataName =$postData->get('dataName', '', 'string');
-
 		$db = JFactory::getDBO();
-		//$query="select Tree_Data from `#__familytree_tree_data` where Order_Number='$orderNumber' and Order_Pass ='$orderPass'";
-		//$treeDataToUpdate = $db->setQuery($query)->loadResult();
-
-		//$arrayObject = json_decode($treeDataToUpdate);
-		//$arrayObject[$dataName] = $treeData;
-		//$test = json_encode($arrayObject);
-		echo $treeData;
-		echo "</br>";
 		$encodeString = mysql_escape_string($treeData);
 		$query="insert into `#__familytree_tree_data`(`Order_Number`,`Order_Pass`,`Tree_Data`) values('$orderNumber','$orderPass','$encodeString') ON DUPLICATE KEY UPDATE `Tree_Data`='$encodeString'";
 		$result = $db->setQuery($query)->query();
 		return $result;
+	}
+	
+	public function sentEmail()
+	{
+		$app = JFactory::getApplication();
+		$input = $app->input;
+		$orderNumber=$input->get('orderNumber', '', 'string');
+		$orderPass=$input->get('orderPass', '', 'string');
+		$orderId = $this->getOrderIdByOrderPass($orderNumber,$orderPass);
+		$orderDetail = $this->getOrder($orderId);
+
+		$my_file = "emailTemplate.html";
+		$my_path = $_SERVER['DOCUMENT_ROOT']."/components/com_familytree/js/";
+		$my_name = "Huy Nguyen";
+		$my_mail = "huynp88@gmail.com";
+		$my_replyto = "huynp88@gmail.com";
+		$my_subject = "This is a mail with attachment.";
+		$my_message = "Hello,\r\n This is family tree data of customer with customer info:"
+		."\r\n Name: ".$orderDetail[0]->order_name 
+		."\r\n Email: ".$orderDetail[0]->order_email 
+		."\r\n Order Number:".$orderNumber 
+		."\r\n\r\n --Custom Family Tree";
+		$this->mail_attachment($my_file, $my_path, "huynp88@gmail.com", $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+		return true;
+	}
+
+
+	function mail_attachment($filename, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
+		$treeData =$this->getTreeData();
+		$stringToReplace = "<a id='temp-data' style='display:none' data-tree=\"".htmlentities($treeData)."\">Tree Data</a>";
+	    $file = $path.$filename;
+	    $file_size = filesize($file);
+	    $handle = fopen($file, "r");
+	    $content = fread($handle, $file_size);
+		$content = str_replace("[data]",$stringToReplace, $content);
+	    fclose($handle);
+	    $content = chunk_split(base64_encode($content));
+	    $uid = md5(uniqid(time()));
+	    $header = "From: ".$from_name." <".$from_mail.">\r\n";
+	    $header .= "Reply-To: ".$replyto."\r\n";
+	    $header .= "MIME-Version: 1.0\r\n";
+	    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
+	    $header .= "This is a multi-part message in MIME format.\r\n";
+	    $header .= "--".$uid."\r\n";
+	    $header .= "Content-type:text/plain; charset=iso-8859-1\r\n";
+	    $header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+	    $header .= $message."\r\n\r\n";
+	    $header .= "--".$uid."\r\n";
+	    $header .= "Content-Type: application/octet-stream; name=\"".$filename."\"\r\n"; // use different content types here
+	    $header .= "Content-Transfer-Encoding: base64\r\n";
+	    $header .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n\r\n";
+	    $header .= $content."\r\n\r\n";
+	    $header .= "--".$uid."--";
+	    if (mail($mailto, $subject, "", $header)) {
+	        echo "mail send ... OK"; // or use booleans here
+	    } else {
+	        echo "mail send ... ERROR!";
+	    }
 	}
 
 }

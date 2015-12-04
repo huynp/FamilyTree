@@ -2,13 +2,26 @@
     $.fn.generateUID = function() {
         return ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4);
     };
+    $.fn.getParameterByName = function(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    }   
+
     $.fn.jOrgChart = function(options, data) {
         data.level = 0;
-        var opts = $.extend({}, $.fn.jOrgChart.defaults, options),
-            $selectedNode, $appendTo = $(opts.chartElement),
+        var opts = $.extend({}, $.fn.jOrgChart.defaults, options)
+        var mode = $.fn.getParameterByName('mode'); 
+        mode && (opts.mode = mode);
+
+        var $selectedNode, 
+            $appendTo = $(opts.chartElement),
             _treeLevel = 0,
             $container = $("<div class='node-container " + opts.chartClass + "'/>").addClass(opts.treeType),
             $rootNode = buildNode(data, $container, opts);
+        
+
         $rootNode.addClass('main');
         $appendTo.append($container);
         opts.displayHorizontal && displayHorizontal();
@@ -16,14 +29,16 @@
         function displayHorizontal() {
             $container.addClass('jOrgChart-horizontal');
             $container.find('>table').addClass('horizontal');
-            var tableWidth = $container.find('>table').width();
-            var tableHeight = $container.find('>table').height();
-            $container.find('>table').css({
-                top: (tableWidth + 50) + "px",
-                left: "20px"
-            });
-            $container.height(tableWidth + 120);
-            $container.parents('#family-tree-container').width(tableHeight + 120);
+            setTimeout(function(){
+                var tableWidth = $container.find('>table').width();
+                var tableHeight = $container.find('>table').height();
+                $container.find('>table').css({
+                    top: tableWidth + "px",
+                    left: "20px"
+                });
+                $container.height(tableWidth+20);
+                $container.parents('#family-tree-container').width(tableWidth+20);
+            },10);
         }
 
         function renderNode($node) {
@@ -162,20 +177,20 @@
                 var $nodeContent = $(opts.nodeTemplate.readOnly);
                 var nodeDisplayText =  nodeData.name;
                 var nodeMainDate ='';
-                nodeData.birthday && (nodeMainDate+=  nodeData.birthday);
-                nodeData.anniversary && (nodeMainDate += ' | '+ nodeData.anniversary);
+                nodeData.birthday && (nodeMainDate+=  'BD-' + nodeData.birthday);
+                nodeData.anniversary && (nodeMainDate += ' | AN-'+ nodeData.anniversary);
                 $nodeContent.find('.name').text(nodeDisplayText);
                 $nodeContent.find('.main-date').text(nodeMainDate);
                 if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
                     var spouseConent = nodeData.spouse;
-                    nodeData.spouseBirthday && (spouseConent+= ' | ' +  nodeData.spouseBirthday);
+                    nodeData.spouseBirthday && (spouseConent+= ' | BD-' +  nodeData.spouseBirthday);
                     var $spouseContent = $('<label class="spouse-name"></label>').text(spouseConent);
                     $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseContent);
                 }
 
                 if (!nodeData.isDummy && nodeData.exSpouse && nodeData.exSpouse !== '') {
                     var exSpouseConent = nodeData.exSpouse;
-                    nodeData.exSpouseBirthday && (exSpouseConent+= ' | ' +  nodeData.exSpouseBirthday);
+                    nodeData.exSpouseBirthday && (exSpouseConent+= ' | BD-' +  nodeData.exSpouseBirthday);
                     var $exSpouseContent = $('<label class="ex-spouse-name"></label>').text(exSpouseConent)
                     $nodeContent.find('.ex-spouse-name-container').append($andStyle).append($exSpouseContent);
                 }
@@ -287,7 +302,7 @@
             edit:'<div class="node-content"><i class="icon"></i><span class="name"></span><div class="spouse-name-container"></div></div>',
             readOnly:'<div class="node-content"><i class="icon"></i><span class="name"></span><span class="main-date"></span><div class="spouse-name-container"></div><div class="ex-spouse-name-container"></div></div>'
         },
-        mode:'readOnly'
+        mode:'edit'
     };
 
 
