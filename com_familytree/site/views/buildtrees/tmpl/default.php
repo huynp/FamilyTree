@@ -1,5 +1,11 @@
 <div class="tree-builder-container">
-    <script type="text/javascript" src="/components/com_familytree/js/output.min.js"></script>
+
+    <!--<script type="text/javascript" src="/components/com_familytree/js/output.min.js"></script>-->
+    <script type="text/javascript" src="/components/com_familytree/js/jquery-1.11.3.js"></script>
+    <script type="text/javascript" src="/components/com_familytree/js/customTree.js"></script>
+    <script type="text/javascript" src="/components/com_familytree/js/jquery.popup.js"></script>
+    <script type="text/javascript" src="/components/com_familytree/js/jquery.jOrgChart.js"></script>
+    <script type="text/javascript" src="/components/com_familytree/js/bootstrap-datepicker.js"></script>
     <link rel="stylesheet" href="/components/com_familytree/js/jquery.jOrgChart.css" />
     <link rel="stylesheet" href="/components/com_familytree/js/custom.css" />
     <link rel="stylesheet" href="/components/com_familytree/js/datepicker.css" />
@@ -20,7 +26,8 @@
                 ancestorLevel:4,
                 descendantLevel:3,
                 allowAddBirthDay:false,
-                isFinish:false
+                isFinish:false,
+                isDoubleTrunk:false
             };
 
             $.extend(option,dataObject);

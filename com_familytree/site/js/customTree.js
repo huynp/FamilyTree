@@ -121,7 +121,7 @@
                 setTimeout(function(){
                     $mainTab.addClass('tab-item tab-content active');
                     $rootTab.addClass('tab-item tab-content');
-                },20);
+                },200);
 
                 function buildToolBar(hasRoot, treeType) {
                     var $toolbarContainer = $('<div class="toolbar-container"></div>');
@@ -151,6 +151,22 @@
                         me.options.allowAddBirthDay && alert('Adding date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
                         me.saveTreeData(false);
                     });
+
+                    if(treeType ==='Descendant')
+                    {
+                        //Add single trunk or double trunk radio
+                        var $trunkOptionContainer = $('<div class="trunk-option-container">\
+                                        <input type="checkbox" id="cb-double"/>\
+                                        <label for="cb-double" class="lbAddBirthday"></label> Double Trunk\
+                            </div>').appendTo($toolbarContainer);
+                        $trunkOptionContainer.find("#cb-double").prop("checked", me.options.isDoubleTrunk)
+                        $trunkOptionContainer.find("#cb-double").change(function(){
+                            me.options.isDoubleTrunk = $(this).is(":checked");
+                            me.saveTreeData(false);
+                        });
+
+                    }
+
                     var $finishButton = $('<button class="finish-button">I have completed my family tree!!!!</button>').appendTo($toolbarContainer);
                     $finishButton.click(function(){
                         if(confirm('You can\'t edit anymore after click this button. Are you completed your family tree?'))
@@ -371,14 +387,14 @@
                     if(me.options.allowAddBirthDay)
                     {
                         $rowsAllowAddBirthday.show();
-                        $exSpouseBirthday.show();
-                        $spouseBirthday.show();
+                        $rowHasSpouse.addClass('allow-add-birthday');
+                        $rowHasExSpouse.addClass('allow-add-birthday');
                     }  
                     else{
                         $rowsAllowAddBirthday.hide();
-                        $exSpouseBirthday.hide();
-                        $spouseBirthday.hide();
-                    }
+                        $rowHasSpouse.removeClass('allow-add-birthday');
+                        $rowHasExSpouse.removeClass('allow-add-birthday');                   
+                     }
                 };
                 me.myPopup = $.fn.jPopup();
             },
@@ -387,7 +403,6 @@
                 var _nodeData = $node[0].data,
                     callback = function(data) {
                         data ? treeInstance.updateNode(data) : treeInstance.removeNode();
-                        var treeData = treeInstance.getTreeData();
                         me.saveTreeData(false);
                     };
                 this.showPopup(_nodeData, callback);
@@ -464,7 +479,8 @@
                     allowAddBirthDay:me.options.allowAddBirthDay,
                     ancestorLevel: me.options.ancestorLevel,
                     descendantLevel: me.options.descendantLevel,
-                    isFinish:isFinish
+                    isFinish:isFinish,
+                    isDoubleTrunk:me.options.isDoubleTrunk
                 };
                 $.each(me.trees, function() {
                     var treeData ={};
@@ -481,7 +497,7 @@
                     },
                     url:url,
                     success: function(result) {
-
+                        isFinish && window.location.reload();
                     },
                     error: function(error) {
                         alert(error);

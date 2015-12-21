@@ -69,6 +69,61 @@ class FamilyTreeModelBuildtrees extends JModel
 		$product_attribute = $db->loadResult();
 		return $product_attribute;
 	}
+	public function getProductInfo(){
+			$app = JFactory::getApplication();
+			$input = $app->input;
+			$orderNumber=$input->get('orderNumber', '', 'string');
+			$orderPass=$input->get('orderPass', '', 'string');
+			$orderId = $this->getOrderIdByOrderPass($orderNumber,$orderPass);
+			$product_attribute = $this->getOrderProductAttribute($orderId);
+			$productInfo = new stdClass();
+			$productInfo->hasRoot =strpos($product_attribute,'Yes Roots');
+			$productInfo->ancestorLevel =3;
+			$productInfo->descendantLevel = 3;
+
+			$Ancestry4Couple = strpos($product_attribute,'Ancestry - 4 Generation Couple'); 
+			$Ancestry4Individual = strpos($product_attribute,'Ancestry - 4 Generation Individual'); 
+			$Ancestry5Individual = strpos($product_attribute,'Ancestry - 5 Generation Individual'); 
+			$Descendant2 = strpos($product_attribute,'Descendant - 2 Generation'); 
+			$Descendant3 = strpos($product_attribute,'Descendant - 3 Generation'); 
+			$Descendant4 = strpos($product_attribute,'Descendant - 4 Generation'); 
+			$Descendant5 = strpos($product_attribute,'Descendant - 5 Generation'); 
+			 if($Ancestry4Couple)
+			 {
+			 	$productInfo->treeType = 'AncestorCouple';
+			 	$productInfo->ancestorLevel = 4;
+			 }
+			 elseif($Ancestry4Individual){
+
+			 	$productInfo->treeType = 'AncestorSingle';
+			 	$productInfo->ancestorLevel =4;
+			 }
+			 elseif($Ancestry5Individual){
+
+			 	$productInfo->treeType = 'AncestorSingle';
+			 	$productInfo->ancestorLevel = 5;
+			 }
+			 elseif($Descendant2){
+
+			 	$productInfo->treeType = 'Descendant';
+			 	$productInfo->descendantLevel = 2;
+			 }
+			 elseif($Descendant3){
+
+			 	$productInfo->treeType = 'Descendant';
+			 	$productInfo->descendantLevel = 3;
+			 }
+			 elseif($Descendant4){
+
+			 	$productInfo->treeType = 'Descendant';
+			 	$productInfo->descendantLevel = 4;
+			 }
+			 elseif($Descendant5){
+			 	$productInfo->treeType = 'Descendant';
+			 	$productInfo->descendantLevel = 5;
+			 }
+			 return $productInfo;
+	}
 	public function getTreeData() {
 		$app = JFactory::getApplication();
 		$input = $app->input;
@@ -80,61 +135,14 @@ class FamilyTreeModelBuildtrees extends JModel
 		$treeData = $db->setQuery($query)->loadResult();
 		if($treeData===null || $treeData=='')
 		{
-			$orderId = $this->getOrderIdByOrderPass($orderNumber,$orderPass);
-			$product_attribute = $this->getOrderProductAttribute($orderId);
-			
-			 $hasRoot =strpos($product_attribute,'Yes Roots');
-			 $Ancestry4Couple = strpos($product_attribute,'Ancestry - 4 Generation Couple'); 
-			 $Ancestry4Individual = strpos($product_attribute,'Ancestry - 4 Generation Individual'); 
-			 $Ancestry5Individual = strpos($product_attribute,'Ancestry - 5 Generation Individual'); 
-			 $Descendant2 = strpos($product_attribute,'Descendant - 2 Generation'); 
-			 $Descendant3 = strpos($product_attribute,'Descendant - 3 Generation'); 
-			 $Descendant4 = strpos($product_attribute,'Descendant - 4 Generation'); 
-			 $Descendant5 = strpos($product_attribute,'Descendant - 5 Generation'); 
-			 $ancestorLevel =3;
-			 $descendantLevel = 3;
-			 if($Ancestry4Couple)
-			 {
-			 	$treeType = 'AncestorCouple';
-			 	$ancestorLevel =4;
-			 }
-			 elseif($Ancestry4Individual){
-
-			 	$treeType = 'AncestorSingle';
-			 	$ancestorLevel =4;
-			 }
-			 elseif($Ancestry5Individual){
-
-			 	$treeType = 'AncestorSingle';
-			 	$ancestorLevel =5;
-			 }
-			 elseif($Descendant2){
-
-			 	$treeType = 'Descendant';
-			 	$descendantLevel =2;
-			 }
-			 elseif($Descendant3){
-
-			 	$treeType = 'Descendant';
-			 	$descendantLevel =3;
-			 }
-			 elseif($Descendant4){
-
-			 	$treeType = 'Descendant';
-			 	$descendantLevel =4;
-			 }
-			 elseif($Descendant5){
-
-			 	$treeType = 'Descendant';
-			 	$descendantLevel =5;
-			 }
+			$productInfo =$this->getProductInfo();
 			$treeData = new stdClass();
 			$treeData->mainPersonData =null;
 			$treeData->spouseData =null;
-			$treeData->treeType =$treeType;
-			$treeData->hasRoot =$hasRoot;
-			$treeData->descendantLevel =$descendantLevel;
-			$treeData->ancestorLevel =$ancestorLevel;
+			$treeData->treeType = $productInfo->treeType;
+			$treeData->hasRoot = $productInfo->hasRoot;
+			$treeData->descendantLevel = $productInfo->descendantLevel;
+			$treeData->ancestorLevel = $productInfo->ancestorLevel;
 			$treeData->allowAddBirthDay=false;
 
 			$treeData = json_encode($treeData);
@@ -166,22 +174,31 @@ class FamilyTreeModelBuildtrees extends JModel
 		$orderDetail = $this->getOrder($orderId);
 
 		$my_file = "emailTemplate.html";
+		$attachment_my_file_name = $orderNumber."-family-tree.html";
 		$my_path = $_SERVER['DOCUMENT_ROOT']."/components/com_familytree/js/";
-		$my_name = "Huy Nguyen";
-		$my_mail = "huynp88@gmail.com";
-		$my_replyto = "huynp88@gmail.com";
-		$my_subject = "This is a mail with attachment.";
-		$my_message = "Hello,\r\n This is family tree data of customer with customer info:"
+		$my_name = "Custom Family Tree";
+		$my_mail = $orderDetail[0]->order_email ;
+		$my_replyto = $orderDetail[0]->order_email ;
+
+		$productInfo =$this->getProductInfo();
+		$genNum =$productInfo->ancestorLevel;
+		if($productInfo->treeType == 'Descendant')
+		{
+			$genNum = $productInfo->descendantLevel;
+		}
+		$my_subject = "Order ".$orderNumber." - ".$orderDetail[0]->order_name." - [".$genNum." ".$productInfo->treeType."] Form";//This is a mail with attachment.";
+		$date = date('m/d/Y h:i:s a', time());
+		$my_message = $orderDetail[0]->order_name ." completed the form at ".$date.". Please see attached." //"Hello,\r\n This is family tree data of customer with customer info:"
 		."\r\n Name: ".$orderDetail[0]->order_name 
 		."\r\n Email: ".$orderDetail[0]->order_email 
 		."\r\n Order Number:".$orderNumber 
 		."\r\n\r\n --Custom Family Tree";
-		$this->mail_attachment($my_file, $my_path, "huynp88@gmail.com", $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+		$this->mail_attachment($my_file,$attachment_my_file_name, $my_path, "noelle@customfamilytreeart.com,huynp88@gmail.com", $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
 		return true;
 	}
 
 
-	function mail_attachment($filename, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
+	function mail_attachment($filename,$attachment_my_file_name, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
 		$treeData =$this->getTreeData();
 		$stringToReplace = "<a id='temp-data' style='display:none' data-tree=\"".htmlentities($treeData)."\">Tree Data</a>";
 	    $file = $path.$filename;
@@ -193,6 +210,7 @@ class FamilyTreeModelBuildtrees extends JModel
 	    $content = chunk_split(base64_encode($content));
 	    $uid = md5(uniqid(time()));
 	    $header = "From: ".$from_name." <".$from_mail.">\r\n";
+	    $headers .= "BCC: huynp88@gmail.com\r\n";  
 	    $header .= "Reply-To: ".$replyto."\r\n";
 	    $header .= "MIME-Version: 1.0\r\n";
 	    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
@@ -202,9 +220,9 @@ class FamilyTreeModelBuildtrees extends JModel
 	    $header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
 	    $header .= $message."\r\n\r\n";
 	    $header .= "--".$uid."\r\n";
-	    $header .= "Content-Type: application/octet-stream; name=\"".$filename."\"\r\n"; // use different content types here
+	    $header .= "Content-Type: application/octet-stream; name=\"".$attachment_my_file_name."\"\r\n"; // use different content types here
 	    $header .= "Content-Transfer-Encoding: base64\r\n";
-	    $header .= "Content-Disposition: attachment; filename=\"".$filename."\"\r\n\r\n";
+	    $header .= "Content-Disposition: attachment; filename=\"".$attachment_my_file_name."\"\r\n\r\n";
 	    $header .= $content."\r\n\r\n";
 	    $header .= "--".$uid."--";
 	    if (mail($mailto, $subject, "", $header)) {

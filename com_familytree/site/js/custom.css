@@ -157,7 +157,7 @@ body {
     line-height: 40px;
     height: 35px;
 }
-.add-birthday-container {
+.add-birthday-container,.trunk-option-container {
     vertical-align: middle;
     line-height: 40px;
     font-size: 16px;
@@ -180,7 +180,7 @@ input[type="checkbox"]:checked + label.lbAddBirthday:before
     border-right: 2px solid white;
     border-bottom: 2px solid white;
 }
-#cb-add-birthday{
+#cb-add-birthday,#cb-double{
     display: none;
 }
 .lbAddBirthday:before{
@@ -247,4 +247,12 @@ button.finish-button {
 }
 label.disabled,button.disabled{
     background-color: gray !important;
+}
+
+.has-spouse .date-picker,.has-ex-spouse .date-picker{
+    display: none !important;
+}
+
+.has-spouse.allow-add-birthday .date-picker,.has-ex-spouse.allow-add-birthday .date-picker{
+    display: block !important;
 }

@@ -38,7 +38,7 @@
                 });
                 $container.height(tableWidth+20);
                 $container.parents('#family-tree-container').width(tableWidth+20);
-            },10);
+            },100);
         }
 
         function renderNode($node) {
@@ -177,20 +177,20 @@
                 var $nodeContent = $(opts.nodeTemplate.readOnly);
                 var nodeDisplayText =  nodeData.name;
                 var nodeMainDate ='';
-                nodeData.birthday && (nodeMainDate+=  'BD-' + nodeData.birthday);
-                nodeData.anniversary && (nodeMainDate += ' | AN-'+ nodeData.anniversary);
+                nodeData.birthday && (nodeMainDate+=  'BD ' + nodeData.birthday);
+                nodeData.anniversary && (nodeMainDate += ' | AN '+ nodeData.anniversary);
                 $nodeContent.find('.name').text(nodeDisplayText);
                 $nodeContent.find('.main-date').text(nodeMainDate);
                 if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
                     var spouseConent = nodeData.spouse;
-                    nodeData.spouseBirthday && (spouseConent+= ' | BD-' +  nodeData.spouseBirthday);
+                    nodeData.spouseBirthday && (spouseConent+= ' | BD ' +  nodeData.spouseBirthday);
                     var $spouseContent = $('<label class="spouse-name"></label>').text(spouseConent);
                     $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseContent);
                 }
 
                 if (!nodeData.isDummy && nodeData.exSpouse && nodeData.exSpouse !== '') {
                     var exSpouseConent = nodeData.exSpouse;
-                    nodeData.exSpouseBirthday && (exSpouseConent+= ' | BD-' +  nodeData.exSpouseBirthday);
+                    nodeData.exSpouseBirthday && (exSpouseConent+= ' | BD ' +  nodeData.exSpouseBirthday);
                     var $exSpouseContent = $('<label class="ex-spouse-name"></label>').text(exSpouseConent)
                     $nodeContent.find('.ex-spouse-name-container').append($andStyle).append($exSpouseContent);
                 }
