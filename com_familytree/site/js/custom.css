@@ -256,3 +256,6 @@ label.disabled,button.disabled{
 .has-spouse.allow-add-birthday .date-picker,.has-ex-spouse.allow-add-birthday .date-picker{
     display: block !important;
 }
+.error{
+    border: red 1px solid !important;
+}

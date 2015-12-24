@@ -26,8 +26,8 @@
                 ancestorLevel:4,
                 descendantLevel:3,
                 allowAddBirthDay:false,
-                isFinish:false,
-                isDoubleTrunk:false
+                isDoubleTrunk:false,
+                isReadOnly:false
             };
 
             $.extend(option,dataObject);
