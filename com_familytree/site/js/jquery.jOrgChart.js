@@ -126,7 +126,6 @@
                         !_hasDummyNode && _childNodes.unshift({
                             name: 'Child Name',
                             hasSpouse:false,
-                            spouse: 'Child\'s spouse',
                             hasExSpouse:false,
                             exSpouses:[],
                             level: nodeData.level + 1,

@@ -28,7 +28,7 @@
             $content.append($el);
             !opts.allowManualClose && $closeButton.hide();
             opts.buttons && $.each(opts.buttons, function(index, button) {
-                var $button = $('<button>').text(button.title);
+                var $button = $('<button>').text(button.title).attr("id",button.id||"");
                 $button.on('click', function() {
                     button.onClick(_instance);
                 })

@@ -200,21 +200,17 @@ input[type="checkbox"]:checked + label.lbAddBirthday:before
 }
 .toolbar-container{
     background: white;
-    height: 85px;
 }
 
 button.finish-button {
     margin-left: 10px;
-    margin-top: 4px;
 }
 
 .toolbar-container .tree-tabs{
-   
-    margin-bottom: 0;
-    margin-left: 5px;
-    border-width: 2px;
-    border-bottom-width: 0;
+    border-width: 2px 2px 0;
     margin: 10px;
+    clear: both;
+    padding-top: 10px;
 }
 
 .toolbar-container .tree-tab{
@@ -258,4 +254,15 @@ label.disabled,button.disabled{
 }
 .error{
     border: red 1px solid !important;
+}
+
+.product-items-container{
+    font-size: 16px;
+}
+select.product-item{
+    font-size: 16px;
+    width: auto;
+    padding: 5px;
+    height: 30px;
+    margin: 0px;
 }

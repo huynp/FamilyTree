@@ -22,10 +22,13 @@
             init: function() {
                 var me = this;
                 _instance.initPopup();
-                (me.options.mainAncestorData || me.options.mainDescendantData) ? _instance.initTree(me.options.mainAncestorData, me.options.mainDescendantData, me.options.spouseAncestorData): _instance.showInitScreen();
+                (me.options.mainAncestorData || me.options.mainDescendantData) ? 
+                _instance.initTree(me.options.mainAncestorData, me.options.mainDescendantData, me.options.spouseAncestorData) : _instance.showInitScreen();
             },
             showInitScreen: function() {
                 var me = this;
+                if(me.options.isReadOnly)
+                    return;
                 var data = {
                     isDummy: true,
                     name: 'Main Person Name',
@@ -167,8 +170,8 @@
                         });
 
                     }
-
-                    var $finishButton = $('<button class="finish-button">I have completed my family tree!!!!</button>').appendTo($toolbarContainer);
+                    $(".finish-button").remove();
+                    var $finishButton = $('<button class="finish-button">Save all form and notify us!!!</button>').appendTo($(".product-items-container"));
                     $finishButton.click(function(){
                         if(confirm('Are you completed your family tree?'))
                         {
@@ -176,6 +179,27 @@
                         }
                     });   
                     
+                    if(me.options.isReadOnly)
+                    {
+                         $finishButton && $finishButton.attr({
+                            disabled: 'disabled',
+                        });
+                        
+                        $trunkOptionContainer && $trunkOptionContainer.attr({
+                            disabled: 'disabled',
+                        });
+
+                        $cbAddBirthday && $cbAddBirthday.attr({
+                            disabled: 'disabled',
+                        });
+
+                        $select && $select.attr({
+                            disabled: 'disabled',
+                        });
+                    }
+
+                    var $navTabs = $('<ul class="nav nav-tabs tree-tabs"></ul>');
+                    $navTabs.appendTo($toolbarContainer);
                     //build tabs
                     if (hasRoot) {
                         var mainTabTitle, rootTabTitle,mainTabTreeType,rootTabTreeType;
@@ -196,10 +220,8 @@
                                 rootTabTreeType ='Descendant';
                                 break;
                         }
-                        var $navTabs = $('<ul class="nav nav-tabs tree-tabs"></ul>');
                         $navTabs.append($('<li class="active"><a class="tree-tab active" tab-content="#main-tab-container">' + mainTabTitle + '</a></li>'));
                         $navTabs.append($('<li> <a class="tree-tab" tab-content="#root-tab-container">' + rootTabTitle + '</a></li>'));
-                        $navTabs.appendTo($toolbarContainer);
                         $navTabs.find('a.tree-tab').click(function() {
                             $('.tree-tabs .active, .tab-item').removeClass('active');
                             var contentId = $(this).attr('tab-content');
@@ -342,6 +364,11 @@
                                 }
                             }).data('datepicker');
                         });
+                me.$popup.on("keypress","input",function(event) {
+                        if (event.which == 13) {
+                            me.myPopup.$container.find('#btnSave').click();
+                        }
+                });
                 me.$popup.getData = function() {
                     var isValid = me.$popup.valid();
                     if (!isValid) {
@@ -487,11 +514,13 @@
                 var me = this,
                     popupButtons = [{
                         title: 'cancel',
+                        id:'btnCanel',
                         onClick: function(popupInstance) {
                             popupInstance.display(false);
                         }
                     }, {
                         title: 'save',
+                        id:'btnSave',
                         onClick: function(popupInstance) {
                             var data = me.$popup.getData();
                             if (data) {
@@ -501,6 +530,7 @@
                         }
                     }, {
                         title: 'Remove',
+                        id:'btnRemove',
                         onClick: function(popupInstance) {
                             callback();
                             popupInstance.display(false);
@@ -562,18 +592,34 @@
                     descendantLevel: me.options.descendantLevel,
                     isDoubleTrunk:me.options.isDoubleTrunk
                 };
+
                 $.each(me.trees, function() {
                     var treeData ={};
                      $.extend(true,treeData,this.getTreeData().data);
-                    enCodeData(treeData);
                     treeDataToSave[this.getTreeData().name] = treeData;
                 });
+                
+                //Map current treedata to array tree data
+                var currentDataIndex = $(".product-item").val()||0;
+                $.extend(true, $.dataObjects[currentDataIndex], treeDataToSave);
+
+                //Encode data before save
+                var encodedDataToSave =[];
+                $.each($.dataObjects , function(index, val) {
+                    var dataObjectEncoded ={}
+                    $.extend(true,dataObjectEncoded,val);
+                    dataObjectEncoded.mainAncestorData && enCodeData(dataObjectEncoded.mainAncestorData);
+                    dataObjectEncoded.mainDescendantData && enCodeData(dataObjectEncoded.mainDescendantData);
+                    dataObjectEncoded.spouseAncestorData && enCodeData(dataObjectEncoded.spouseAncestorData);
+                    encodedDataToSave.push(dataObjectEncoded);
+                });
+
                 $.ajax({
                     type: 'POST',
                     data: {
                         orderNumber: me.options.orderNumber,
                         orderPass: me.options.orderPass,
-                        treeData: JSON.stringify(treeDataToSave)
+                        treeData: JSON.stringify(encodedDataToSave)
                     },
                     url:url,
                     success: function(result) {

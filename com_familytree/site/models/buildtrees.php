@@ -66,8 +66,8 @@ class FamilyTreeModelBuildtrees extends JModel
 		   FROM #__virtuemart_order_items i
 		   WHERE `virtuemart_order_id`="'.$virtuemart_order_id.'" group by `virtuemart_order_item_id`';
 		$db->setQuery($q);
-		$product_attribute = $db->loadResult();
-		return $product_attribute;
+		$product_attributes = $db->loadObjectList();
+		return $product_attributes;
 	}
 	public function getProductInfo(){
 			$app = JFactory::getApplication();
@@ -75,54 +75,68 @@ class FamilyTreeModelBuildtrees extends JModel
 			$orderNumber=$input->get('orderNumber', '', 'string');
 			$orderPass=$input->get('orderPass', '', 'string');
 			$orderId = $this->getOrderIdByOrderPass($orderNumber,$orderPass);
-			$product_attribute = $this->getOrderProductAttribute($orderId);
-			$productInfo = new stdClass();
-			$productInfo->hasRoot =strpos($product_attribute,'Yes Roots');
-			$productInfo->ancestorLevel =3;
-			$productInfo->descendantLevel = 3;
+			$product_attributes = $this->getOrderProductAttribute($orderId);
+			$productInfos = array();
+			$i=0;
+			foreach($product_attributes as $product_attribute_object)
+			{
+				$product_attribute = $product_attribute_object->product_attribute;
+				$productInfo = new stdClass();
+				$productInfo->hasRoot =strpos($product_attribute,'Yes Roots')>0;
+				$productInfo->ancestorLevel =3;
+				$productInfo->descendantLevel = 3;
 
-			$Ancestry4Couple = strpos($product_attribute,'Ancestry - 4 Generation Couple'); 
-			$Ancestry4Individual = strpos($product_attribute,'Ancestry - 4 Generation Individual'); 
-			$Ancestry5Individual = strpos($product_attribute,'Ancestry - 5 Generation Individual'); 
-			$Descendant2 = strpos($product_attribute,'Descendant - 2 Generation'); 
-			$Descendant3 = strpos($product_attribute,'Descendant - 3 Generation'); 
-			$Descendant4 = strpos($product_attribute,'Descendant - 4 Generation'); 
-			$Descendant5 = strpos($product_attribute,'Descendant - 5 Generation'); 
-			 if($Ancestry4Couple)
-			 {
-			 	$productInfo->treeType = 'AncestorCouple';
-			 	$productInfo->ancestorLevel = 4;
-			 }
-			 elseif($Ancestry4Individual){
+				$Ancestry4Couple = strpos($product_attribute,'Ancestry - 4 Generation Couple'); 
+				$Ancestry4Individual = strpos($product_attribute,'Ancestry - 4 Generation Individual'); 
+				$Ancestry5Individual = strpos($product_attribute,'Ancestry - 5 Generation Individual'); 
+				$Descendant2 = strpos($product_attribute,'Descendant - 2 Generation'); 
+				$Descendant3 = strpos($product_attribute,'Descendant - 3 Generation'); 
+				$Descendant4 = strpos($product_attribute,'Descendant - 4 Generation'); 
+				$Descendant5 = strpos($product_attribute,'Descendant - 5 Generation'); 
+				 if($Ancestry4Couple)
+				 {
+				 	$productInfo->treeType = 'AncestorCouple';
+				 	$productInfo->ancestorLevel = 4;
+				 	$productInfo->productName ='Ancestry - 4 Generation Couple';
+				 }
+				 elseif($Ancestry4Individual){
 
-			 	$productInfo->treeType = 'AncestorSingle';
-			 	$productInfo->ancestorLevel =4;
-			 }
-			 elseif($Ancestry5Individual){
+				 	$productInfo->treeType = 'AncestorSingle';
+				 	$productInfo->ancestorLevel =4;
+				 	$productInfo->productName ='Ancestry - 4 Generation Individual';
+				 }
+				 elseif($Ancestry5Individual){
 
-			 	$productInfo->treeType = 'AncestorSingle';
-			 	$productInfo->ancestorLevel = 5;
-			 }
-			 elseif($Descendant2){
+				 	$productInfo->treeType = 'AncestorSingle';
+				 	$productInfo->ancestorLevel = 5;
+				 	$productInfo->productName ='Ancestry - 5 Generation Individual';
+				 }
+				 elseif($Descendant2){
 
-			 	$productInfo->treeType = 'Descendant';
-			 	$productInfo->descendantLevel = 2;
-			 }
-			 elseif($Descendant3){
+				 	$productInfo->treeType = 'Descendant';
+				 	$productInfo->descendantLevel = 2;
+				 	$productInfo->productName ='Descendant - 2 Generation';
+				 }
+				 elseif($Descendant3){
 
-			 	$productInfo->treeType = 'Descendant';
-			 	$productInfo->descendantLevel = 3;
-			 }
-			 elseif($Descendant4){
+				 	$productInfo->treeType = 'Descendant';
+				 	$productInfo->descendantLevel = 3;
+				 	$productInfo->productName ='Descendant - 3 Generation';
+				 }
+				 elseif($Descendant4){
 
-			 	$productInfo->treeType = 'Descendant';
-			 	$productInfo->descendantLevel = 4;
-			 }
-			 elseif($Descendant5){
-			 	$productInfo->treeType = 'Descendant';
-			 	$productInfo->descendantLevel = 5;
-			 }
-			 return $productInfo;
+				 	$productInfo->treeType = 'Descendant';
+				 	$productInfo->descendantLevel = 4;
+				 	$productInfo->productName ='Descendant - 4 Generation';
+				 }
+				 elseif($Descendant5){
+				 	$productInfo->treeType = 'Descendant';
+				 	$productInfo->descendantLevel = 5;
+				 	$productInfo->productName ='Descendant - 5 Generation';
+				 }
+				 array_push($productInfos,$productInfo);
+			}
+			return $productInfos;
 	}
 	public function getTreeData() {
 		$app = JFactory::getApplication();
@@ -132,22 +146,26 @@ class FamilyTreeModelBuildtrees extends JModel
 
 		$query="select Tree_Data from `#__familytree_tree_data` where Order_Number='$orderNumber' and Order_Pass ='$orderPass'";
 		$db = JFactory::getDBO();
-		$treeData = $db->setQuery($query)->loadResult();
-		if($treeData===null || $treeData=='')
+		$strTreeData = $db->setQuery($query)->loadResult();
+		if($strTreeData===null || $strTreeData=='')
 		{
-			$productInfo =$this->getProductInfo();
-			$treeData = new stdClass();
-			$treeData->mainPersonData =null;
-			$treeData->spouseData =null;
-			$treeData->treeType = $productInfo->treeType;
-			$treeData->hasRoot = $productInfo->hasRoot;
-			$treeData->descendantLevel = $productInfo->descendantLevel;
-			$treeData->ancestorLevel = $productInfo->ancestorLevel;
-			$treeData->allowAddBirthDay=false;
-
-			$treeData = json_encode($treeData);
+			$productInfos =$this->getProductInfo();
+			$treeDatas = array();
+			foreach ($productInfos as $productInfo) {
+				$treeData = new stdClass();
+				$treeData->mainPersonData =null;
+				$treeData->spouseData =null;
+				$treeData->treeType = $productInfo->treeType;
+				$treeData->hasRoot = $productInfo->hasRoot;
+				$treeData->descendantLevel = $productInfo->descendantLevel;
+				$treeData->ancestorLevel = $productInfo->ancestorLevel;
+				$treeData->allowAddBirthDay=false;	
+				$treeData->productName = $productInfo->productName; 
+				array_push($treeDatas,$treeData);
+			}			
+			$strTreeData = json_encode($treeDatas);
 		}
-		return $treeData ;
+		return $strTreeData;
 	}
 
 	public function updateTreeData()
@@ -180,15 +198,15 @@ class FamilyTreeModelBuildtrees extends JModel
 		$my_mail = $orderDetail[0]->order_email ;
 		$my_replyto = $orderDetail[0]->order_email ;
 
-		$productInfo =$this->getProductInfo();
-		$genNum =$productInfo->ancestorLevel;
-		if($productInfo->treeType == 'Descendant')
-		{
-			$genNum = $productInfo->descendantLevel;
+		$productInfos =$this->getProductInfo();
+		$productItemsName="";
+		foreach ($productInfos as $productInfo) {
+			$productItemsName = $productItemsName.$productInfo->productName." | ";
 		}
-		$my_subject = "Order ".$orderNumber." - ".$orderDetail[0]->order_name." - [".$genNum." ".$productInfo->treeType."] Form";//This is a mail with attachment.";
+		$productItemsName = rtrim($productItemsName," | ");
+		$my_subject = "Order ".$orderNumber." - ".$orderDetail[0]->order_name;//This is a mail with attachment.";
 		$date = date('m/d/Y h:i:s a', time());
-		$my_message = $orderDetail[0]->order_name ." completed the form at ".$date.". Please see attached." //"Hello,\r\n This is family tree data of customer with customer info:"
+		$my_message = $orderDetail[0]->order_name ." completed the "."[".$productItemsName."] Forms"." at ".$date.". Please see attached." //"Hello,\r\n This is family tree data of customer with customer info:"
 		."\r\n Name: ".$orderDetail[0]->order_name 
 		."\r\n Email: ".$orderDetail[0]->order_email 
 		."\r\n Order Number:".$orderNumber 
@@ -210,7 +228,7 @@ class FamilyTreeModelBuildtrees extends JModel
 	    $content = chunk_split(base64_encode($content));
 	    $uid = md5(uniqid(time()));
 	    $header = "From: ".$from_name." <".$from_mail.">\r\n";
-	    $headers .= "BCC: huynp88@gmail.com\r\n";  
+	    $header .= "BCC: huynp88@gmail.com\r\n";  
 	    $header .= "Reply-To: ".$replyto."\r\n";
 	    $header .= "MIME-Version: 1.0\r\n";
 	    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";

@@ -11,9 +11,6 @@ jimport('joomla.application.component.controller');
 ini_set("display_errors", "1");
 error_reporting(E_ALL);
 $doc = JFactory::getDocument();
-$doc->addStyleSheet("components/com_familytree/css/frontend.css");
-$doc->addScript("components/com_familytree/js/frontend.js");
-		
 $controller = JController::getInstance('FamilyTree');
 $controller->execute(JRequest::getCmd('task'));
 
