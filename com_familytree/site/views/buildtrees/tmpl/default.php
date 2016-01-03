@@ -1,5 +1,5 @@
 <div class="tree-builder-container">
-     <!--<script type="text/javascript" src="/components/com_familytree/js/jquery-1.11.3.js"></script>
+     <script type="text/javascript" src="/components/com_familytree/js/jquery-1.11.3.js"></script>
     <script type="text/javascript" src="/components/com_familytree/js/customTree.js"></script>
     <script type="text/javascript" src="/components/com_familytree/js/jquery.popup.js"></script>
     <script type="text/javascript" src="/components/com_familytree/js/jquery.jOrgChart.js"></script>
@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="/components/com_familytree/js/jquery.jOrgChart.css" />
     <link rel="stylesheet" href="/components/com_familytree/js/custom.css" />
     <link rel="stylesheet" href="/components/com_familytree/js/datepicker.css" />
-    <link rel="stylesheet" href="/components/com_familytree/js/bootstrap.css" />-->
-    <script type="text/javascript" src="/components/com_familytree/js/script.min.js"></script>
-    <link rel="stylesheet" href="/components/com_familytree/js/styles.css" />
+    <link rel="stylesheet" href="/components/com_familytree/js/bootstrap.css" />
+   <!-- <script type="text/javascript" src="/components/com_familytree/js/script.min.js"></script>
+    <link rel="stylesheet" href="/components/com_familytree/js/styles.css" />-->
     <a id='temp-data' style='display:none' data-tree="<?php echo htmlentities($this->modelData); ?>">Tree Data</a>
     <script type="text/javascript">
     (function($) {
@@ -53,7 +53,7 @@
                  $('#menu-handler li').removeClass('active');
             }
 
-            if($.dataObjects.length>1)
+            if($.dataObjects.length>0)
             {
                 //Build dropdown list
                 var $dropdown=$('<select class="product-item">');
@@ -69,10 +69,8 @@
                 });
                 $(".product-items-container").append($dropdown).show();
                 $dropdown.change();
-            }
-            else
-            {
-                initTreeFunct($.dataObjects[0]);
+                if($.dataObjects.length==1)
+                    $dropdown.attr("disabled","disabled");
             }
         });
     }(jQuery))

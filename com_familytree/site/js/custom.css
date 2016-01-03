@@ -166,19 +166,20 @@ body {
 .lbAddBirthday{
     cursor: pointer;
     display: inline-block;
-    background-color: #b3d239;
+    background-color: white;
     width: 20px;
     position: relative;
     height: 20px;
     border-radius: 3px;
-    margin: 10px 5px;
+    margin: 8px 7px;
     float: left;
+    border: 2px solid #b3d239;
 }
 
 input[type="checkbox"]:checked + label.lbAddBirthday:before
 {
-    border-right: 2px solid white;
-    border-bottom: 2px solid white;
+    border-right: 2px solid #b3d239;
+    border-bottom: 2px solid #b3d239;
 }
 #cb-add-birthday,#cb-double{
     display: none;

@@ -31,7 +31,7 @@
                     return;
                 var data = {
                     isDummy: true,
-                    name: 'Main Person Name',
+                    name: 'Main Person / Trunk name',
                     hasSpouse:true,
                     hasExSpouse:false,
                     type: 'Initial Data',
@@ -125,7 +125,7 @@
                 setTimeout(function(){
                     $mainTab.addClass('tab-item tab-content active');
                     $rootTab.addClass('tab-item tab-content');
-                },200);
+                },600);
 
                 function buildToolBar(hasRoot, treeType) {
                     var $toolbarContainer = $('<div class="toolbar-container"></div>');
@@ -152,10 +152,18 @@
                     $cbAddBirthday.prop('checked', me.options.allowAddBirthDay);
                     $cbAddBirthday.change(function() {
                         me.options.allowAddBirthDay = $(this).is(":checked");
-                        me.options.allowAddBirthDay && alert('Adding date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
+                        if(me.options.allowAddBirthDay)
+                        {
+                            alert('Adding date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
+                            $("table.horizontal").addClass('add-birthday');
+                        }
+                        else
+                        {
+                            $("table.horizontal").removeClass('add-birthday');
+                        }
+
                         me.saveTreeData(false);
                     });
-
                     if(treeType ==='Descendant')
                     {
                         //Add single trunk or double trunk radio
@@ -254,7 +262,8 @@
                         treeType: treeType,
                         andStyle: me.options.andStyle,
                         maxLevel: treeType === 'Descendant' ? me.options.descendantLevel : me.options.ancestorLevel,
-                        mode: me.options.isReadOnly ? 'readOnly':'edit'
+                        mode: me.options.isReadOnly ? 'readOnly':'edit',
+                        allowAddBirthDay:me.options.allowAddBirthDay
                     }, data);
                     return tree;
                 }
@@ -450,7 +459,7 @@
                 me.$popup.bindDataToPopup = function(data) {
                     me.options.currentTree != 'Descendant' ? $rowAllowAddSpouse.hide() : $rowAllowAddSpouse.show();
 
-                    if(data.hasSpouse)
+                    if(data.hasSpouse && me.options.currentTree == 'Descendant')
                     {
                         $cbHasSpouse.prop('checked', true);
                         $spouseName.val(data.spouse);
@@ -477,7 +486,7 @@
                         $popup.find('.has-ex-spouse').removeClass('allow-add-birthday');                   
                      }
 
-                    if(data.hasExSpouse)
+                    if(data.hasExSpouse && me.options.currentTree == 'Descendant')
                     {
                         $cbHasExSpouse.prop('checked', true);
                         $.each(data.exSpouses, function(index, val) {
@@ -623,7 +632,7 @@
                     },
                     url:url,
                     success: function(result) {
-                        isFinish && alert("Your tree have been sent to Custom Family Tree team. Thank You!!!");
+                        isFinish && alert("Your Form(s) has been sent to Custom Family Tree Art.  Thank You!");
                     },
                     error: function(error) {
                         alert(error);

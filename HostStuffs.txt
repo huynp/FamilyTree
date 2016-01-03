@@ -1,0 +1,16 @@
+Joomla Version 2.5.27
+
+URL: http://dev2.thought-inc.com
+Admin Access: http://dev2.thought-inc.com/administrator
+Username: Guest Admin
+Password: P@55w0rd!@#
+
+FTP Hostname: ftp.ord1-1.websitesettings.com
+User: thoughtguest
+Pass: P@55w0rd!@#
+
+Database Access
+PHPMyAdmin URL:  https://mysql.ord1-1.websitesettings.com/?server=mysql51-039.wc1
+User:  357386_dev2use
+Pass: P@55w0rd!@#
+Server Choice: mysql51-039.wc:3306

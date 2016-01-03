@@ -149,6 +149,8 @@ class FamilyTreeModelBuildtrees extends JModel
 		$strTreeData = $db->setQuery($query)->loadResult();
 		if($strTreeData===null || $strTreeData=='')
 		{
+			// $orderId = $this->getOrderIdByOrderPass($orderNumber,$orderPass);
+			// $orderDetail = $this->getOrder($orderId);
 			$productInfos =$this->getProductInfo();
 			$treeDatas = array();
 			foreach ($productInfos as $productInfo) {

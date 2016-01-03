@@ -24,8 +24,10 @@
 
         $rootNode.addClass('main');
         $appendTo.append($container);
+        opts.allowAddBirthDay && $container.find('>table').addClass('add-birthday');
         opts.displayHorizontal && displayHorizontal();
-        opts.mode =='readOnly' && $container.addClass('read-only');
+        //Show full detail for both readonly and edit mode
+        $container.addClass('full-detail');
         function displayHorizontal() {
             $container.addClass('jOrgChart-horizontal');
             $container.find('>table').addClass('horizontal');
@@ -38,7 +40,7 @@
                 });
                 $container.height(tableWidth+20);
                 $container.parents('#family-tree-container').width(tableWidth+20);
-            },100);
+            },300);
         }
 
         function renderNode($node) {
@@ -48,6 +50,7 @@
             $selectedNode = buildNode($node[0].data, $nodeContainer, opts);
             if (isRoot)
                 $rootNode = $selectedNode.addClass('main');
+            opts.allowAddBirthDay && $container.find('>table').addClass('add-birthday');
             opts.displayHorizontal && displayHorizontal();
         }
 
@@ -142,66 +145,65 @@
             if (_childNodes && _childNodes.length > 1) {
                 $nodeCell.attr("colspan", _childNodes.length * 2);
             }
+
             // Draw the node
-            
-            if(opts.mode=='edit')
+            var $nodeContent = $(opts.nodeTemplate);
+            var nodeDisplayText = nodeData.isDummy ? 'Add ' + nodeData.type : nodeData.name;
+            $nodeContent.find('.name').text(nodeDisplayText);
+            var getDateValue= function(str){
+                return $.trim(str).length > 0 ? $.trim(str) : "- - -";
+            }
+
+            if(!nodeData.isDummy)
             {
-                var $nodeContent = $(opts.nodeTemplate.edit);
-                var nodeDisplayText = nodeData.isDummy ? 'Add ' + nodeData.type : nodeData.name;
-                $nodeContent.find('.name').text(nodeDisplayText);
-                if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
+                var nodeMainDate ='';
+                nodeMainDate+=  'BD ' + getDateValue(nodeData.birthday);
+                nodeMainDate += ' | AN ' + getDateValue(nodeData.anniversary);
+                $nodeContent.find('.main-date').text(nodeMainDate);   
+            }
+            if(opts.treeType =="Descendant" && !nodeData.isDummy)
+            {
+
+                if (nodeData.hasSpouse ) {
                     var andText = 'and';
                     if (opts.andStyle == 'sign')
                         andText = '&';
 
                     var $andStyle = $('<label class="end-style"></label>').text(andText);
                     opts.andStyle == 'italized' && $andStyle.addClass('italized');
-                    var spouseName =nodeData.spouse;
-                    var $spouseName = $('<label class="spouse-name"></label>').text(spouseName)
-                    $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseName);
-                } else {
-                    $nodeContent.find('.spouse-name-container').remove();
+                    var spouseConent = nodeData.spouse;
+                    var $birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.spouseBirthday)+'</text>');
+                    var $spouseContent = $('<label class="spouse-name"></label>').text(spouseConent).append($birthdayText);
+                    $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseContent);
                 }
+               
+                if ( nodeData.hasExSpouse) {
+                    var exSpouseConent = nodeData.exSpouses[0].name;
+                    var $birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.exSpouses[0].birthday)+'</text>');
+                    var $exSpouseContent = $('<label class="ex-spouse-name"></label>').text(exSpouseConent).append($birthdayText);
+                    $nodeContent.find('.ex-spouse-name-container').append($exSpouseContent);
+                    nodeData.exSpouses.length>1 && $nodeContent.find('.ex-spouse-name-container').addClass("more-ex-spouse");
+                }
+                else{
+                     $nodeContent.find('.ex-spouse-name-container').remove();
+                     !nodeData.hasSpouse &&  $nodeContent.find('.spouse-name-container').remove();
+                }
+            }
 
-                var iconClass = nodeData.type || '';
-                $nodeContent.find('.icon').addClass(iconClass);
-                //Increaments the node count which is used to link the source list and the org chart
-                $nodeDiv.append($nodeContent);
-                $nodeDiv[0].data = nodeData;
+            var iconClass = nodeData.type || '';
+            $nodeContent.find('.icon').addClass(iconClass);
+            $nodeDiv[0].data = nodeData;
+            $nodeDiv.append($nodeContent);
+
+            //If edit mode add click event
+            if(opts.mode=='edit')
+            {
                 $nodeDiv.unbind('click').on('click', function() {
                     $selectedNode = $nodeDiv;
                     opts.onNodeSelected($nodeDiv);
                 });
             }
-            else
-            {
-               
-                var $nodeContent = $(opts.nodeTemplate.readOnly);
-                var nodeDisplayText =  nodeData.name;
-                var nodeMainDate ='';
-                nodeData.birthday && (nodeMainDate+=  'BD ' + nodeData.birthday);
-                nodeData.anniversary && (nodeMainDate += ' | AN '+ nodeData.anniversary);
-                $nodeContent.find('.name').text(nodeDisplayText);
-                $nodeContent.find('.main-date').text(nodeMainDate);
-                if (!nodeData.isDummy && nodeData.spouse && nodeData.spouse !== '') {
-                    var spouseConent = nodeData.spouse;
-                    nodeData.spouseBirthday && (spouseConent+= ' | BD ' +  nodeData.spouseBirthday);
-                    var $spouseContent = $('<label class="spouse-name"></label>').text(spouseConent);
-                    $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseContent);
-                }
 
-                if (!nodeData.isDummy && nodeData.exSpouse && nodeData.exSpouse !== '') {
-                    var exSpouseConent = nodeData.exSpouse;
-                    nodeData.exSpouseBirthday && (exSpouseConent+= ' | BD ' +  nodeData.exSpouseBirthday);
-                    var $exSpouseContent = $('<label class="ex-spouse-name"></label>').text(exSpouseConent)
-                    $nodeContent.find('.ex-spouse-name-container').append($andStyle).append($exSpouseContent);
-                }
-
-                var iconClass = nodeData.type || '';
-                $nodeContent.find('.icon').addClass(iconClass);
-                //Increaments the node count which is used to link the source list and the org chart
-                $nodeDiv.append($nodeContent);
-            }
             var $nodeWrapper = $('<div class="node-wrapper"></div>');
             $nodeCell.append($nodeDiv);
             $nodeRow.append($nodeCell);
@@ -277,6 +279,28 @@
                 $.extend($selectedNode[0].data, data);
                 var isRoot = $selectedNode.hasClass('main');
                 var $parentNode = !isRoot ? $selectedNode.parents('.node-container').eq(1).find('.node:first') : $selectedNode;
+                if(opts.treeType != "Descendant")
+                {
+                    if(isRoot)
+                    {
+                        //Update anniversary for other root node in corrent tab
+                       $selectedNode.closest(".tab-content").find('.node.main').each(function(index, el) {
+                           if($selectedNode[0].data.id != el.data.id && !el.data.isDummy)
+                             {
+                                el.data.anniversary = $selectedNode[0].data.anniversary;
+                             }
+                       });
+                    }
+                    else{
+                        $.each($parentNode[0].data.childNodes, function(index, val) {
+                             if($selectedNode[0].data.id != val.id && !val.isDummy)
+                             {
+                                val.anniversary = $selectedNode[0].data.anniversary;
+                             }
+                        });
+                    }
+                }
+
                 renderNode($parentNode);
             },
             updateAndStyle: function(andStyle) {
@@ -300,10 +324,7 @@
         chartClass: "jOrgChart",
         dragAndDrop: false,
         onNodeSelected: function() {},
-        nodeTemplate:{
-            edit:'<div class="node-content"><i class="icon"></i><span class="name"></span><div class="spouse-name-container"></div></div>',
-            readOnly:'<div class="node-content"><i class="icon"></i><span class="name"></span><span class="main-date"></span><div class="spouse-name-container"></div><div class="ex-spouse-name-container"></div></div>'
-        },
+        nodeTemplate:'<div class="node-content"><i class="icon"></i><span class="name"></span><span class="main-date"></span><div class="spouse-name-container"></div><div class="ex-spouse-name-container"></div></div>',
         mode:'edit'
     };
 

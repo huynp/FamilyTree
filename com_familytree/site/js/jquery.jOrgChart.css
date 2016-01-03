@@ -93,7 +93,7 @@
 
 .horizontal .node {
     width: 40px;
-    height: 210px;
+    height: 260px;
     border: 3px solid #726E67;
     border-radius: 6px;
 }
@@ -137,7 +137,7 @@
 
 .horizontal .node-content {
     width: 40px;
-    height: 210px;
+    height: 260px;
     position: relative;
     background-color: white;
     border-radius: 4px;
@@ -147,20 +147,15 @@
     background-color: black;
 }
 
-.horizontal .node span,.horizontal span.main-date {
+.horizontal .node span,
+.horizontal span.main-date {
     display: block;
-    width: 170px;
+    width: 215px;
     position: absolute;
     left: 100%;
-    height: 40px;
-    line-height: 40px;
     color: rgb(79, 79, 79);
     cursor: default;
-    display: block;
-    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
-    font-size: 16px;
     cursor: pointer;
-    font-weight: bold;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);
     -o-transform: rotate(90deg);
@@ -171,15 +166,46 @@
     top: 40px;
     overflow: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
+    text-overflow:visible;
+    height: 40px;
+    line-height: 40px;
+    font-size: 12px;
+    text-align: left;
+    padding-left: 5px;
 }
+
+.horizontal span.main-date {
+    display: none;
+}
+
+.horizontal.add-birthday .node span,
+.horizontal.add-birthday span.main-date {
+    height: 20px;
+    line-height: 20px;
+}
+
+.horizontal.add-birthday span.main-date {
+    margin-left: -20px;
+    display: block;
+}
+
+.horizontal .birthday-text{
+    display: none;
+}
+
+.horizontal.add-birthday .birthday-text{
+    display: inline-block;
+    margin-left: 4px;
+}
+
+
 
 .horizontal .main .node-content span {
     color: white;
 }
 
 .horizontal td.node-cell {
-    padding: 0 15px;
+    padding: 0 35px;
 }
 
 .horizontal .line {
@@ -220,24 +246,26 @@
 
 .horizontal div.spouse-name-container{
     color: white;
-    width: 170px;
+    width: 260px;
     display: inline-block;
     transform: rotate(90deg);
-    transform-origin: 0 0;
+    transform-origin: 20px -20px;
     height: 20px;
     background: gray;
     padding: 2px 0;
     transform-style: flat;
     margin-left: -3px;
     margin-top: -5px;
+    font-size: 12px;
+    font-size: 12px !important;
 }
 
 .horizontal div.ex-spouse-name-container {
     color: white;
-    width: 170px;
+    width: 260px;
     display: inline-block;
     transform: rotate(90deg);
-    transform-origin: 20px -20px;
+    transform-origin: 40px -40px;
     height: 20px;
     background: gray;
     padding: 2px 0;
@@ -247,15 +275,36 @@
     background-color: rgba(112, 162, 246, 0.4);
 }
 
-.horizontal .spouse-name {
+.horizontal div.ex-spouse-name-container.more-ex-spouse :after {
+    content: "Click To See More Ex Spouse...";
+    position: absolute;
+    top: 22px;
+    right: 0px;
+    color: rgba(112, 162, 246, 0.8);
+}
+
+.node.dummy-node .ex-spouse-name-container,
+.node.dummy-node .spouse-name-container,
+.Ancestor .spouse-name-container, 
+.Ancestor .ex-spouse-name-container {
+    display: none !important;
+}
+.node.dummy-node span.name {
+    height: 40px ;
+    line-height: 40px ;
+}
+
+.horizontal .spouse-name , .horizontal .ex-spouse-name {
     float: left;
     margin-left: 5px;
     text-transform: capitalize;
-    width: 132px;
+    width: 220px;
+    text-align: left;
     overflow: hidden;
-    text-overflow: ellipsis;
+    overflow: visible;
     white-space: nowrap;
     cursor: pointer;
+    font-size: 12px;
 }
 
 .horizontal .end-style {
@@ -270,51 +319,4 @@
 
 .hide {
     display: none;
-}
-.read-only .horizontal td.node-cell{
-    padding: 0 35px;
-}
-
-.read-only .node-content{
-    height: 230px;
-}
-.read-only .node:hover{
-    border-color: #726E67;
-}
-.read-only .horizontal div.spouse-name-container {
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-}
-
-.read-only .horizontal .node span,.read-only .horizontal .node label  {
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    text-align: left;
-    padding-left: 5px;
-    width: 190px;
-    cursor: text;
-}
-
-.read-only .horizontal .node label {
-    width: 225px;
-}
-
-.read-only .horizontal .node span.main-date{
-    margin-left: -20px;
-}
-.read-only .horizontal div.ex-spouse-name-container {
-    width: 230px;
-    transform-origin: 40px -40px;
-}
-
-.read-only .horizontal div.spouse-name-container {
-    width: 230px;
-    transform-origin: 20px -20px;
-}
-.read-only .horizontal .spouse-name,.read-only .horizontal .ex-spouse-name
-{
-    margin: 0;
-    padding: 0;
 }
