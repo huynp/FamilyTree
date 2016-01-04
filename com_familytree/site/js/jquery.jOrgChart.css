@@ -275,12 +275,14 @@
     background-color: rgba(112, 162, 246, 0.4);
 }
 
-.horizontal div.ex-spouse-name-container.more-ex-spouse :after {
-    content: "Click To See More Ex Spouse...";
+.horizontal div.ex-spouse-name-container .more-ex-spouse {
+    color: #9AD2F4;
+    text-align: right;
+    display: block;
     position: absolute;
     top: 22px;
-    right: 0px;
-    color: rgba(112, 162, 246, 0.8);
+    width: 260px;
+    cursor: pointer;
 }
 
 .node.dummy-node .ex-spouse-name-container,

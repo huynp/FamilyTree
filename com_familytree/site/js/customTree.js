@@ -177,10 +177,12 @@
                         {
                             alert('Adding date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
                             $("table.horizontal").addClass('add-birthday');
+                            $(".birthday-text").removeClass('hide');
                         }
                         else
                         {
                             $("table.horizontal").removeClass('add-birthday');
+                            $(".birthday-text").addClass('hide');
                         }
 
                         me.saveTreeData(false);
@@ -198,6 +200,7 @@
                             me.options.isDoubleTrunk = $(this).is(":checked");
                             me.saveTreeData(false);
                         });
+
 
                     }
 
@@ -227,14 +230,16 @@
                         $select && $select.attr({
                             disabled: 'disabled',
                         });
+
+                        $addMoreGenContainer.find('.btn-add-more-gen') && $addMoreGenContainer.find('.btn-add-more-gen').attr({
+                            disabled: 'disabled',
+                        });
                     }
 
                     //Addition level status
-                    if(me.options.additionLevel>0)
-                    {
-                        var $additionLevelStatus = $("<div class='addition-level-status'>Addition Generations: <b class='addition-gen-count'></b></div>").appendTo($toolbarContainer);
-                        $additionLevelStatus.find('.addition-gen-count').text(me.options.additionLevel);    
-                    }
+                    
+                    var $additionLevelStatus = $("<div class='addition-level-status'>Addition Generations: <b class='addition-gen-count'></b></div>").appendTo($toolbarContainer);
+                    $additionLevelStatus.find('.addition-gen-count').text(me.options.additionLevel);    
 
                     var $navTabs = $('<ul class="nav nav-tabs tree-tabs"></ul>');
                     $navTabs.appendTo($toolbarContainer);
@@ -385,7 +390,7 @@
                     {
                         $trExSpouse.find('.txtExSpouseName').val(data.name);
                         $trExSpouse.find('.ex-spouse-birthday').val(data.birthday);
-                        $trExSpouse.find('.ex-spouse-node').val(data.node);
+                        $trExSpouse.find('.ex-spouse-node').val(data.note);
                         
                     }
 
@@ -438,8 +443,8 @@
                         $popup.find('tr.has-ex-spouse').each(function(index, el) {
                             var name = $.trim($(el).find('.txtExSpouseName').val());
                             var birthday = $(el).find('.ex-spouse-birthday').val();
-                            var node = $(el).find('.ex-spouse-node').val();
-                            exSpouses.push({name:name,birthday:birthday,node:node})
+                            var note = $(el).find('.ex-spouse-node').val();
+                            exSpouses.push({name:name,birthday:birthday,note:note})
 
                         });
                      }
@@ -533,7 +538,7 @@
                                 var $trExSpouse =  $popup.find('table tr.has-ex-spouse:first');
                                 $trExSpouse.find(".txtExSpouseName").val(val.name);
                                 $trExSpouse.find(".ex-spouse-birthday").val(val.birthday);
-                                $trExSpouse.find(".ex-spouse-node").val(val.node);
+                                $trExSpouse.find(".ex-spouse-node").val(val.note);
                             }
                             else
                             {

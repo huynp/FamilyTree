@@ -4,10 +4,12 @@
     <script type="text/javascript" src="/components/com_familytree/js/jquery.popup.js"></script>
     <script type="text/javascript" src="/components/com_familytree/js/jquery.jOrgChart.js"></script>
     <script type="text/javascript" src="/components/com_familytree/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/components/com_familytree/js/jquery.qtip.min.js" ></script>
     <link rel="stylesheet" href="/components/com_familytree/js/jquery.jOrgChart.css" />
     <link rel="stylesheet" href="/components/com_familytree/js/custom.css" />
     <link rel="stylesheet" href="/components/com_familytree/js/datepicker.css" />
     <link rel="stylesheet" href="/components/com_familytree/js/bootstrap.css" />
+    <link rel="stylesheet" href="/components/com_familytree/js/jquery.qtip.min.css" />
    <!-- <script type="text/javascript" src="/components/com_familytree/js/script.min.js"></script>
     <link rel="stylesheet" href="/components/com_familytree/js/styles.css" />-->
     <script type="text/javascript">

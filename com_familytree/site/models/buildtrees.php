@@ -227,7 +227,7 @@ class FamilyTreeModelBuildtrees extends JModel
 
 	function mail_attachment($filename,$attachment_my_file_name, $path, $mailto, $from_mail, $from_name, $replyto, $subject, $message) {
 		$treeData =$this->getTreeData();
-		$stringToReplace = "<a id='temp-data' style='display:none' data-tree=\"".htmlentities($treeData)."\">Tree Data</a>";
+		$stringToReplace = $treeData;
 	    $file = $path.$filename;
 	    $file_size = filesize($file);
 	    $handle = fopen($file, "r");

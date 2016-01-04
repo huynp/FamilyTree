@@ -179,10 +179,38 @@
                
                 if ( nodeData.hasExSpouse) {
                     var exSpouseConent = nodeData.exSpouses[0].name;
+                    if(nodeData.exSpouses[0].note && $.trim(nodeData.exSpouses[0].note).length >0)
+                        exSpouseConent+=" | "+ nodeData.exSpouses[0].note;
                     var $birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.exSpouses[0].birthday)+'</text>');
                     var $exSpouseContent = $('<label class="ex-spouse-name"></label>').text(exSpouseConent).append($birthdayText);
                     $nodeContent.find('.ex-spouse-name-container').append($exSpouseContent);
-                    nodeData.exSpouses.length>1 && $nodeContent.find('.ex-spouse-name-container').addClass("more-ex-spouse");
+                    if(nodeData.exSpouses.length>1)
+                    {
+                        var $moreExSpouseLabel = $("<label class='more-ex-spouse'>Hover to see more Ex-Spouse</label>");
+                        var $tooltipContent =$("<div class='tooltip-content'></div>");
+                        $.each(nodeData.exSpouses, function(index, val) {
+                            var toolTip_exSpouseConent = nodeData.exSpouses[index].name;
+                            if(nodeData.exSpouses[index].note && $.trim(nodeData.exSpouses[index].note).length >0 )
+                                toolTip_exSpouseConent+=" | "+ nodeData.exSpouses[index].note;
+                            var $toolTip_birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.exSpouses[index].birthday)+'</text>');
+                            !opts.allowAddBirthDay && $toolTip_birthdayText.addClass('hide');
+                            var $toolTip_exSpouseContent = $('<label class="ex-spouse-name"></label>').text(toolTip_exSpouseConent).append($toolTip_birthdayText);
+                            $tooltipContent.append($toolTip_exSpouseContent);
+                        });
+
+                        $nodeContent.find('.ex-spouse-name-container').append($moreExSpouseLabel);
+                        $moreExSpouseLabel.qtip({ 
+                            content: {
+                                text: $tooltipContent
+                            },
+                            style: {
+                                classes: 'qtip-blue qtip-shadow'
+                            },
+                            hide: {
+                                event: 'unfocus'
+                            }
+                        });
+                    }
                 }
                 else{
                      $nodeContent.find('.ex-spouse-name-container').remove();

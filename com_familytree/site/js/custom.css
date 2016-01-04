@@ -71,7 +71,7 @@ body {
 .popup-content{
     padding: 30px 20px;
     font-weight: 700;
-    width: 450px;
+    width: 520px;
 }
 .popup-content td{
     white-space: normal;
@@ -82,7 +82,7 @@ body {
 }
 .popup-content td.title{
     white-space: nowrap;
-    width: 90px;
+    width: 151px;
 }
 
 .popup-header{
@@ -255,6 +255,10 @@ label.disabled,button.disabled{
 
 .has-spouse .date-picker,.has-ex-spouse .date-picker{
     display: none !important;
+}
+
+tr.has-ex-spouse{
+    border-top: 1px dashed rgb(204, 204, 204);
 }
 
 .has-spouse.allow-add-birthday .date-picker,.has-ex-spouse.allow-add-birthday .date-picker{
