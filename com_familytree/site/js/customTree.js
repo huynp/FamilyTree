@@ -219,7 +219,7 @@
                             disabled: 'disabled',
                         });
                         
-                        $trunkOptionContainer && $trunkOptionContainer.attr({
+                         $trunkOptionContainer.find("#cb-double").length>0 &&  $trunkOptionContainer.find("#cb-double").attr({
                             disabled: 'disabled',
                         });
 
@@ -231,7 +231,7 @@
                             disabled: 'disabled',
                         });
 
-                        $addMoreGenContainer.find('.btn-add-more-gen') && $addMoreGenContainer.find('.btn-add-more-gen').attr({
+                        $addMoreGenContainer.find('.btn-add-more-gen').length>0 && $addMoreGenContainer.find('.btn-add-more-gen').attr({
                             disabled: 'disabled',
                         });
                     }
