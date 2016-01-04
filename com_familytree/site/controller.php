@@ -24,6 +24,14 @@ class FamilyTreeController extends JController{
 	   	$view->display();
 	}
 	
+	function getTreeData()
+	{
+
+		$model = $this->getModel ( 'buildtrees' );
+		$result =$model->getTreeData();
+		echo $result;
+	}
+	
 	function save()
 	{
 		$model = $this->getModel ( 'buildtrees' );

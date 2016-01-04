@@ -34,7 +34,7 @@
                     name: 'Main Person / Trunk name',
                     hasSpouse:true,
                     hasExSpouse:false,
-                    type: 'Initial Data',
+                    type: 'Family Name Form for '+ me.options.customerName,
                     isInitialize: true,
                     isRoot: true
                 };
@@ -42,6 +42,7 @@
                     me.options.mainAncestorData = {
                         name: returnData.name,
                         spouse: returnData.spouse,
+                        hasSpouse:true,
                         exSpouses: returnData.exSpouses,
                         level: 0,
                         type: 'Root',
@@ -49,12 +50,14 @@
                         id: $.fn.generateUID(),
                         isRoot: true,
                         anniversary: returnData.anniversary,
-                        birthday: returnData.birthday
+                        birthday: returnData.birthday,
+                        treeName:"mainAncestor"
                     };
 
                     me.options.mainDescendantData = {
                         name: returnData.name,
                         spouse: returnData.spouse,
+                        hasSpouse:true,
                         exSpouses: returnData.exSpouses,
                         level: 0,
                         type: 'Root',
@@ -62,17 +65,20 @@
                         id: $.fn.generateUID(),
                         isRoot: true,
                         anniversary: returnData.anniversary,
-                        birthday: returnData.birthday
+                        birthday: returnData.birthday,
+                        treeName:"mainDescendant"
                     };
 
                     me.options.spouseAncestorData = {
                         name: returnData.spouse,
                         spouse: returnData.name,
+                        hasSpouse:true,
                         level: 0,
                         type: 'Root',
                         isDummy: false,
                         id: $.fn.generateUID(),
-                        isRoot: true
+                        isRoot: true,
+                        treeName:"spouseAncestor"
                     };
                     me.initTree(me.options.mainAncestorData, me.options.mainDescendantData, me.options.spouseAncestorData);
                     me.saveTreeData(false);
@@ -146,6 +152,21 @@
                         $('.tab-content').addClass('tab-item');
                         me.saveTreeData(false);
                     });
+
+                    // Add button add more generation
+                    var $addMoreGenContainer = $('<div class="add-more-gen-container"><button class="btn-add-more-gen">Add One More Generation</button> </div>').appendTo($toolbarContainer);
+                    $addMoreGenContainer.find('.btn-add-more-gen').click(function(event) {
+                        if(confirm('Adding one more generation to your tree is additional $10. You may be invoiced for this amount if not previously collected.'))
+                        {
+                            me.options.additionLevel+=1;
+                            me.saveTreeData(false);
+                            var maxLevel = treeType === 'Descendant' ? me.options.descendantLevel : me.options.ancestorLevel ;
+                            maxLevel+= me.options.additionLevel;
+                            $(".addition-level-status").find('.addition-gen-count').text(me.options.additionLevel);
+                            me.reload({maxLevel:maxLevel});    
+                        }
+                    });
+
                     var $addBirthDayContainer = $('<div class="add-birthday-container">Add Birthday and Anniversary</div>').appendTo($toolbarContainer);
                     var $lbForAddBirthDay = $('<label class="lbAddBirthday" for="cb-add-birthday"> </label>').prependTo($addBirthDayContainer);
                     var $cbAddBirthday = $('<input type="checkbox" id="cb-add-birthday"/>').prependTo($addBirthDayContainer);
@@ -164,6 +185,7 @@
 
                         me.saveTreeData(false);
                     });
+
                     if(treeType ==='Descendant')
                     {
                         //Add single trunk or double trunk radio
@@ -178,6 +200,7 @@
                         });
 
                     }
+
                     $(".finish-button").remove();
                     var $finishButton = $('<button class="finish-button">Save all form and notify us!!!</button>').appendTo($(".product-items-container"));
                     $finishButton.click(function(){
@@ -204,6 +227,13 @@
                         $select && $select.attr({
                             disabled: 'disabled',
                         });
+                    }
+
+                    //Addition level status
+                    if(me.options.additionLevel>0)
+                    {
+                        var $additionLevelStatus = $("<div class='addition-level-status'>Addition Generations: <b class='addition-gen-count'></b></div>").appendTo($toolbarContainer);
+                        $additionLevelStatus.find('.addition-gen-count').text(me.options.additionLevel);    
                     }
 
                     var $navTabs = $('<ul class="nav nav-tabs tree-tabs"></ul>');
@@ -252,6 +282,8 @@
                 }
 
                 function createFamilyTree(treeType, data, $treeContainer, treeName) {
+                    var maxLevel = treeType === 'Descendant' ? me.options.descendantLevel : me.options.ancestorLevel ;
+                    maxLevel += me.options.additionLevel;
                     var tree = $.fn.jOrgChart({
                         treeName: treeName,
                         chartElement: $treeContainer,
@@ -261,7 +293,7 @@
                         displayHorizontal: true,
                         treeType: treeType,
                         andStyle: me.options.andStyle,
-                        maxLevel: treeType === 'Descendant' ? me.options.descendantLevel : me.options.ancestorLevel,
+                        maxLevel: maxLevel,
                         mode: me.options.isReadOnly ? 'readOnly':'edit',
                         allowAddBirthDay:me.options.allowAddBirthDay
                     }, data);
@@ -273,44 +305,50 @@
                 var $popup = $('<div class="inner-popup-content">\
                         <table>\
                             <tr>\
-                                <td>Name</td>\
+                                <td class="title">Name</td>\
                                 <td><input type="text" class="txtName" /></td>\
                             </tr>\
                             <tr class="allow-add-birthday">\
-                                <td>Birthday</td>\
+                                <td class="title">Birthday</td>\
                                 <td><input type="text"  class="birthday date-picker" placeholder="Select A Date" data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
                             </tr>\
                             <tr class="allow-add-birthday">\
-                                <td>Anniversary</td>\
+                                <td class="title">Anniversary</td>\
                                 <td><input type="text"  class="anniversary-date date-picker" placeholder="Select A Date" data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
                             </tr>\
                             <tr  class="allow-add-spouse">\
-                                <td>Spouses</td>\
+                                <td class="title">Spouses</td>\
                                 <td>\
                                     <label class="lbHasSpouse" for="cbHasSpouse"><input type="checkbox" class="cbHasSpouse" id="cbHasSpouse" /> Has spouse</label>\
                                     <label class="lbHasExSpouse" for="cbHasExSpouse"> <input type="checkbox" class="cbHasExSpouse" id="cbHasExSpouse" /> Has ex-spouse</label>\
                                 </td>\
                             </tr>\
                             <tr class="has-spouse hide">\
-                                <td>Spouse</td>\
+                                <td class="title">Spouse</td>\
                                 <td><input type="text" class="txtSpouseName" placeholder="Spouse name" />\
                                 <input type="text"  class="spouse-birthday date-picker" placeholder="Spouse Birthday" data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
                             </tr>\
                             <tr class="add-more-ex-spouse-row hide">\
-                                <td></td>\
+                                <td class="title"></td>\
                                 <td><button class="btn-add-more-ex-spouse">Add More Ex-Spouse</button></td>\
                             </tr>\
                             <tr class="has-ex-spouse hide">\
-                                <td>Ex Spouse</td>\
-                                <td><input type="text" class="txtExSpouseName" placeholder="Ex Spouse name" />\
-                                <input type="text"  class="ex-spouse-birthday date-picker" placeholder="ex Spouse Birthday " data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
+                                <td class="title">Ex Spouse</td>\
+                                <td>\
+                                    <input type="text" class="txtExSpouseName" placeholder="Ex Spouse name" />\
+                                    <input type="text"  class="ex-spouse-birthday date-picker" placeholder="ex Spouse Birthday " data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/>\
+                                    <input type="text" class="ex-spouse-node" placeholder="Note" />\
+                              </td>\
                             </tr>\
                         </table>\
                     </div>'),
                     trExSpouseTemplate ='<tr class="has-ex-spouse allow-add-birthday">\
-                                        <td><button class="remove-ex-spouse">Remove Ex-Spouse</button></td>\
-                                        <td><input type="text" class="txtExSpouseName" placeholder="Ex Spouse name" />\
-                                        <input type="text"  class="ex-spouse-birthday date-picker" placeholder="ex Spouse Birthday " data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/></td>\
+                                        <td class="title"><button class="remove-ex-spouse">Remove Ex-Spouse</button></td>\
+                                        <td>\
+                                            <input type="text" class="txtExSpouseName" placeholder="Ex Spouse name" />\
+                                            <input type="text" class="ex-spouse-birthday date-picker" placeholder="ex Spouse Birthday " data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/>\
+                                            <input type="text" class="ex-spouse-node" placeholder="Note" />\
+                                        </td>\
                                     </tr>',
                     $birthday = $popup.find('.birthday'),
                     $spouseBirthday = $popup.find('.spouse-birthday'),
@@ -325,7 +363,8 @@
                     $cbHasExSpouse = $popup.find('.cbHasExSpouse');
                     $btnAddMoreExSpouse = $popup.find('.btn-add-more-ex-spouse');
 
-                $cbHasSpouse.on('change', function() {
+                $cbHasSpouse.on('change', function() 
+                {
                     $(this).is(':checked') ? $popup.find('.has-spouse').show().find('input:first').focus() : $popup.find('.has-spouse').hide();
                 });
 
@@ -346,6 +385,8 @@
                     {
                         $trExSpouse.find('.txtExSpouseName').val(data.name);
                         $trExSpouse.find('.ex-spouse-birthday').val(data.birthday);
+                        $trExSpouse.find('.ex-spouse-node').val(data.node);
+                        
                     }
 
                     $popup.find('table').append($trExSpouse);
@@ -358,6 +399,7 @@
                     }).data('datepicker');
 
                 }
+
                 $btnAddMoreExSpouse.click(function(event) {
                     if(!$cbHasExSpouse.is(':checked'))
                         return;
@@ -378,6 +420,9 @@
                             me.myPopup.$container.find('#btnSave').click();
                         }
                 });
+
+                me.myPopup = $.fn.jPopup();
+
                 me.$popup.getData = function() {
                     var isValid = me.$popup.valid();
                     if (!isValid) {
@@ -385,17 +430,16 @@
                         alert('Please complete all information before save!!!');
                         return;
                     }
-                    var spouseName ="";
-                    if($cbHasSpouse.is(':checked'))
-                        spouseName = $.trim($spouseName.val());
+                    var spouseName = $.trim($spouseName.val());
 
                     var exSpouses=[];
                      if($cbHasExSpouse.is(':checked'))
                      {
                         $popup.find('tr.has-ex-spouse').each(function(index, el) {
                             var name = $.trim($(el).find('.txtExSpouseName').val());
-                            var birthday = $(el).find('.ex-spouse-birthday').val()
-                            exSpouses.push({name:name,birthday:birthday})
+                            var birthday = $(el).find('.ex-spouse-birthday').val();
+                            var node = $(el).find('.ex-spouse-node').val();
+                            exSpouses.push({name:name,birthday:birthday,node:node})
 
                         });
                      }
@@ -459,15 +503,9 @@
                 me.$popup.bindDataToPopup = function(data) {
                     me.options.currentTree != 'Descendant' ? $rowAllowAddSpouse.hide() : $rowAllowAddSpouse.show();
 
-                    if(data.hasSpouse && me.options.currentTree == 'Descendant')
-                    {
-                        $cbHasSpouse.prop('checked', true);
-                        $spouseName.val(data.spouse);
-                        data.spouseBirthday && $spouseBirthday.val(data.spouseBirthday);
-                    }
-                    else{
-                         $cbHasSpouse.prop('checked', false);
-                    } 
+                    $spouseName.val(data.spouse);
+                    data.spouseBirthday && $spouseBirthday.val(data.spouseBirthday);
+                    $cbHasSpouse.prop('checked', data.hasSpouse);
                     $cbHasSpouse.change();
 
                     data.birthday && $birthday.val(data.birthday);
@@ -480,7 +518,7 @@
                         $popup.find('.has-spouse').addClass('allow-add-birthday');
                         $popup.find('.has-ex-spouse').addClass('allow-add-birthday');
                     }  
-                    else{
+                    else {
                         $rowsAllowAddBirthday.hide();
                         $popup.find('.has-spouse').removeClass('allow-add-birthday');
                         $popup.find('.has-ex-spouse').removeClass('allow-add-birthday');                   
@@ -495,6 +533,7 @@
                                 var $trExSpouse =  $popup.find('table tr.has-ex-spouse:first');
                                 $trExSpouse.find(".txtExSpouseName").val(val.name);
                                 $trExSpouse.find(".ex-spouse-birthday").val(val.birthday);
+                                $trExSpouse.find(".ex-spouse-node").val(val.node);
                             }
                             else
                             {
@@ -508,7 +547,7 @@
                     }
                     $cbHasExSpouse.change();
                 };
-                me.myPopup = $.fn.jPopup();
+
             },
             addUpdateTreeNode: function($node, treeInstance) {
                 var me = this;
@@ -516,8 +555,27 @@
                     callback = function(data) {
                         data ? treeInstance.updateNode(data) : treeInstance.removeNode();
                         me.saveTreeData(false);
+                        if(_nodeData.isRoot)
+                        {
+                            me.reload();        
+                        }
+
                     };
-                this.showPopup(_nodeData, callback);
+                me.showPopup(_nodeData, callback);
+            },
+            reload:function(options){
+                var me=this;
+                var $currentActiveTab = $(".tab-item.active");
+                $(".tab-item").addClass('active');
+                $.each(me.trees, function() {
+                    this.reloadTree(options);
+                });
+
+                setTimeout(function(){
+                     $(".tab-item").removeClass('active');
+                     $currentActiveTab.addClass('active');
+                },500)
+
             },
             showPopup: function(data, callback) {
                 var me = this,
@@ -545,7 +603,6 @@
                             popupInstance.display(false);
                         }
                     }];
-
                 me.$popup.bindDataToPopup(data);
                 (data.isDummy || data.isRoot) && popupButtons.splice(2, 1);
                 data.isInitialize && popupButtons.splice(0, 1);
@@ -599,7 +656,8 @@
                     allowAddBirthDay:me.options.allowAddBirthDay,
                     ancestorLevel: me.options.ancestorLevel,
                     descendantLevel: me.options.descendantLevel,
-                    isDoubleTrunk:me.options.isDoubleTrunk
+                    isDoubleTrunk:me.options.isDoubleTrunk,
+                    additionLevel: me.options.additionLevel
                 };
 
                 $.each(me.trees, function() {

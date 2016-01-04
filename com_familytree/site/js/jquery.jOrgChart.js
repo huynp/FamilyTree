@@ -279,27 +279,58 @@
                 $.extend($selectedNode[0].data, data);
                 var isRoot = $selectedNode.hasClass('main');
                 var $parentNode = !isRoot ? $selectedNode.parents('.node-container').eq(1).find('.node:first') : $selectedNode;
-                if(opts.treeType != "Descendant")
-                {
+              
                     if(isRoot)
                     {
                         //Update anniversary for other root node in corrent tab
-                       $selectedNode.closest(".tab-content").find('.node.main').each(function(index, el) {
+                        var mainName,spouseName,mainBirthDay,spouseBirthday;
+                        if($selectedNode[0].data.treeName=="mainAncestor" || $selectedNode[0].data.treeName=="mainDescendant")
+                        {
+                            mainName = data.name;
+                            mainBirthDay = data.birthday;
+                            spouseName = data.spouse;
+                            spouseBirthday = data.spouseBirthday;
+                        }
+                        else{
+
+                            mainName = data.spouse;
+                            mainBirthDay = data.spouseBirthday;
+                            spouseName = data.name;
+                            spouseBirthday = data.birthday;
+                        }
+
+                        $('.node.main').each(function(index, el) {
                            if($selectedNode[0].data.id != el.data.id && !el.data.isDummy)
                              {
                                 el.data.anniversary = $selectedNode[0].data.anniversary;
-                             }
-                       });
-                    }
-                    else{
-                        $.each($parentNode[0].data.childNodes, function(index, val) {
-                             if($selectedNode[0].data.id != val.id && !val.isDummy)
-                             {
-                                val.anniversary = $selectedNode[0].data.anniversary;
+                                if(el.data.treeName=="mainAncestor" || el.data.treeName=="mainDescendant")
+                                {
+                                    el.data.name =mainName;
+                                    el.data.birthday = mainBirthDay;
+                                    el.data.spouse =spouseName ;
+                                    el.data.spouseBirthday = spouseBirthday;
+                                }
+                                else{
+                                    
+                                    el.data.name =spouseName;
+                                    el.data.birthday = spouseBirthday;
+                                    el.data.spouse =mainName ;
+                                    el.data.spouseBirthday = mainBirthDay;
+                                }
                              }
                         });
                     }
-                }
+                    else{
+                        if(opts.treeType != "Descendant")
+                        {
+                            $.each($parentNode[0].data.childNodes, function(index, val) {
+                                 if($selectedNode[0].data.id != val.id && !val.isDummy)
+                                 {
+                                    val.anniversary = $selectedNode[0].data.anniversary;
+                                 }
+                            });
+                        }
+                    }
 
                 renderNode($parentNode);
             },
@@ -312,6 +343,10 @@
                         name:opts.treeName,
                         data:$rootNode[0].data
                     };
+            },
+            reloadTree:function(options){
+                $.extend(true,opts,options);
+                renderNode($rootNode);
             }
         };
         return _instance;

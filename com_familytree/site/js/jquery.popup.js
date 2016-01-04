@@ -56,14 +56,14 @@
             var me = this;
             if (isDisplay) {
                 prepairPopup($el,options);
-                $('html').css('overflow','hidden');
+                //$('html').css('overflow','hidden');
                 opts.onShow && opts.onShow(_instance);
                 $backdrop.show();
                 $container.show();
                 $container.find('input:first').focus();
             } else {
 
-                $('html').css('overflow','auto');
+                //$('html').css('overflow','auto');
                 opts.onHide && opts.onHide(_instance);
                 $container.hide();
                 $backdrop.hide();

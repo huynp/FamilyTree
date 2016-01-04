@@ -138,19 +138,20 @@ class FamilyTreeModelBuildtrees extends JModel
 			}
 			return $productInfos;
 	}
+
 	public function getTreeData() {
 		$app = JFactory::getApplication();
 		$input = $app->input;
 		$orderNumber=$input->get('orderNumber', '', 'string');
 		$orderPass=$input->get('orderPass', '', 'string');
-
 		$query="select Tree_Data from `#__familytree_tree_data` where Order_Number='$orderNumber' and Order_Pass ='$orderPass'";
 		$db = JFactory::getDBO();
 		$strTreeData = $db->setQuery($query)->loadResult();
+		$orderId = $this->getOrderIdByOrderPass($orderNumber,$orderPass);
+		$orderDetail = $this->getOrder($orderId);
+		$responseData = new stdClass();
 		if($strTreeData===null || $strTreeData=='')
 		{
-			// $orderId = $this->getOrderIdByOrderPass($orderNumber,$orderPass);
-			// $orderDetail = $this->getOrder($orderId);
 			$productInfos =$this->getProductInfo();
 			$treeDatas = array();
 			foreach ($productInfos as $productInfo) {
@@ -165,20 +166,26 @@ class FamilyTreeModelBuildtrees extends JModel
 				$treeData->productName = $productInfo->productName; 
 				array_push($treeDatas,$treeData);
 			}			
-			$strTreeData = json_encode($treeDatas);
+			$responseData->treeDatas =$treeDatas;
 		}
+		else {
+			$responseData->treeDatas = json_decode($strTreeData);
+		}
+		$responseData->customerName =  $orderDetail[0]->order_name;
+		$strTreeData = json_encode($responseData);
 		return $strTreeData;
 	}
 
 	public function updateTreeData()
 	{
+		// Need to test before save
 		$app = JFactory::getApplication();
 		$postData = $app->input->post;
 		$orderNumber=$postData->get('orderNumber', '', 'string');
 		$orderPass=$postData->get('orderPass', '', 'string');
 		$treeData =$postData->get('treeData', '', 'string');
 		$db = JFactory::getDBO();
-		$encodeString = mysql_escape_string($treeData);
+		$encodeString = $treeData;
 		$query="insert into `#__familytree_tree_data`(`Order_Number`,`Order_Pass`,`Tree_Data`) values('$orderNumber','$orderPass','$encodeString') ON DUPLICATE KEY UPDATE `Tree_Data`='$encodeString'";
 		$result = $db->setQuery($query)->query();
 		return $result;

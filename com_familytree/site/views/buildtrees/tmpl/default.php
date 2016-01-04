@@ -10,70 +10,86 @@
     <link rel="stylesheet" href="/components/com_familytree/js/bootstrap.css" />
    <!-- <script type="text/javascript" src="/components/com_familytree/js/script.min.js"></script>
     <link rel="stylesheet" href="/components/com_familytree/js/styles.css" />-->
-    <a id='temp-data' style='display:none' data-tree="<?php echo htmlentities($this->modelData); ?>">Tree Data</a>
     <script type="text/javascript">
-    (function($) {
-        $(document).ready(function() {
-            var temp = $('#temp-data').attr('data-tree').replace(/\\"/g, '"');
-                temp = temp.replace(/%%H%%U%%Y%%/g, "\\\\");
-                temp = temp.replace(/@@H@@U@@Y@@/g, "\\\"");
-                temp = temp.replace(/!!H!!U!!Y!!/g, "\'");
-            $.dataObjects =JSON.parse(temp) ;
 
-            var initTreeFunct = function(dataObject) {
-                $("#family-tree-container").empty();
-                var option ={
-                    orderNumber:'<?php print_r($this->orderNumber);?>',
-                    orderPass:'<?php echo $this->orderPass; ?>',
-                    andStyle:'and',
-                    ancestorLevel:4,
-                    descendantLevel:3,
-                    allowAddBirthDay:false,
-                    isDoubleTrunk:false,
-                    isReadOnly:false
-                };
+        function buildCustomTreeForm(){
+            var orderNumber =jQuery.fn.getParameterByName('orderNumber'); 
+            var orderPass = jQuery.fn.getParameterByName('orderPass'); 
+            jQuery.ajax({
+              url: "/?option=com_familytree&task=getTreeData&format=raw",
+              data: {
+                orderNumber:orderNumber,
+                orderPass:orderPass,
+              },
+              success: function(data){
+                    var temp = data.replace(/\\"/g, '"');
+                    temp = temp.replace(/%%H%%U%%Y%%/g, "\\\\");
+                    temp = temp.replace(/@@H@@U@@Y@@/g, "\\\"");
+                    temp = temp.replace(/!!H!!U!!Y!!/g, "\'");
+                    var returnDataObject =JSON.parse(temp);
+                    jQuery.dataObjects =returnDataObject.treeDatas ;
+                    var initTreeFunct = function(dataObject) {
+                        jQuery("#family-tree-container").empty();
+                        var option ={
+                            orderNumber:orderNumber,
+                            orderPass:orderPass,
+                            andStyle:'and',
+                            ancestorLevel:4,
+                            descendantLevel:3,
+                            allowAddBirthDay:false,
+                            isDoubleTrunk:false,
+                            isReadOnly:false,
+                            additionLevel:0,
+                            customerName:returnDataObject.customerName
+                        };
 
-                $.extend(option,dataObject);
-                $('#family-tree-container').familyTree(option);
-                $('#nav-line').remove();
-                $('#tab-modules').remove();
-                $(".tree-builder-container").parents('.row-fluid').find('.span3').remove();
-                 $(".tree-builder-container").parents('.row-fluid').find('.span9').addClass('span12').removeClass('span9');
-                 $('.tree-builder-container').css({
-                    "width": "100%",
-                    "height": "auto",
-                    "padding": "5px",
-                    "border-radius": "4px",
-                    "overflow":"auto",
-                    "border": "1px solid #CCC",
-                    "margin-top":"20px"});
-                 $('#main-handler').width('98%');
-                 $('#bottom-bg').remove();
-                 $('#slideshow-header').remove();
-                 $('#menu-handler li').removeClass('active');
-            }
+                        jQuery.extend(option,dataObject);
+                        jQuery('#family-tree-container').familyTree(option);
+                        jQuery('#nav-line').remove();
+                        jQuery('#tab-modules').remove();
+                        jQuery(".tree-builder-container").parents('.row-fluid').find('.span3').remove();
+                        jQuery(".tree-builder-container").parents('.row-fluid').find('.span9').addClass('span12').removeClass('span9');
+                        jQuery('.tree-builder-container').css({
+                            "width": "100%",
+                            "height": "auto",
+                            "padding": "5px",
+                            "border-radius": "4px",
+                            "overflow":"auto",
+                            "border": "1px solid #CCC",
+                            "margin-top":"20px"});
+                         jQuery('#main-handler').width('98%');
+                         jQuery('#bottom-bg').remove();
+                         jQuery('#slideshow-header').remove();
+                         jQuery('#menu-handler li').removeClass('active');
+                    }
 
-            if($.dataObjects.length>0)
-            {
-                //Build dropdown list
-                var $dropdown=$('<select class="product-item">');
-                for(var i =0;i< $.dataObjects.length; i++)
-                {
-                    var $option = $("<option/>").val(i).text($.dataObjects[i].productName);
-                    $dropdown.append($option);
+                    if(jQuery.dataObjects.length>0)
+                    {
+                        //Build dropdown list
+                        jQuery(".product-item").remove();
+                        var jQuerydropdown=jQuery('<select class="product-item">');
+                        for(var i =0;i< jQuery.dataObjects.length; i++)
+                        {
+                            var jQueryoption = jQuery("<option/>").val(i).text(jQuery.dataObjects[i].productName);
+                            jQuerydropdown.append(jQueryoption);
+                        }
+                        jQuerydropdown.change(function(event) {
+                            var index = jQuery(this).val();
+                            dataObject =jQuery.dataObjects[index];
+                            initTreeFunct(dataObject);
+                        });
+                        jQuery(".product-items-container").append(jQuerydropdown).show();
+                        jQuerydropdown.change();
+                        if(jQuery.dataObjects.length==1)
+                            jQuerydropdown.attr("disabled","disabled");
+                    }
                 }
-                $dropdown.change(function(event) {
-                    var index = $(this).val();
-                    dataObject =$.dataObjects[index];
-                    initTreeFunct(dataObject);
-                });
-                $(".product-items-container").append($dropdown).show();
-                $dropdown.change();
-                if($.dataObjects.length==1)
-                    $dropdown.attr("disabled","disabled");
-            }
+            });
+        }
+
+        jQuery(document).ready(function() {
+            buildCustomTreeForm();
         });
-    }(jQuery))
     </script>
     <div class="hide product-items-container" style="margin: 10px 10px 0 20px;">
         <span style="display:inline-block">Product Item</span>

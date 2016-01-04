@@ -27,7 +27,7 @@ body {
 }
 
 .popup-container {
-    position: fixed;
+    position: absolute;
     z-index: 99999;
     background: white;
     border-radius: 5px;
@@ -71,6 +71,7 @@ body {
 .popup-content{
     padding: 30px 20px;
     font-weight: 700;
+    width: 450px;
 }
 .popup-content td{
     white-space: normal;
@@ -78,6 +79,10 @@ body {
     border: none;
     padding: 1px 0;
 
+}
+.popup-content td.title{
+    white-space: nowrap;
+    width: 90px;
 }
 
 .popup-header{
@@ -150,7 +155,7 @@ body {
     cursor: pointer;
     display: block;
     background-color: white;
-    padding: 0px 20px;
+    padding:0px 6px 0 20px;
     font-size: 16px;
     float: left;
     margin: 0;
@@ -196,8 +201,10 @@ input[type="checkbox"]:checked + label.lbAddBirthday:before
 
 .lbAnStyle select{
     font-size: 14px;
-    margin-left: 10px;
+    margin-left: 28px;
     margin-bottom: 0;
+    width: 270px;
+
 }
 .toolbar-container{
     background: white;
@@ -266,4 +273,22 @@ select.product-item{
     padding: 5px;
     height: 30px;
     margin: 0px;
+    width: 270px !important;
+}
+.ex-spouse-node{
+    display: block;
+}
+.add-more-gen-container{
+    margin: 5px;
+    float: left;
+}
+
+.btn-add-more-gen{
+    width: 210px;
+}
+.addition-level-status {
+    display: block;
+    clear: both;
+    margin-left: 20px;
+    font-size: 16px;
 }
