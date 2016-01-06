@@ -375,7 +375,11 @@
             reloadTree:function(options){
                 $.extend(true,opts,options);
                 renderNode($rootNode);
+            },
+            updateOptions:function(options){
+                $.extend(true,opts,options);
             }
+
         };
         return _instance;
     };

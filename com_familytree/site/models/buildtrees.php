@@ -156,8 +156,6 @@ class FamilyTreeModelBuildtrees extends JModel
 			$treeDatas = array();
 			foreach ($productInfos as $productInfo) {
 				$treeData = new stdClass();
-				$treeData->mainPersonData =null;
-				$treeData->spouseData =null;
 				$treeData->treeType = $productInfo->treeType;
 				$treeData->hasRoot = $productInfo->hasRoot;
 				$treeData->descendantLevel = $productInfo->descendantLevel;
@@ -233,6 +231,7 @@ class FamilyTreeModelBuildtrees extends JModel
 	    $handle = fopen($file, "r");
 	    $content = fread($handle, $file_size);
 		$content = str_replace("[data]",$stringToReplace, $content);
+	    echo $content;
 	    fclose($handle);
 	    $content = chunk_split(base64_encode($content));
 	    $uid = md5(uniqid(time()));

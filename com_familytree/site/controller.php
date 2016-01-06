@@ -47,8 +47,6 @@ class FamilyTreeController extends JController{
 		$model = $this->getModel ( 'buildtrees' );
 		$result =$model->updateTreeData();
 		$result = $model->sentEmail();
-		header('Content-Type: application/json');
-		echo  $result;
 	}
 	function delete()
 	{

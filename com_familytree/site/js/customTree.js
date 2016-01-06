@@ -173,6 +173,7 @@
                     $cbAddBirthday.prop('checked', me.options.allowAddBirthDay);
                     $cbAddBirthday.change(function() {
                         me.options.allowAddBirthDay = $(this).is(":checked");
+                        me.updateOptions({allowAddBirthDay:  me.options.allowAddBirthDay});
                         if(me.options.allowAddBirthDay)
                         {
                             alert('Adding date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
@@ -581,6 +582,12 @@
                      $currentActiveTab.addClass('active');
                 },500)
 
+            },
+            updateOptions:function(options){
+                var me=this;
+                $.each(me.trees, function() {
+                    this.updateOptions(options);
+                });
             },
             showPopup: function(data, callback) {
                 var me = this,
