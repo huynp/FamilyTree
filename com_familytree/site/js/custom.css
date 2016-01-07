@@ -91,7 +91,6 @@ body {
     font-weight: bold;
     color: gray;
     position: relative;
-    text-transform: capitalize;
 }
 .popup-header .b-close{
     font: bold 14px sans-serif;
@@ -156,7 +155,7 @@ body {
     display: block;
     background-color: white;
     padding:0px 6px 0 20px;
-    font-size: 16px;
+    font-size: 15px;
     float: left;
     margin: 0;
     line-height: 40px;
@@ -165,7 +164,7 @@ body {
 .add-birthday-container,.trunk-option-container {
     vertical-align: middle;
     line-height: 40px;
-    font-size: 16px;
+    font-size: 15px;
     float: left;
 }
 .lbAddBirthday{
@@ -201,7 +200,7 @@ input[type="checkbox"]:checked + label.lbAddBirthday:before
 
 .lbAnStyle select{
     font-size: 14px;
-    margin-left: 28px;
+    margin-left: 35px;
     margin-bottom: 0;
     width: 270px;
 
@@ -269,10 +268,10 @@ tr.has-ex-spouse{
 }
 
 .product-items-container{
-    font-size: 16px;
+    font-size: 15px;
 }
 select.product-item{
-    font-size: 16px;
+    font-size: 15px;
     width: auto;
     padding: 5px;
     height: 30px;
@@ -288,11 +287,11 @@ select.product-item{
 }
 
 .btn-add-more-gen{
-    width: 210px;
+    width: 325px;
 }
 .addition-level-status {
     display: block;
     clear: both;
     margin-left: 20px;
-    font-size: 16px;
+    font-size: 15px;
 }

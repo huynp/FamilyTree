@@ -141,7 +141,7 @@
                     $select.append($('<option value="italized">  I want the "and" italized</option>'));
                     $select.append($('<option value="sign">  I want "&"</option>'));
                     $select.val(me.options.andStyle);
-                    var $andStyleDDL = $("<label class='lbAnStyle' for='ddl-and-style'/>").text("And style").append($select);
+                    var $andStyleDDL = $("<label class='lbAnStyle' for='ddl-and-style'/>").text("\"and\" style").append($select);
                     $andStyleDDL.appendTo($toolbarContainer);
                     $andStyleDDL.change(function() {
                         //Remove tab-item to make all tree visible in order to calculate correct 
@@ -154,7 +154,7 @@
                     });
 
                     // Add button add more generation
-                    var $addMoreGenContainer = $('<div class="add-more-gen-container"><button class="btn-add-more-gen">Add One More Generation</button> </div>').appendTo($toolbarContainer);
+                    var $addMoreGenContainer = $('<div class="add-more-gen-container"><button class="btn-add-more-gen">Oops! I didn\'t order enough generations. Add gen</button> </div>').appendTo($toolbarContainer);
                     $addMoreGenContainer.find('.btn-add-more-gen').click(function(event) {
                         if(confirm('Adding one more generation to your tree is additional $10. You may be invoiced for this amount if not previously collected.'))
                         {
@@ -167,7 +167,7 @@
                         }
                     });
 
-                    var $addBirthDayContainer = $('<div class="add-birthday-container">Add Birthday and Anniversary</div>').appendTo($toolbarContainer);
+                    var $addBirthDayContainer = $('<div class="add-birthday-container">Add Birthdates and/or Anniversaries</div>').appendTo($toolbarContainer);
                     var $lbForAddBirthDay = $('<label class="lbAddBirthday" for="cb-add-birthday"> </label>').prependTo($addBirthDayContainer);
                     var $cbAddBirthday = $('<input type="checkbox" id="cb-add-birthday"/>').prependTo($addBirthDayContainer);
                     $cbAddBirthday.prop('checked', me.options.allowAddBirthDay);
@@ -206,7 +206,7 @@
                     }
 
                     $(".finish-button").remove();
-                    var $finishButton = $('<button class="finish-button">Save all form and notify us!!!</button>').appendTo($(".product-items-container"));
+                    var $finishButton = $('<button class="finish-button">Have you completed the family name form?</button>').appendTo($(".product-items-container"));
                     $finishButton.click(function(){
                         if(confirm('Are you completed your family tree?'))
                         {
@@ -239,7 +239,7 @@
 
                     //Addition level status
                     
-                    var $additionLevelStatus = $("<div class='addition-level-status'>Addition Generations: <b class='addition-gen-count'></b></div>").appendTo($toolbarContainer);
+                    var $additionLevelStatus = $("<div class='addition-level-status'>Additional Generations: <b class='addition-gen-count'></b></div>").appendTo($toolbarContainer);
                     $additionLevelStatus.find('.addition-gen-count').text(me.options.additionLevel);    
 
                     var $navTabs = $('<ul class="nav nav-tabs tree-tabs"></ul>');
@@ -618,9 +618,11 @@
                 me.$popup.bindDataToPopup(data);
                 (data.isDummy || data.isRoot) && popupButtons.splice(2, 1);
                 data.isInitialize && popupButtons.splice(0, 1);
+                var title =data.isInitialize ? data.type : data.isDummy ? ('Add ' + data.type) : ('Edit ' + data.name);
+                
                 var popupOptions = {
                     buttons: popupButtons,
-                    title: data.isDummy ? ('Add ' + data.type) : ('Edit ' + data.name),
+                    title: title,
                     allowManualClose: !data.isInitialize,
                     onShow: function(popupInstance) {
                     },

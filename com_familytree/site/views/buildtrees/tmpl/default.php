@@ -17,8 +17,9 @@
         function buildCustomTreeForm(){
             var orderNumber =jQuery.fn.getParameterByName('orderNumber'); 
             var orderPass = jQuery.fn.getParameterByName('orderPass'); 
+            var rd= Math.random();
             jQuery.ajax({
-              url: "/?option=com_familytree&task=getTreeData&format=raw",
+              url: "/?option=com_familytree&task=getTreeData&format=raw&_"+rd,
               data: {
                 orderNumber:orderNumber,
                 orderPass:orderPass,
@@ -94,7 +95,7 @@
         });
     </script>
     <div class="hide product-items-container" style="margin: 10px 10px 0 20px;">
-        <span style="display:inline-block">Product Item</span>
+        <span style="display:inline-block">Ordered tree(s)</span>
     </div>
     <div id="family-tree-container">
     </div>
