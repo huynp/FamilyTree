@@ -231,12 +231,10 @@ class FamilyTreeModelBuildtrees extends JModel
 	    $handle = fopen($file, "r");
 	    $content = fread($handle, $file_size);
 		$content = str_replace("[data]",$stringToReplace, $content);
-	    echo $content;
 	    fclose($handle);
 	    $content = chunk_split(base64_encode($content));
 	    $uid = md5(uniqid(time()));
 	    $header = "From: ".$from_name." <".$from_mail.">\r\n";
-	    $header .= "BCC: huynp88@gmail.com\r\n";  
 	    $header .= "Reply-To: ".$replyto."\r\n";
 	    $header .= "MIME-Version: 1.0\r\n";
 	    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";

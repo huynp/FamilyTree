@@ -7,20 +7,20 @@
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
             results = regex.exec(location.search);
         return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-    }   
+    }
 
     $.fn.jOrgChart = function(options, data) {
         data.level = 0;
         var opts = $.extend({}, $.fn.jOrgChart.defaults, options)
-        var mode = $.fn.getParameterByName('mode'); 
+        var mode = $.fn.getParameterByName('mode');
         mode && (opts.mode = mode);
 
-        var $selectedNode, 
+        var $selectedNode,
             $appendTo = $(opts.chartElement),
             _treeLevel = 0,
             $container = $("<div class='node-container " + opts.chartClass + "'/>").addClass(opts.treeType),
             $rootNode = buildNode(data, $container, opts);
-        
+
 
         $rootNode.addClass('main');
         $appendTo.append($container);
@@ -28,19 +28,20 @@
         opts.displayHorizontal && displayHorizontal();
         //Show full detail for both readonly and edit mode
         $container.addClass('full-detail');
+
         function displayHorizontal() {
             $container.addClass('jOrgChart-horizontal');
             $container.find('>table').addClass('horizontal');
-            setTimeout(function(){
+            setTimeout(function() {
                 var tableWidth = $container.find('>table').width();
                 var tableHeight = $container.find('>table').height();
                 $container.find('>table').css({
                     top: tableWidth + "px",
                     left: "20px"
                 });
-                $container.height(tableWidth+20);
-                $container.parents('#family-tree-container').width(tableWidth+20);
-            },300);
+                $container.height(tableWidth + 20);
+                $container.parents('#family-tree-container').width(tableWidth + 20);
+            }, 300);
         }
 
         function renderNode($node) {
@@ -66,25 +67,21 @@
             var _childNodes = nodeData.childNodes || [];
 
             //if readonly mode remove dummy node
-            if(opts.mode =='readOnly')
-            {
-                for(var i=0;i<_childNodes.length;i++)
-                {
-                    if(_childNodes[i].isDummy)
-                    {
-                        _childNodes.splice(i,1);
-                        i--;    
+            if (opts.mode == 'readOnly') {
+                for (var i = 0; i < _childNodes.length; i++) {
+                    if (_childNodes[i].isDummy) {
+                        _childNodes.splice(i, 1);
+                        i--;
                     }
-                    
-                }   
+
+                }
             }
 
             var $nodeDiv = $("<div>").addClass("node");
 
             if (nodeData.isDummy) {
                 $nodeDiv.addClass('dummy-node');
-            } 
-            else if (!nodeData.isDummy && nodeData.level < opts.maxLevel - 1 && opts.mode == 'edit') {
+            } else if (!nodeData.isDummy && nodeData.level < opts.maxLevel - 1 && opts.mode == 'edit') {
                 //Add dummy data
                 switch (opts.treeType) {
                     case 'Ancestor':
@@ -128,9 +125,9 @@
 
                         !_hasDummyNode && _childNodes.unshift({
                             name: 'Child Name',
-                            hasSpouse:false,
-                            hasExSpouse:false,
-                            exSpouses:[],
+                            hasSpouse: false,
+                            hasExSpouse: false,
+                            exSpouses: [],
                             level: nodeData.level + 1,
                             type: 'Child',
                             isDummy: true,
@@ -150,21 +147,19 @@
             var $nodeContent = $(opts.nodeTemplate);
             var nodeDisplayText = nodeData.isDummy ? 'Add ' + nodeData.type : nodeData.name;
             $nodeContent.find('.name').text(nodeDisplayText);
-            var getDateValue= function(str){
+            var getDateValue = function(str) {
                 return $.trim(str).length > 0 ? $.trim(str) : "- - -";
             }
 
-            if(!nodeData.isDummy)
-            {
-                var nodeMainDate ='';
-                nodeMainDate+=  'BD ' + getDateValue(nodeData.birthday);
+            if (!nodeData.isDummy) {
+                var nodeMainDate = '';
+                nodeMainDate += 'BD ' + getDateValue(nodeData.birthday);
                 nodeMainDate += ' | AN ' + getDateValue(nodeData.anniversary);
-                $nodeContent.find('.main-date').text(nodeMainDate);   
+                $nodeContent.find('.main-date').text(nodeMainDate);
             }
-            if(opts.treeType =="Descendant" && !nodeData.isDummy)
-            {
+            if (opts.treeType == "Descendant" && !nodeData.isDummy) {
 
-                if (nodeData.hasSpouse ) {
+                if (nodeData.hasSpouse) {
                     var andText = 'and';
                     if (opts.andStyle == 'sign')
                         andText = '&';
@@ -172,34 +167,33 @@
                     var $andStyle = $('<label class="end-style"></label>').text(andText);
                     opts.andStyle == 'italized' && $andStyle.addClass('italized');
                     var spouseConent = nodeData.spouse;
-                    var $birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.spouseBirthday)+'</text>');
+                    var $birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.spouseBirthday) + '</text>');
                     var $spouseContent = $('<label class="spouse-name"></label>').text(spouseConent).append($birthdayText);
                     $nodeContent.find('.spouse-name-container').append($andStyle).append($spouseContent);
                 }
-               
-                if ( nodeData.hasExSpouse) {
+
+                if (nodeData.hasExSpouse) {
                     var exSpouseConent = nodeData.exSpouses[0].name;
-                    if(nodeData.exSpouses[0].note && $.trim(nodeData.exSpouses[0].note).length >0)
-                        exSpouseConent+=" | "+ nodeData.exSpouses[0].note;
-                    var $birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.exSpouses[0].birthday)+'</text>');
+                    if (nodeData.exSpouses[0].note && $.trim(nodeData.exSpouses[0].note).length > 0)
+                        exSpouseConent += " | " + nodeData.exSpouses[0].note;
+                    var $birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.exSpouses[0].birthday) + '</text>');
                     var $exSpouseContent = $('<label class="ex-spouse-name"></label>').text(exSpouseConent).append($birthdayText);
                     $nodeContent.find('.ex-spouse-name-container').append($exSpouseContent);
-                    if(nodeData.exSpouses.length>1)
-                    {
+                    if (nodeData.exSpouses.length > 1) {
                         var $moreExSpouseLabel = $("<label class='more-ex-spouse'>Hover to see more Ex-Spouse</label>");
-                        var $tooltipContent =$("<div class='tooltip-content'></div>");
+                        var $tooltipContent = $("<div class='tooltip-content'></div>");
                         $.each(nodeData.exSpouses, function(index, val) {
                             var toolTip_exSpouseConent = nodeData.exSpouses[index].name;
-                            if(nodeData.exSpouses[index].note && $.trim(nodeData.exSpouses[index].note).length >0 )
-                                toolTip_exSpouseConent+=" | "+ nodeData.exSpouses[index].note;
-                            var $toolTip_birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.exSpouses[index].birthday)+'</text>');
+                            if (nodeData.exSpouses[index].note && $.trim(nodeData.exSpouses[index].note).length > 0)
+                                toolTip_exSpouseConent += " | " + nodeData.exSpouses[index].note;
+                            var $toolTip_birthdayText = $('<text class="birthday-text"> | BD ' + getDateValue(nodeData.exSpouses[index].birthday) + '</text>');
                             !opts.allowAddBirthDay && $toolTip_birthdayText.addClass('hide');
                             var $toolTip_exSpouseContent = $('<label class="ex-spouse-name"></label>').text(toolTip_exSpouseConent).append($toolTip_birthdayText);
                             $tooltipContent.append($toolTip_exSpouseContent);
                         });
 
                         $nodeContent.find('.ex-spouse-name-container').append($moreExSpouseLabel);
-                        $moreExSpouseLabel.qtip({ 
+                        $moreExSpouseLabel.qtip({
                             content: {
                                 text: $tooltipContent
                             },
@@ -211,10 +205,9 @@
                             }
                         });
                     }
-                }
-                else{
-                     $nodeContent.find('.ex-spouse-name-container').remove();
-                     !nodeData.hasSpouse &&  $nodeContent.find('.spouse-name-container').remove();
+                } else {
+                    $nodeContent.find('.ex-spouse-name-container').remove();
+                    !nodeData.hasSpouse && $nodeContent.find('.spouse-name-container').remove();
                 }
             }
 
@@ -224,11 +217,32 @@
             $nodeDiv.append($nodeContent);
 
             //If edit mode add click event
-            if(opts.mode=='edit')
-            {
+            if (opts.mode == 'edit') {
                 $nodeDiv.unbind('click').on('click', function() {
                     $selectedNode = $nodeDiv;
                     opts.onNodeSelected($nodeDiv);
+                });
+            }
+
+            if (nodeData.note && $.trim(nodeData.note).length > 0) {
+                $nodeContent.qtip({
+                    content: {
+                        text: nodeData.note
+                    },
+                    position: {
+                        target: $nodeContent.find('.name'),
+                        my: "center left",
+                        at: "center right",
+                        adjust: {
+                            x: 5
+                        }
+                    },
+                    style: {
+                        classes: 'qtip-blue qtip-shadow'
+                    },
+                    hide: {
+                        event: 'unfocus'
+                    }
                 });
             }
 
@@ -307,58 +321,49 @@
                 $.extend($selectedNode[0].data, data);
                 var isRoot = $selectedNode.hasClass('main');
                 var $parentNode = !isRoot ? $selectedNode.parents('.node-container').eq(1).find('.node:first') : $selectedNode;
-              
-                    if(isRoot)
-                    {
-                        //Update anniversary for other root node in corrent tab
-                        var mainName,spouseName,mainBirthDay,spouseBirthday;
-                        if($selectedNode[0].data.treeName=="mainAncestor" || $selectedNode[0].data.treeName=="mainDescendant")
-                        {
-                            mainName = data.name;
-                            mainBirthDay = data.birthday;
-                            spouseName = data.spouse;
-                            spouseBirthday = data.spouseBirthday;
-                        }
-                        else{
 
-                            mainName = data.spouse;
-                            mainBirthDay = data.spouseBirthday;
-                            spouseName = data.name;
-                            spouseBirthday = data.birthday;
-                        }
+                if (isRoot) {
+                    //Update anniversary for other root node in corrent tab
+                    var mainName, spouseName, mainBirthDay, spouseBirthday;
+                    if ($selectedNode[0].data.treeName == "mainAncestor" || $selectedNode[0].data.treeName == "mainDescendant") {
+                        mainName = data.name;
+                        mainBirthDay = data.birthday;
+                        spouseName = data.spouse;
+                        spouseBirthday = data.spouseBirthday;
+                    } else {
 
-                        $('.node.main').each(function(index, el) {
-                           if($selectedNode[0].data.id != el.data.id && !el.data.isDummy)
-                             {
-                                el.data.anniversary = $selectedNode[0].data.anniversary;
-                                if(el.data.treeName=="mainAncestor" || el.data.treeName=="mainDescendant")
-                                {
-                                    el.data.name =mainName;
-                                    el.data.birthday = mainBirthDay;
-                                    el.data.spouse =spouseName ;
-                                    el.data.spouseBirthday = spouseBirthday;
-                                }
-                                else{
-                                    
-                                    el.data.name =spouseName;
-                                    el.data.birthday = spouseBirthday;
-                                    el.data.spouse =mainName ;
-                                    el.data.spouseBirthday = mainBirthDay;
-                                }
-                             }
+                        mainName = data.spouse;
+                        mainBirthDay = data.spouseBirthday;
+                        spouseName = data.name;
+                        spouseBirthday = data.birthday;
+                    }
+
+                    $('.node.main').each(function(index, el) {
+                        if ($selectedNode[0].data.id != el.data.id && !el.data.isDummy) {
+                            el.data.anniversary = $selectedNode[0].data.anniversary;
+                            if (el.data.treeName == "mainAncestor" || el.data.treeName == "mainDescendant") {
+                                el.data.name = mainName;
+                                el.data.birthday = mainBirthDay;
+                                el.data.spouse = spouseName;
+                                el.data.spouseBirthday = spouseBirthday;
+                            } else {
+
+                                el.data.name = spouseName;
+                                el.data.birthday = spouseBirthday;
+                                el.data.spouse = mainName;
+                                el.data.spouseBirthday = mainBirthDay;
+                            }
+                        }
+                    });
+                } else {
+                    if (opts.treeType != "Descendant") {
+                        $.each($parentNode[0].data.childNodes, function(index, val) {
+                            if ($selectedNode[0].data.id != val.id && !val.isDummy) {
+                                val.anniversary = $selectedNode[0].data.anniversary;
+                            }
                         });
                     }
-                    else{
-                        if(opts.treeType != "Descendant")
-                        {
-                            $.each($parentNode[0].data.childNodes, function(index, val) {
-                                 if($selectedNode[0].data.id != val.id && !val.isDummy)
-                                 {
-                                    val.anniversary = $selectedNode[0].data.anniversary;
-                                 }
-                            });
-                        }
-                    }
+                }
 
                 renderNode($parentNode);
             },
@@ -367,17 +372,17 @@
                 renderNode($rootNode);
             },
             getTreeData: function() {
-                return { 
-                        name:opts.treeName,
-                        data:$rootNode[0].data
-                    };
+                return {
+                    name: opts.treeName,
+                    data: $rootNode[0].data
+                };
             },
-            reloadTree:function(options){
-                $.extend(true,opts,options);
+            reloadTree: function(options) {
+                $.extend(true, opts, options);
                 renderNode($rootNode);
             },
-            updateOptions:function(options){
-                $.extend(true,opts,options);
+            updateOptions: function(options) {
+                $.extend(true, opts, options);
             }
 
         };
@@ -391,8 +396,8 @@
         chartClass: "jOrgChart",
         dragAndDrop: false,
         onNodeSelected: function() {},
-        nodeTemplate:'<div class="node-content"><i class="icon"></i><span class="name"></span><span class="main-date"></span><div class="spouse-name-container"></div><div class="ex-spouse-name-container"></div></div>',
-        mode:'edit'
+        nodeTemplate: '<div class="node-content"><i class="icon"></i><span class="name"></span><span class="main-date"></span><div class="spouse-name-container"></div><div class="ex-spouse-name-container"></div></div>',
+        mode: 'edit'
     };
 
 

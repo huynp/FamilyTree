@@ -54,6 +54,7 @@
                         jQuery(".tree-builder-container").parents('.row-fluid').find('.span9').addClass('span12').removeClass('span9');
                         jQuery('.tree-builder-container').css({
                             "width": "100%",
+                            "min-width":"800px",
                             "height": "auto",
                             "padding": "5px",
                             "border-radius": "4px",
@@ -63,7 +64,9 @@
                          jQuery('#main-handler').width('98%');
                          jQuery('#bottom-bg').remove();
                          jQuery('#slideshow-header').remove();
+                         jQuery('#top-nav-handler').remove();
                          jQuery('#menu-handler li').removeClass('active');
+                         jQuery('#search-position').removeClass('span4');
                     }
 
                     if(jQuery.dataObjects.length>0)

@@ -42,6 +42,8 @@
                 var height = $(document).height();
                 var x = ($(window).width() - $container.width()) / 2;
                 var y = $(window).height() / 8;
+                if(x<0)
+                    x=10;
                 $backdrop.css({
                     'width': width,
                     'height': height

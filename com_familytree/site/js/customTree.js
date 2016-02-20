@@ -51,7 +51,8 @@
                         isRoot: true,
                         anniversary: returnData.anniversary,
                         birthday: returnData.birthday,
-                        treeName:"mainAncestor"
+                        treeName:"mainAncestor",
+                        note:returnData.note
                     };
 
                     me.options.mainDescendantData = {
@@ -66,7 +67,8 @@
                         isRoot: true,
                         anniversary: returnData.anniversary,
                         birthday: returnData.birthday,
-                        treeName:"mainDescendant"
+                        treeName:"mainDescendant",
+                        note:returnData.note
                     };
 
                     me.options.spouseAncestorData = {
@@ -146,17 +148,15 @@
                     $andStyleDDL.change(function() {
                         //Remove tab-item to make all tree visible in order to calculate correct 
                         $('.tab-content').removeClass('tab-item');
-                        $.each(me.trees, function(index, item) {
-                            item.updateAndStyle($andStyleDDL.find('option:selected').val())
-                        });
                         $('.tab-content').addClass('tab-item');
                         me.saveTreeData(false);
+                        me.reload({andStyle:me.$toolbar.find('select option:selected').val()});
                     });
 
                     // Add button add more generation
                     var $addMoreGenContainer = $('<div class="add-more-gen-container"><button class="btn-add-more-gen">Oops! I didn\'t order enough generations. Add gen</button> </div>').appendTo($toolbarContainer);
                     $addMoreGenContainer.find('.btn-add-more-gen').click(function(event) {
-                        if(confirm('Adding one more generation to your tree is additional $10. You may be invoiced for this amount if not previously collected.'))
+                        if(confirm('An additional one more generation to your tree is additional $10. You may be invoiced for this amount if not previously collected.'))
                         {
                             me.options.additionLevel+=1;
                             me.saveTreeData(false);
@@ -176,7 +176,7 @@
                         me.updateOptions({allowAddBirthDay:  me.options.allowAddBirthDay});
                         if(me.options.allowAddBirthDay)
                         {
-                            alert('Adding date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
+                            alert('An additional date branches to your tree is additional $10. You may be invoiced for this amount if not previously collected.');
                             $("table.horizontal").addClass('add-birthday');
                             $(".birthday-text").removeClass('hide');
                         }
@@ -206,9 +206,9 @@
                     }
 
                     $(".finish-button").remove();
-                    var $finishButton = $('<button class="finish-button">Have you completed the family name form?</button>').appendTo($(".product-items-container"));
+                    var $finishButton = $('<button class="finish-button">Finished! Submit Form</button>').appendTo($(".product-items-container"));
                     $finishButton.click(function(){
-                        if(confirm('Are you completed your family tree?'))
+                        if(confirm('Have you completed the family name form?'))
                         {
                             me.saveTreeData(true);
                         }
@@ -220,7 +220,7 @@
                             disabled: 'disabled',
                         });
                         
-                         $trunkOptionContainer.find("#cb-double").length>0 &&  $trunkOptionContainer.find("#cb-double").attr({
+                         $trunkOptionContainer && $trunkOptionContainer.find("#cb-double").length>0 &&  $trunkOptionContainer.find("#cb-double").attr({
                             disabled: 'disabled',
                         });
 
@@ -338,13 +338,16 @@
                                 <td class="title"></td>\
                                 <td><button class="btn-add-more-ex-spouse">Add More Ex-Spouse</button></td>\
                             </tr>\
-                            <tr class="has-ex-spouse hide">\
+                            <tr class="has-ex-spouse first-ex-spouse hide">\
                                 <td class="title">Ex Spouse</td>\
                                 <td>\
                                     <input type="text" class="txtExSpouseName" placeholder="Ex Spouse name" />\
                                     <input type="text"  class="ex-spouse-birthday date-picker" placeholder="ex Spouse Birthday " data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/>\
-                                    <input type="text" class="ex-spouse-node" placeholder="Note" />\
                               </td>\
+                            </tr>\
+                            <tr class="node-row">\
+                                <td>Note</td>\
+                                <td><textarea class="txtNote" placeholder="Note whatever you want..."></textarea></td>\
                             </tr>\
                         </table>\
                     </div>'),
@@ -353,7 +356,6 @@
                                         <td>\
                                             <input type="text" class="txtExSpouseName" placeholder="Ex Spouse name" />\
                                             <input type="text" class="ex-spouse-birthday date-picker" placeholder="ex Spouse Birthday " data-date-format="mm-dd-yyyy" data-date-viewmode="years" readonly/>\
-                                            <input type="text" class="ex-spouse-node" placeholder="Note" />\
                                         </td>\
                                     </tr>',
                     $birthday = $popup.find('.birthday'),
@@ -364,6 +366,7 @@
                     $popupTitle = $popup.find('.title'),
                     $spouseName = $popup.find('.txtSpouseName'),
                     $name = $popup.find('.txtName'),
+                    $note= $popup.find('.txtNote');
                     $nodeType = $popup.find('.txtType'),
                     $cbHasSpouse = $popup.find('.cbHasSpouse'),
                     $cbHasExSpouse = $popup.find('.cbHasExSpouse');
@@ -391,11 +394,9 @@
                     {
                         $trExSpouse.find('.txtExSpouseName').val(data.name);
                         $trExSpouse.find('.ex-spouse-birthday').val(data.birthday);
-                        $trExSpouse.find('.ex-spouse-node').val(data.note);
-                        
                     }
 
-                    $popup.find('table').append($trExSpouse);
+                    $popup.find('table tr.first-ex-spouse').after($trExSpouse);
 
                     var $datePicker = $trExSpouse.find('.date-picker').datepicker().on('changeDate', function(ev) {
                         if (ev.viewMode === "days") {
@@ -444,13 +445,12 @@
                         $popup.find('tr.has-ex-spouse').each(function(index, el) {
                             var name = $.trim($(el).find('.txtExSpouseName').val());
                             var birthday = $(el).find('.ex-spouse-birthday').val();
-                            var note = $(el).find('.ex-spouse-node').val();
-                            exSpouses.push({name:name,birthday:birthday,note:note})
+                            exSpouses.push({name:name,birthday:birthday})
 
                         });
                      }
                     var name = $.trim($name.val());
-
+                    var note = $.trim($note.val());
                     var data = {
                         name: name,
                         hasSpouse:$cbHasSpouse.is(':checked'),
@@ -461,7 +461,8 @@
                         type: $nodeType.val(),
                         isDummy: false,
                         birthday: $birthday.val(),
-                        anniversary: $anniversary.val()
+                        anniversary: $anniversary.val(),
+                        note:note
                     };
                     return data;
                 };
@@ -517,6 +518,7 @@
                     data.birthday && $birthday.val(data.birthday);
                     data.anniversary && $anniversary.val(data.anniversary);
                     data.isDummy ? $name.attr('placeholder', data.name) : $name.val(data.name);
+                    $note.val(data.note);
                     $nodeType.val(data.type);
                     if(me.options.allowAddBirthDay)
                     {
@@ -539,7 +541,6 @@
                                 var $trExSpouse =  $popup.find('table tr.has-ex-spouse:first');
                                 $trExSpouse.find(".txtExSpouseName").val(val.name);
                                 $trExSpouse.find(".ex-spouse-birthday").val(val.birthday);
-                                $trExSpouse.find(".ex-spouse-node").val(val.note);
                             }
                             else
                             {
@@ -645,6 +646,7 @@
                 function enCodeData(data) {
                     data.name && (data.name = enCodeDataString(data.name));
                     data.spouse && (data.spouse = enCodeDataString(data.spouse));
+                    data.note && (data.note = enCodeDataString(data.note))
                     if(data.exSpouses)
                     {
                         $.each(data.exSpouses, function(index, val) {

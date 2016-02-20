@@ -256,8 +256,8 @@ label.disabled,button.disabled{
     display: none !important;
 }
 
-tr.has-ex-spouse{
-    border-top: 1px dashed rgb(204, 204, 204);
+tr.has-ex-spouse, tr.node-row{
+    border-top: 1px dashed #999999;
 }
 
 .has-spouse.allow-add-birthday .date-picker,.has-ex-spouse.allow-add-birthday .date-picker{
@@ -285,13 +285,21 @@ select.product-item{
     margin: 5px;
     float: left;
 }
-
 .btn-add-more-gen{
-    width: 325px;
+    width: 350px;
 }
 .addition-level-status {
     display: block;
     clear: both;
     margin-left: 20px;
     font-size: 15px;
+}
+.txtNote{
+    width: 345px;
+    margin: 5px;
+    font-size: 14px;
+}
+
+.btn-add-more-ex-spouse{
+    margin-bottom: 5px;
 }

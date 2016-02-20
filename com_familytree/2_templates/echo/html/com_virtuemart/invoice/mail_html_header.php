@@ -46,7 +46,7 @@ defined ('_JEXEC') or die('Restricted access');
 		</td>
 	</tr>
     <tr>
-    	<td colspan="3">Thank you for your order. If you haven't already done so, you'll need to provide the family names that make up your family tree.<br /><br />Please go to <?php echo('<a href="'.JText::_('COM_VIRTUEMART_ENTER_FAMILY_NAME_DOMAIN').'index.php?option=com_familytree&view=buildtrees&orderNumber='.$this->orderDetails['details']['BT']->order_number.'&orderPass='.$this->orderDetails['details']['BT']->order_pass.'">this page</a>');?>, fill out, and submit your family names.
+    	<td colspan="3">Thank you for your order. If you haven't already done so, you'll need to provide the family names that make up your family tree.<br /><br />Please go to <?php echo('<b><a href="'.JText::_('COM_VIRTUEMART_ENTER_FAMILY_NAME_DOMAIN').'index.php?option=com_familytree&view=buildtrees&orderNumber='.$this->orderDetails['details']['BT']->order_number.'&orderPass='.$this->orderDetails['details']['BT']->order_pass.'">THIS PAGE</a></b>');?>, fill out, and submit your family names.
         </td>
     </tr>
     <tr>
