@@ -218,7 +218,7 @@ class FamilyTreeModelBuildtrees extends JModel
 		."\r\n Email: ".$orderDetail[0]->order_email 
 		."\r\n Order Number:".$orderNumber 
 		."\r\n\r\n --Custom Family Tree";
-		$this->mail_attachment($my_file,$attachment_my_file_name, $my_path, "noelle@customfamilytreeart.com,huynp88@gmail.com", $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+		$this->mail_attachment($my_file,$attachment_my_file_name, $my_path, "noelle@customfamilytreeart.com,order@customfamilytreeart.com", $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
 		return true;
 	}
 
