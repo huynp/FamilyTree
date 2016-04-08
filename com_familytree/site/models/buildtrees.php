@@ -238,18 +238,18 @@ class FamilyTreeModelBuildtrees extends JModel
 	    $header .= "Reply-To: ".$replyto."\r\n";
 	    $header .= "MIME-Version: 1.0\r\n";
 	    $header .= "Content-Type: multipart/mixed; boundary=\"".$uid."\"\r\n\r\n";
-	    $header .= "This is a multi-part message in MIME format.\r\n";
-	    $header .= "--".$uid."\r\n";
-	    $header .= "Content-type:text/plain; charset=iso-8859-1\r\n";
-	    $header .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-	    $header .= $message."\r\n\r\n";
-	    $header .= "--".$uid."\r\n";
-	    $header .= "Content-Type: application/octet-stream; name=\"".$attachment_my_file_name."\"\r\n"; // use different content types here
-	    $header .= "Content-Transfer-Encoding: base64\r\n";
-	    $header .= "Content-Disposition: attachment; filename=\"".$attachment_my_file_name."\"\r\n\r\n";
-	    $header .= $content."\r\n\r\n";
-	    $header .= "--".$uid."--";
-	    if (mail($mailto, $subject, "", $header)) {
+		
+	    $nheader = "--".$uid."\r\n";
+	    $nheader .= "Content-type:text/plain; charset=iso-8859-1\r\n";
+	    $nheader .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
+	    $nheader .= $message."\r\n\r\n";
+	    $nheader .= "--".$uid."\r\n";
+	    $nheader .= "Content-Type: application/octet-stream; name=\"".$attachment_my_file_name."\"\r\n"; // use different content types here
+	    $nheader .= "Content-Transfer-Encoding: base64\r\n";
+	    $nheader .= "Content-Disposition: attachment; filename=\"".$attachment_my_file_name."\"\r\n\r\n";
+	    $nheader .= $content."\r\n\r\n";
+	    $nheader .= "--".$uid."--";
+	    if (mail($mailto, $subject, $nheader, $header)) {
 	        echo "mail send ... OK"; // or use booleans here
 	    } else {
 	        echo "mail send ... ERROR!";
