@@ -164,7 +164,7 @@
     transform-origin: 0% 0%;
     text-transform: capitalize;
     top: 40px;
-    overflow: hidden;
+    overflow: auto;
     white-space: nowrap;
     text-overflow:visible;
     height: 40px;

@@ -17,6 +17,23 @@
     }
 
     function FamilyTree($el, options) {
+        var getUrlParameter = function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
+        };
+
+        if (hasReadOnlyParam != undefined)
+
         var _instance = {
             options: options,
             init: function() {
@@ -673,7 +690,8 @@
                     ancestorLevel: me.options.ancestorLevel,
                     descendantLevel: me.options.descendantLevel,
                     isDoubleTrunk:me.options.isDoubleTrunk,
-                    additionLevel: me.options.additionLevel
+                    additionLevel: me.options.additionLevel,
+                    isFinish:isFinish
                 };
 
                 $.each(me.trees, function() {
