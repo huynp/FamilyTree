@@ -202,7 +202,6 @@ class FamilyTreeModelBuildtrees extends JModel
 		$attachment_my_file_name = $orderNumber."-family-tree.html";
 		$my_path = $_SERVER['DOCUMENT_ROOT']."/components/com_familytree/js/";
 		$my_name = "Custom Family Tree";
-		$my_mail = $orderDetail[0]->order_email ;
 		$my_replyto = $orderDetail[0]->order_email ;
 
 		$productInfos =$this->getProductInfo();
@@ -214,11 +213,11 @@ class FamilyTreeModelBuildtrees extends JModel
 		$my_subject = "Order ".$orderNumber." - ".$orderDetail[0]->order_name;//This is a mail with attachment.";
 		$date = date('m/d/Y h:i:s a', time());
 		$my_message = $orderDetail[0]->order_name ." completed the "."[".$productItemsName."] Forms"." at ".$date.". Please see attached." //"Hello,\r\n This is family tree data of customer with customer info:"
-		."\r\n Name: ".$orderDetail[0]->order_name 
-		."\r\n Email: ".$orderDetail[0]->order_email 
-		."\r\n Order Number:".$orderNumber 
-		."\r\n\r\n --Custom Family Tree";
-		$this->mail_attachment($my_file,$attachment_my_file_name, $my_path, "noelle@customfamilytreeart.com,order@customfamilytreeart.com,huynp88@gmail.com", $my_mail, $my_name, $my_replyto, $my_subject, $my_message);
+		."\r\nName: ".$orderDetail[0]->order_name 
+		."\r\nEmail: ".$orderDetail[0]->order_email 
+		."\r\nOrder Number: ".$orderNumber 
+		."\r\n\r\n--Custom Family Tree";
+		$this->mail_attachment($my_file,$attachment_my_file_name, $my_path, "noelle@customfamilytreeart.com,order@customfamilytreeart.com", "order@customfamilytreeart.com", $my_name, $my_replyto, $my_subject, $my_message);
 		return true;
 	}
 

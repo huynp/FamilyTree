@@ -32,7 +32,9 @@
             }
         };
 
+        var hasReadOnlyParam =getUrlParameter("isReadOnly") ;
         if (hasReadOnlyParam != undefined)
+            options.isReadOnly = hasReadOnlyParam == "true";
 
         var _instance = {
             options: options,
